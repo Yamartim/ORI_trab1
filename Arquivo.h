@@ -17,10 +17,12 @@ public:
 
     Arquivo(string p, char t);
 
-    virtual Registro buscaKey(int key);
-    virtual Registro buscaNome(string nome);
+    virtual Registro buscaKey(int key) = 0;
+    virtual Registro buscaNome(string nome) = 0;
 
-    virtual void escreverReg(Registro reg);
+    virtual void escreverReg(Registro reg) = 0;
+    virtual void removerReg(Registro reg) = 0;
+    virtual void atualizaIndice(Registro reg) = 0;
 
 
 };
