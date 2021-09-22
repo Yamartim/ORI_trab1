@@ -11,7 +11,6 @@ int main()
 
 	rteste.print();
 
-	cout << "bepis";
 	
 	return 0;
 }

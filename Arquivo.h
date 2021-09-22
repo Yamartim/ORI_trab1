@@ -8,16 +8,34 @@ class Arquivo
 {
 private:
     string path;    //caminho do arquivo
+    string pathindice;
     char tipo;      //tipo do arquiv, b = binario, t = texto
-    int offset;     //
+
     //Registro regs[];
 
 public:
 
     Arquivo(string p, char t);
 
-    Registro buscaKey(int key);
-    Registro buscaNome(string nome);
+    virtual Registro buscaKey(int key);
+    virtual Registro buscaNome(string nome);
 
+    virtual void escreverReg(Registro reg);
+
+
+};
+
+class ArquivoFIX: public Arquivo
+{
+private:
+    int offset;
+
+public:
+    Registro buscaNumReg(int n);
+
+};
+
+class ArquivoVAR: public Arquivo
+{
 
 };

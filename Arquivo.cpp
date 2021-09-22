@@ -24,3 +24,8 @@ Registro Arquivo::buscaNome(string nome)
 {
     
 }
+
+void Arquivo::escreverReg(Registro reg)
+{
+    
+}
