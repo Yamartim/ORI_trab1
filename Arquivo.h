@@ -25,19 +25,44 @@ public:
     virtual void atualizaIndice(Registro reg) = 0;
 
 
+
 };
 
 class ArquivoFIX: public Arquivo
 {
 private:
-    int offset;
+    int offset_reg;
+    int offset_cam[];
 
 public:
+    ArquivoFIX(string p, char t);
+
+    Registro buscaKey(int key);
+    Registro buscaNome(string nome);
+
+    void escreverReg(Registro reg);
+    void removerReg(Registro reg);
+    void atualizaIndice(Registro reg);
+
     Registro buscaNumReg(int n);
 
 };
 
 class ArquivoVAR: public Arquivo
 {
+private:
+    char separador_reg;
+    char separador_cam;
+
+public:
+    ArquivoVAR(string p, char t);
+
+    
+    Registro buscaKey(int key);
+    Registro buscaNome(string nome);
+
+    void escreverReg(Registro reg);
+    void removerReg(Registro reg);
+    void atualizaIndice(Registro reg);
 
 };

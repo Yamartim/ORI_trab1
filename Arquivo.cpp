@@ -13,8 +13,36 @@ Arquivo::Arquivo(string p, char t)
 
 }
 
+ArquivoFIX::ArquivoFIX(string p, char t)
+{
 
-Registro Arquivo::buscaKey(int key)
+}
+
+Registro ArquivoFIX::buscaKey(int key)
+{
+    
+}
+
+
+Registro ArquivoFIX::buscaNome(string nome)
+{
+    
+}
+
+void ArquivoFIX::escreverReg(Registro reg)
+{
+
+}
+
+
+
+ArquivoVAR::ArquivoVAR(string p, char t)
+{
+
+}
+
+
+Registro ArquivoVAR::buscaKey(int key)
 {
     
 }
