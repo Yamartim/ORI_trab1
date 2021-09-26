@@ -1,3 +1,6 @@
+#ifndef REGISTRO_H
+#define REGISTRO_H
+
 #include <string>
 
 using std::string;
@@ -50,3 +53,5 @@ public:
     void print();
 
 };
+
+#endif
