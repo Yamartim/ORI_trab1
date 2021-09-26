@@ -44,7 +44,7 @@ PHONE (i.e., número do telefone com DDD, tal como (022)2222-2222) (6 bytes)
 
 
 public:
-
+    Registro();
     Registro(int k, string ln, string fn, string al, int an, string ac, string ci, string st, int zc, int pd, int pn);
 
     void print();

@@ -5,6 +5,25 @@
 using std::cout;
 using std::endl;
 
+Registro::Registro(){
+    key = 0;
+
+    lastname = "";
+    firstname = "";
+
+    address.logradouro = "";
+    address.numero = 0;
+    address.complemento = "";
+
+    city = "";
+    state = "";
+
+    zipcode = 0;
+
+    phone.ddd = 0;
+    phone.numero = 0;
+}
+
 Registro::Registro(int k, string ln, string fn, string al, int an, string ac, string ci, string st, int zc, int pd, int pn)
 {
     key = k;
