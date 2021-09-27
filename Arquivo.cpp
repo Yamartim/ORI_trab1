@@ -13,10 +13,10 @@ Arquivo::Arquivo(string p, char t)
 
 }
 
-ArquivoFIX::ArquivoFIX(string p, char t)
-{
+// ArquivoFIX::ArquivoFIX(string p, char t)
+// {
 
-}
+// }
 
 Registro ArquivoFIX::buscaKey(int key)
 {
@@ -34,12 +34,10 @@ void ArquivoFIX::escreverReg(Registro reg)
 
 }
 
+// ArquivoVAR::ArquivoVAR(string p, char t)
+// {
 
-
-ArquivoVAR::ArquivoVAR(string p, char t)
-{
-
-}
+// }
 
 
 Registro ArquivoVAR::buscaKey(int key)
