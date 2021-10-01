@@ -27,23 +27,23 @@ Registro::Registro(){
 
 Registro::Registro(int k, string ln, string fn, string al, int an, string ac, string ci, string st, int zc, int pd, int pn)
 {
-    key = k;
+    //Set(Requisitado) ? : Senão Set(Padrão)
+    SetKey(k) ? : SetKey(0);
 
-    lastname = ln;
-    firstname = fn;
+    SetFirstName(fn) ? : SetFirstName("");
+    SetLastName(ln) ? : SetLastName("");
 
-    address.logradouro = al;
-    address.numero = an;
-    address.complemento = ac;
+    SetLogradouro(al) ? : SetLogradouro("");
+    SetANumero(an) ? : SetANumero(0);
+    SetComplemento(ac) ? : SetComplemento("");
 
-    city = ci;
-    state = st;
+    SetCity(ci) ? : SetCity("");
+    SetState(st) ? : SetState("NA");
 
-    zipcode = zc;
+    SetZipcode(zc) ? : SetZipcode(0);
 
-    phone.ddd = pd;
-    phone.numero = pn;
-
+    SetDDD(pd) ? : SetDDD(0);
+    SetPNumero(pn) ? : SetPNumero(0);
 }
 
 void Registro::print()
