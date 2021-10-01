@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <iostream>
+#include <string>
 #include "Registro.h"
 
 using std::cout;
@@ -58,3 +59,78 @@ void Registro::print()
     cout << "--------------------------" << endl << endl;
 
 }
+
+// Sets
+//! Talvez faltem algumas verificações aqui
+bool Registro::SetKey(int k){
+    if(k >= 0){
+        key = k;
+        return 1;
+    }
+    return 0;
+}
+
+bool Registro::SetLastName(string ln){
+    lastname = ln;
+    return 1;
+}
+
+bool Registro::SetFirstName(string fn){
+    firstname = fn;
+    return 1;
+}
+
+bool Registro::SetLogradouro(string al){
+    address.logradouro = al;
+    return 1;
+}
+
+bool Registro::SetANumero(int an){
+    address.numero = an;
+    return 1;
+}
+
+bool Registro::SetComplemento(string ac){
+    address.complemento = ac;
+    return 1;
+}
+
+bool Registro::SetCity(string ci){
+    city = ci;
+    return 1;
+}
+
+bool Registro::SetState(string st){
+    if(st.length() == 2){
+        state = st;
+        return 1;
+    }
+    return 0;
+}
+
+bool Registro::SetZipcode(int zc){
+    if(zc >= 0){
+        zipcode = zc;
+        return 1;
+    }
+    return 0;
+}
+
+bool Registro::SetDDD(int pd){
+    if(pd >= 0){
+        phone.ddd = pd;
+        return 1;
+    }
+    return 0;
+}
+
+bool Registro::SetPNumero(int pn){
+    if(pn >= 0){
+        phone.numero = pn;
+        return 1;
+    }
+    return 0;
+}
+
+// Get
+//TODO

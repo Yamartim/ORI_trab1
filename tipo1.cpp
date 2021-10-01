@@ -37,11 +37,63 @@ int inputOperacao(){
 // Loop de input dos dados de pessoas
 void inputGravarDados(){
     Registro inRegistro;
+    int intaux;
+    string straux;
 
     cout << "Iniciando gravação. Digite 0 para parar" << endl;
-    cout << "KEY: ";
-    //? Usar sets de Registro para depois chamar (?)
-    //? gravarDados(), passando o registro para inserir no arquivo
+    do{
+        cout << "KEY: ";
+        cin >> intaux; 
+    }while(!inRegistro.SetKey(intaux));
+    do{
+        cout << "First Name: ";
+        cin >> straux; 
+    }while(!inRegistro.SetFirstName(straux));
+    do{
+        cout << "Last Name: ";
+        cin >> intaux; 
+    }while(!inRegistro.SetLastName(straux));
+
+    cout << "Sobre o endereço," << endl;
+    do{
+        cout << "Logradouro: ";
+        cin >> intaux; 
+    }while(!inRegistro.SetLogradouro(straux));
+    do{
+        cout << "Número: ";
+        cin >> intaux; 
+    }while(!inRegistro.SetANumero(intaux));
+    do{
+        cout << "Complemento: ";
+        cin >> intaux; 
+    }while(!inRegistro.SetComplemento(straux));
+    do{
+        cout << "Cidade: ";
+        cin >> intaux; 
+    }while(!inRegistro.SetCity(straux));
+    do{
+        cout << "Estado (Código de 2 letras): ";
+        cin >> intaux; 
+    }while(!inRegistro.SetState(straux));
+    do{
+        cout << "Zipcode/CEP: ";
+        cin >> intaux; 
+    }while(!inRegistro.SetZipcode(intaux));
+
+    cout << "Sobre o celular," << endl;
+    do{
+        cout << "DDD: ";
+        cin >> intaux; 
+    }while(!inRegistro.SetDDD(intaux));
+    do{
+        cout << "Número: ";
+        cin >> intaux; 
+    }while(!inRegistro.SetPNumero(intaux));
+
+    // gravarDados(&inRegistro);
+    //cout << " gravado com sucesso" << endl;
+    //cout << " Continuar? (S/N)";
+    //TODO Loop S/N
 }
 
 int main(int argc, char const *argv[])

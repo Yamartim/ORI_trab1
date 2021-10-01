@@ -52,6 +52,32 @@ public:
 
     void print();
 
+    // Set
+    bool SetKey(int k);
+    bool SetLastName(string ln);
+    bool SetFirstName(string fn);
+    bool SetLogradouro(string al);
+    bool SetANumero(int an);
+    bool SetComplemento(string ac);
+    bool SetCity(string ci);
+    bool SetState(string st);
+    bool SetZipcode(int zc);
+    bool SetDDD(int pd);
+    bool SetPNumero(int pn);
+
+    // Get
+    int GetKey();
+    string GetLastName();
+    string GetFirstName();
+    string GetLogradouro();
+    int GetANumero();
+    string GetComplemento();
+    string GetCity();
+    string GetState();
+    int GetZipcode();
+    int GetDDD();
+    int GetPNumero();
+
 };
 
 #endif
