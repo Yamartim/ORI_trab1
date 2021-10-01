@@ -40,40 +40,44 @@ void inputGravarDados(){
     int intaux;
     string straux;
 
-    cout << "Iniciando gravação. Digite 0 para parar" << endl;
+    //cin.ignore() usado para ignorar /n que seria absorvido pelo getline()
+
+    cout << "Iniciando gravação." << endl;
     do{
         cout << "KEY: ";
         cin >> intaux; 
+        cin.ignore();
     }while(!inRegistro.SetKey(intaux));
     do{
         cout << "First Name: ";
-        cin >> straux; 
+        getline(cin, straux);
     }while(!inRegistro.SetFirstName(straux));
     do{
         cout << "Last Name: ";
-        cin >> intaux; 
+        getline(cin, straux); 
     }while(!inRegistro.SetLastName(straux));
 
     cout << "Sobre o endereço," << endl;
     do{
         cout << "Logradouro: ";
-        cin >> intaux; 
+        getline(cin, straux);
     }while(!inRegistro.SetLogradouro(straux));
     do{
         cout << "Número: ";
         cin >> intaux; 
+        cin.ignore();
     }while(!inRegistro.SetANumero(intaux));
     do{
         cout << "Complemento: ";
-        cin >> intaux; 
+        getline(cin, straux);
     }while(!inRegistro.SetComplemento(straux));
     do{
         cout << "Cidade: ";
-        cin >> intaux; 
+        getline(cin, straux);
     }while(!inRegistro.SetCity(straux));
     do{
         cout << "Estado (Código de 2 letras): ";
-        cin >> intaux; 
+        cin >> straux; 
     }while(!inRegistro.SetState(straux));
     do{
         cout << "Zipcode/CEP: ";
@@ -126,7 +130,6 @@ int main(int argc, char const *argv[])
                 sair = true;
             break;
             case 1:
-                cout << "1 escolhido" << endl;
                 inputGravarDados();
             break;
             //TODO Adicionar outros casos

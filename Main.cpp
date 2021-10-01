@@ -3,14 +3,14 @@
 
 using std::cout;
 
-int main()
-{
-	cout << "testando a classe...";
+// int main()
+// {
+// 	cout << "testando a classe...";
 
-	Registro rteste(123, "de Tal", "Fulano", "rua x", 345, "apt 6", "São Carlos", "SP", 777888999, 11, 987654321);
+// 	Registro rteste(123, "de Tal", "Fulano", "rua x", 345, "apt 6", "São Carlos", "SP", 777888999, 11, 987654321);
 
-	rteste.print();
+// 	rteste.print();
 
 	
-	return 0;
-}
+// 	return 0;
+// }

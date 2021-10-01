@@ -18,16 +18,16 @@ Arquivo::Arquivo(string p, char t)
 
 // }
 
-Registro ArquivoFIX::buscaKey(int key)
-{
-    
-}
+// Registro ArquivoFIX::buscaKey(int key)
+// {
+
+// }
 
 
-Registro ArquivoFIX::buscaNome(string nome)
-{
+// Registro ArquivoFIX::buscaNome(string nome)
+// {
     
-}
+// }
 
 void ArquivoFIX::escreverReg(Registro reg)
 {
@@ -40,16 +40,16 @@ void ArquivoFIX::escreverReg(Registro reg)
 // }
 
 
-Registro ArquivoVAR::buscaKey(int key)
-{
+// Registro ArquivoVAR::buscaKey(int key)
+// {
     
-}
+// }
 
 
-Registro Arquivo::buscaNome(string nome)
-{
+// Registro Arquivo::buscaNome(string nome)
+// {
     
-}
+// }
 
 void Arquivo::escreverReg(Registro reg)
 {
