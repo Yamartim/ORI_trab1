@@ -39,65 +39,70 @@ void inputGravarDados(){
     Registro inRegistro;
     int intaux;
     string straux;
+    do{
+        //cin.ignore() usado para ignorar /n que seria absorvido pelo getline()
 
-    //cin.ignore() usado para ignorar /n que seria absorvido pelo getline()
+        cout << "Iniciando gravação." << endl;
+        do{
+            cout << "KEY: ";
+            cin >> intaux; 
+            cin.ignore();
+        }while(!inRegistro.SetKey(intaux));
+        do{
+            cout << "First Name: ";
+            getline(cin, straux);
+        }while(!inRegistro.SetFirstName(straux));
+        do{
+            cout << "Last Name: ";
+            getline(cin, straux); 
+        }while(!inRegistro.SetLastName(straux));
 
-    cout << "Iniciando gravação." << endl;
-    do{
-        cout << "KEY: ";
-        cin >> intaux; 
-        cin.ignore();
-    }while(!inRegistro.SetKey(intaux));
-    do{
-        cout << "First Name: ";
-        getline(cin, straux);
-    }while(!inRegistro.SetFirstName(straux));
-    do{
-        cout << "Last Name: ";
-        getline(cin, straux); 
-    }while(!inRegistro.SetLastName(straux));
+        cout << "Sobre o endereço," << endl;
+        do{
+            cout << "Logradouro: ";
+            getline(cin, straux);
+        }while(!inRegistro.SetLogradouro(straux));
+        do{
+            cout << "Número: ";
+            cin >> intaux; 
+            cin.ignore();
+        }while(!inRegistro.SetANumero(intaux));
+        do{
+            cout << "Complemento: ";
+            getline(cin, straux);
+        }while(!inRegistro.SetComplemento(straux));
+        do{
+            cout << "Cidade: ";
+            getline(cin, straux);
+        }while(!inRegistro.SetCity(straux));
+        do{
+            cout << "Estado (Código de 2 letras): ";
+            cin >> straux; 
+        }while(!inRegistro.SetState(straux));
+        do{
+            cout << "Zipcode/CEP: ";
+            cin >> intaux; 
+            cin.ignore();
+        }while(!inRegistro.SetZipcode(intaux));
 
-    cout << "Sobre o endereço," << endl;
-    do{
-        cout << "Logradouro: ";
-        getline(cin, straux);
-    }while(!inRegistro.SetLogradouro(straux));
-    do{
-        cout << "Número: ";
-        cin >> intaux; 
-        cin.ignore();
-    }while(!inRegistro.SetANumero(intaux));
-    do{
-        cout << "Complemento: ";
-        getline(cin, straux);
-    }while(!inRegistro.SetComplemento(straux));
-    do{
-        cout << "Cidade: ";
-        getline(cin, straux);
-    }while(!inRegistro.SetCity(straux));
-    do{
-        cout << "Estado (Código de 2 letras): ";
-        cin >> straux; 
-    }while(!inRegistro.SetState(straux));
-    do{
-        cout << "Zipcode/CEP: ";
-        cin >> intaux; 
-    }while(!inRegistro.SetZipcode(intaux));
+        cout << "Sobre o celular," << endl;
+        do{
+            cout << "DDD: ";
+            cin >> intaux; 
+            cin.ignore();
+        }while(!inRegistro.SetDDD(intaux));
+        do{
+            cout << "Número: ";
+            cin >> intaux; 
+            cin.ignore();
+        }while(!inRegistro.SetPNumero(intaux));
 
-    cout << "Sobre o celular," << endl;
-    do{
-        cout << "DDD: ";
-        cin >> intaux; 
-    }while(!inRegistro.SetDDD(intaux));
-    do{
-        cout << "Número: ";
-        cin >> intaux; 
-    }while(!inRegistro.SetPNumero(intaux));
+        // gravarDados(&inRegistro);
+        //cout << " gravado com sucesso" << endl;
+        cout << "\nContinuar? (S/N)" << endl;
+        cin >> straux;
 
-    // gravarDados(&inRegistro);
-    //cout << " gravado com sucesso" << endl;
-    //cout << " Continuar? (S/N)";
-    //TODO Loop S/N
+    }while(straux == "S" || straux == "s");
 }
 
 int main(int argc, char const *argv[])
