@@ -15,12 +15,18 @@ private:
 
 public:
 
-    Arquivo(string p, char t);
+    Arquivo();
+    
+    //setters
+    void setPaths(string p, string p_indice, char t);
+
+    //getters
+    string getPath();
 
     virtual Registro buscaKey(int key) = 0;
     virtual Registro buscaNome(string nome) = 0;
 
-    virtual void escreverReg(Registro reg) = 0;
+    virtual void escreverReg(Registro reg, ofstream) = 0;
     virtual void removerReg(Registro reg) = 0;
     virtual void atualizaIndice(Registro reg) = 0;
 
@@ -46,7 +52,13 @@ private:
     */
 
 public:
-    ArquivoFIX(string p, char t);
+    ArquivoFIX(string p, string p_indice, char t);
+
+    //setters
+    void setOffset();
+
+    //getters
+    void getPath();
 
     Registro buscaKey(int key);
     Registro buscaNome(string nome);
@@ -66,9 +78,11 @@ private:
     char separador_cam;
 
 public:
-    ArquivoVAR(string p, char t);
+    ArquivoVAR(string p, string p_indice, char t);
 
-    
+    //setters
+    void setSeparadores(char sepCam, char sepReg);
+
     Registro buscaKey(int key);
     Registro buscaNome(string nome);
 

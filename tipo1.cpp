@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <iomanip>
 
 #include "Arquivo.h"
 #include "Registro.h"
@@ -107,21 +108,9 @@ void inputGravarDados(){
 
 int main(int argc, char const *argv[])
 {
-    // Abrindo Arquivo
+    //Criando objeto de Arquivo
+    ArquivoFIX arquivoFix("arquivo.txt", "indices.txt", 't');
     
-    arquivo.open("arquivo.txt");
-
-    //// Exemplo de escrita no arquivo
-    // string buffer;
-    // while(1){
-    //     std::cin >> buffer;
-    //     if(buffer != "0"){
-    //         arquivo << buffer << std::endl;
-    //     }else{
-    //         break;
-    //     }
-    // }
-
     // Loop principal do programa
     // Input(Operacao) -> Loop da operacao Secundário -> Input(sair) -> Saída
     
@@ -143,8 +132,6 @@ int main(int argc, char const *argv[])
             break;
         }
     }
-
-    arquivo.close();
 
     return 0;
 }
