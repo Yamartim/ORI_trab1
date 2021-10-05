@@ -3,13 +3,21 @@
 
 using std::string;
 
+#define KEY 4
+#define LASTNAME 16
+#define FIRSTNAME 16
+#define ADDRESS 32
+#define CITY 20
+#define STATE 2
+#define ZIP 4
+#define PHONE 6
 
 class Arquivo
 {
 private:
     string path;    //caminho do arquivo
     string pathindice;
-    char tipo;      //tipo do arquiv, b = binario, t = texto
+    string tipo;      //tipo do arquiv, b = binario, t = texto
 
     //Registro regs[];
 
@@ -22,13 +30,14 @@ public:
 
     //getters
     string getPath();
+    string getTipo();
 
     virtual Registro buscaKey(int key) = 0;
     virtual Registro buscaNome(string nome) = 0;
 
-    virtual void escreverReg(Registro reg, ofstream) = 0;
-    virtual void removerReg(Registro reg) = 0;
-    virtual void atualizaIndice(Registro reg) = 0;
+    virtual bool escreverReg(Registro reg) = 0;
+    virtual bool removerReg(Registro reg) = 0;
+    virtual bool atualizaIndice(Registro reg) = 0;
 
 
 
@@ -38,7 +47,7 @@ class ArquivoFIX: public Arquivo
 {
 private:
     int offset_reg; 
-    int offset_cam[];
+    int* offset_cam;
     /*
         Total(100 bytes offset)
         KEY (i.e., número que identifica a pessoa) (4 bytes)
@@ -58,14 +67,13 @@ public:
     void setOffset();
 
     //getters
-    void getPath();
 
     Registro buscaKey(int key);
     Registro buscaNome(string nome);
 
-    void escreverReg(Registro reg);
-    void removerReg(Registro reg);
-    void atualizaIndice(Registro reg);
+    bool escreverReg(Registro reg);
+    bool removerReg(Registro reg);
+    bool atualizaIndice(Registro reg);
 
     Registro buscaNumReg(int n);
 
@@ -86,8 +94,8 @@ public:
     Registro buscaKey(int key);
     Registro buscaNome(string nome);
 
-    void escreverReg(Registro reg);
-    void removerReg(Registro reg);
-    void atualizaIndice(Registro reg);
+    bool escreverReg(Registro reg);
+    bool removerReg(Registro reg);
+    bool atualizaIndice(Registro reg);
 
 };

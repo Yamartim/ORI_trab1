@@ -108,6 +108,16 @@ void inputGravarDados(){
 
 int main(int argc, char const *argv[])
 {
+    //// Exemplo de escrita no arquivo
+    // string buffer;
+    // while(1){
+    //     std::cin >> buffer;
+    //     if(buffer != "0"){
+    //         arquivo << buffer << std::endl;
+    //     }else{
+    //         break;
+    //     }
+    // }
     //Criando objeto de Arquivo
     ArquivoFIX arquivoFix("arquivo.txt", "indices.txt", 't');
     

@@ -56,15 +56,20 @@ public:
     bool SetKey(int k);
     bool SetLastName(string ln);
     bool SetFirstName(string fn);
+    //Endereço
     bool SetLogradouro(string al);
     bool SetANumero(int an);
     bool SetComplemento(string ac);
+    // -- 
+
     bool SetCity(string ci);
     bool SetState(string st);
     bool SetZipcode(int zc);
+    
+    //phone
     bool SetDDD(int pd);
     bool SetPNumero(int pn);
-
+    // -- 
     // Get
     int GetKey();
     string GetLastName();
