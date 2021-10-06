@@ -8,7 +8,7 @@ using std::string;
 class Registro
 {
 
-private:
+protected:
 
     int key;
 
@@ -38,7 +38,7 @@ Total(100 bytes offset)
 KEY (i.e., número que identifica a pessoa) (4 bytes)
 LASTNAME (i.e., sobrenome da pessoa) (16 bytes)
 FIRSTNAME (i.e., primeiro nome da pessoa) (16 bytes)
-ADDRESS (i.e., endereço com logradouro, número e complemento) (32 bytes)
+ADDRESS (i.e., endereço com logradouro, número e complemento) (32 bytes) (20, 10, 2)
 CITY (i.e., cidade) (20 bytes)
 STATE (i.e., sigla do estado com 2 caracteres, tal como SP) (2 bytes)
 ZIP (i.e., CEP, tal como 222222-222) (4 bytes)
@@ -54,16 +54,16 @@ public:
 
     // Set
     bool SetKey(int k);
-    bool SetLastName(string ln);
-    bool SetFirstName(string fn);
+    virtual bool SetLastName(string ln);
+    virtual bool SetFirstName(string fn);
     //Endereço
-    bool SetLogradouro(string al);
+    virtual bool SetLogradouro(string al);
     bool SetANumero(int an);
-    bool SetComplemento(string ac);
+    virtual bool SetComplemento(string ac);
     // -- 
 
-    bool SetCity(string ci);
-    bool SetState(string st);
+    virtual bool SetCity(string ci);
+    virtual bool SetState(string st);
     bool SetZipcode(int zc);
     
     //phone
@@ -83,6 +83,27 @@ public:
     int GetDDD();
     int GetPNumero();
 
+};
+
+class RegistroFIX: public Registro
+{
+    // Set
+    bool SetKey(int k);
+    bool SetLastName(string ln);
+    bool SetFirstName(string fn);
+    //Endereço
+    bool SetLogradouro(string al);
+    bool SetANumero(int an);
+    bool SetComplemento(string ac);
+    // -- 
+
+    bool SetCity(string ci);
+    bool SetState(string st);
+    bool SetZipcode(int zc);
+    
+    //phone
+    bool SetDDD(int pd);
+    bool SetPNumero(int pn);
 };
 
 #endif
