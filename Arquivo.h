@@ -64,17 +64,17 @@ public:
     //getters
     int getOffsetReg();
     Registro buscaKey(int key);
-    //Registro buscaNome(string nome);
+    Registro buscaNome(string nome);
 
     void ajustaCampo(Registro* reg);
     bool escreverReg(Registro reg);
-   // bool removerReg(Registro reg);
-    //bool atualizaIndice(Registro reg);
+    bool removerReg(Registro reg);
+    bool atualizaIndice(Registro reg);
 
-    //Registro buscaNumReg(int n);
+    Registro buscaNumReg(int n);
 
 };
-
+/*
 class ArquivoVAR: public Arquivo
 {
 private:
@@ -94,5 +94,5 @@ public:
     //bool removerReg(Registro reg);
     //bool atualizaIndice(Registro reg);
 
-};
+};*/
 #endif

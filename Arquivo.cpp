@@ -1,6 +1,5 @@
 #include "Arquivo.h"
 #include "Registro.h"
-#include <fstream>
 
 using std::cout;
 using std::endl;
@@ -65,13 +64,29 @@ void ArquivoFIX::setOffset(){
         ZIP (i.e., CEP, tal como 222222-222) (4 bytes)
         PHONE (i.e., número do telefone com DDD, tal como (022)2222-2222) (6 bytes)
     */
-void ajustaCampo(Registro* reg){
-    if(reg->GetLastName().length() < 16){
-
+void ArquivoFIX::ajustaCampo(Registro* reg){
+    while(reg->GetLastName().length() < 16){
+        reg->GetLastName() = reg->GetLastName() + '#';
+    }
+    while(reg->GetFirstName().length() < 16){
+        reg->GetFirstName() = reg->GetFirstName() + '#';
+    }
+    while(reg->GetLogradouro().length() < 20){
+        reg->GetLogradouro() = reg->GetLogradouro() + '#';
+    }   
+    while(reg->GetComplemento().length() < 10){
+        reg->GetComplemento() = reg->GetComplemento() + '#';
+    }
+    while(reg->GetCity().length() < 20){
+        reg->GetCity() = reg->GetCity() + '#';
+    }
+    while(reg->GetState().length() < 2){
+        reg->GetState() = reg->GetState() + '#';
     }
 }
 
 bool ArquivoFIX::escreverReg(Registro reg){
+
     std::fstream arq; //arquivo para leitura e escrita
     char c; //variavel para receber os caracteres 1 a 1 do arquivo
     
@@ -137,27 +152,23 @@ bool ArquivoFIX::escreverReg(Registro reg){
  }
 
 
-/*Registro ArquivoFIX::buscaNome(std::string nome){
+Registro ArquivoFIX::buscaNome(std::string nome){
     Registro auxReg;
     //to do
     return auxReg;     
-}*/
+}
 
+bool ArquivoFIX::removerReg(Registro reg){return false;}
+bool ArquivoFIX::atualizaIndice(Registro reg){return false;}
 
-
-
-
-
-
-
-
-
-
-
+Registro ArquivoFIX::buscaNumReg(int n){
+    Registro auxReg;
+    return auxReg;
+}
 
 
 /**ArquivoVAR**/
-
+/*
 //construtor 
  ArquivoVAR::ArquivoVAR(std::string p, std::string p_indice, char t){
     setPaths(p, p_indice, t);
@@ -172,8 +183,6 @@ void ArquivoVAR::setSeparadores(char sepCam, char sepReg){
 
 //Escreve os dados de um registro no arquivo
 bool ArquivoVAR::escreverReg(Registro reg){
-    /**Tentativa de escrever individualmente cada campo direto no arquivo sem fwrite 
-      (se for fazer assim a assinatura da funcao volta a ser void)**/
 
     std::ofstream arq; 
     std::string aux = getPath();
@@ -231,11 +240,11 @@ bool ArquivoVAR::escreverReg(Registro reg){
 
     puts("Registro gravado com sucesso");
 
-    return true;*/
+    return true;
 }
 
 Registro ArquivoVAR::buscaKey(int key){
-    /**Leitura se for permitido gravar o objeto inteiro em binario, ainda nao implementei da outra forma**/
+
     FILE *arq;
     std::string aux = getPath();
     std::string aux2 = getTipo();
