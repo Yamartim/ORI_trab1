@@ -9,23 +9,17 @@
 using std::string;
 using std::cout, std::cin, std::endl;
 
-// Arquivo como variável global
-std::ofstream arquivo;
-
 int inputOperacao(){
     //Exibe opções
-    cout << endl;
-    cout << "Escolha a operação desejada:" << endl;
-    cout << "(0) - Para sair" << endl;
-    cout << "(1) - Gravação de Dados" << endl;
-    //cout << "(2) - Visualizar registros" << endl;
-    //cout << "(3) - Recuperar registro por número" << endl;
-    //cout << "(4) - Recuperar registro por KEY" << endl;
-    //cout << "(5) - Recuperar registro por FIRSTNAME" << endl;
-    //cout << "(6) - Remover logicamente um registro" << endl;
-
-    // Acho que isso já estaria incluso na inserção
-    //cout << "(7) - Inserir novos registros" << endl;
+    cout << '\n';
+    cout << "Escolha a operação desejada:" << '\n';
+    cout << "(0) - Para sair" << '\n';
+    cout << "(1) - Gravação de Dados" << '\n';
+    cout << "(2) - Visualizar registros" << '\n';
+    //cout << "(3) - Recuperar registro por número" << '\n';
+    //cout << "(4) - Recuperar registro por KEY" << '\n';
+    //cout << "(5) - Recuperar registro por FIRSTNAME" << '\n';
+    //cout << "(6) - Remover logicamente um registro" << '\n';
     
     cout << endl;
 
@@ -106,6 +100,34 @@ void inputGravarDados(Arquivo *arq){
     }while(straux == "S" || straux == "s");
 }
 
+// Loop de "browsing" do arquivo
+void visualizar(Arquivo *arq){
+    Registro regAux;
+    string aux;
+    int i = 0;
+    do{
+        i++;
+        cout << "== Exibindo registro " << i << " ==" << '\n';
+        // Usar função de leitura sequencial para colocar o registro i no regAux
+
+        cout << " Chave: " << regAux.GetKey() << '\n';
+        cout << " First Name: " << regAux.GetKey() << '\n';
+        cout << " Last Name: " << regAux.GetKey() << '\n';
+
+        cout << "\n";
+        cout << "Endereço" << '\n';
+        cout << " Logradouro: " << regAux.GetKey() << '\n';
+        cout << " Número: " << regAux.GetKey() << '\n';
+        cout << " Complemento: " << regAux.GetKey() << '\n';
+        cout << " Cidade: " << regAux.GetKey() << '\n';
+        cout << " Estado: " << regAux.GetKey() << '\n';
+        cout << " ZIP: " << regAux.GetKey() << '\n';
+        cout << " Telefone: " << regAux.GetKey() << '\n';
+        cout << "Digite enter para continuar, ou 0 para parar" << endl;
+        std::getline(cin, aux);
+    }while(aux.length() != 0); // Se digitar algo sair do loop
+}
+
 int main(int argc, char const *argv[])
 {
     //Criando objeto de Arquivo
@@ -125,6 +147,9 @@ int main(int argc, char const *argv[])
             break;
             case 1:
                 inputGravarDados(&arquivoFix);
+            break;
+            case 2:
+                visualizar(&arquivoFix);
             break;
             //TODO Adicionar outros casos
             default:
