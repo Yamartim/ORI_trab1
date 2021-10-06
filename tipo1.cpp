@@ -36,7 +36,7 @@ int inputOperacao(){
 }
 
 // Loop de input dos dados de pessoas
-void inputGravarDados(){
+void inputGravarDados(Arquivo *arq){
     Registro inRegistro;
     int intaux;
     string straux;
@@ -98,8 +98,8 @@ void inputGravarDados(){
             cin.ignore();
         }while(!inRegistro.SetPNumero(intaux));
 
-        // gravarDados(&inRegistro);
-        //cout << " gravado com sucesso" << endl;
+        arq->escreverReg(inRegistro);
+        cout << " gravado com sucesso" << endl;
         cout << "\nContinuar? (S/N)" << endl;
         cin >> straux;
 
@@ -108,22 +108,12 @@ void inputGravarDados(){
 
 int main(int argc, char const *argv[])
 {
-    //// Exemplo de escrita no arquivo
-    // string buffer;
-    // while(1){
-    //     std::cin >> buffer;
-    //     if(buffer != "0"){
-    //         arquivo << buffer << std::endl;
-    //     }else{
-    //         break;
-    //     }
-    // }
     //Criando objeto de Arquivo
     ArquivoFIX arquivoFix("arquivo.txt", "indices.txt", 't');
     
     // Loop principal do programa
     // Input(Operacao) -> Loop da operacao Secundário -> Input(sair) -> Saída
-    
+
     bool sair = false;
     while(!sair){
         // Apresenta opções na tela, retorna operação
@@ -134,7 +124,7 @@ int main(int argc, char const *argv[])
                 sair = true;
             break;
             case 1:
-                inputGravarDados();
+                inputGravarDados(&arquivoFix);
             break;
             //TODO Adicionar outros casos
             default:
