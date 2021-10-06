@@ -1,7 +1,3 @@
-#include <stdio.h>
-#include <iostream>
-#include <fstream>
-#include <string.h>
 #include "Arquivo.h"
 #include "Registro.h"
 
@@ -13,23 +9,23 @@ Arquivo::Arquivo(){
     
 }
 //setter dos paths do arquivo
-void Arquivo::setPaths(string p, string p_indice, char t){
+void Arquivo::setPaths(std::string p, std::string p_indice, char t){
     path = p;
     pathindice = p_indice;
     tipo = t;
 }
 
 //getter do path do arquivo
-string Arquivo::getPath(){
+std::string Arquivo::getPath(){
     return this->path;
 }
 
-string Arquivo::getTipo(){
+std::string Arquivo::getTipo(){
     return this->tipo;
 }
 
 /**ArquivoFIX**/
-ArquivoFIX::ArquivoFIX(string p, string p_indice, char t){
+ArquivoFIX::ArquivoFIX(std::string p, std::string p_indice, char t){
     setPaths(p, p_indice, t);
     setOffset();
 }
@@ -50,10 +46,11 @@ void ArquivoFIX::setOffset(){
 }
 
 bool ArquivoFIX::escreverReg(Registro reg){
+    /**Possibilidade com fwrite se for permitido gravar o objeto direto no arquivo binario**/
     FILE *arq;
     
-    string aux = getPath();
-    string aux2 = getTipo();
+    std::string aux = getPath();
+    std::string aux2 = getTipo();
 
     int tam = aux.length();
     char* path = new char[tam + 1];
@@ -84,9 +81,10 @@ bool ArquivoFIX::escreverReg(Registro reg){
 }
 
  Registro ArquivoFIX::buscaKey(int key) {
+     /**Leitura se for permitido gravar o objeto inteiro em binario, ainda nao implementei da outra forma**/
     FILE *arq;
-    string aux = getPath();
-    string aux2 = getTipo();
+    std::string aux = getPath();
+    std::string aux2 = getTipo();
     Registro auxReg;
 
     int tam = aux.length();
@@ -113,18 +111,18 @@ bool ArquivoFIX::escreverReg(Registro reg){
  }
 
 
-// Registro ArquivoFIX::buscaNome(string nome)
-// {
-    
-// }
-
+/*Registro ArquivoFIX::buscaNome(std::string nome){
+    Registro auxReg;
+    //to do
+    return auxReg;     
+}*/
 
 
 
 /**ArquivoVAR**/
 
 //construtor 
- ArquivoVAR::ArquivoVAR(string p, string p_indice, char t){
+ ArquivoVAR::ArquivoVAR(std::string p, std::string p_indice, char t){
     setPaths(p, p_indice, t);
     setSeparadores('|', '#');
 }
@@ -137,16 +135,17 @@ void ArquivoVAR::setSeparadores(char sepCam, char sepReg){
 
 //Escreve os dados de um registro no arquivo
 bool ArquivoVAR::escreverReg(Registro reg){
-    /**Tentativa de escrever individualmente cada campo direto no arquivo sem fwrite**/
+    /**Tentativa de escrever individualmente cada campo direto no arquivo sem fwrite 
+      (se for fazer assim a assinatura da funcao volta a ser void)**/
 
-    ofstream arq; /**Meu editor de texto indicava erro aqui por isso tentei reescrever usando fwrite e ai surgiu a duvida que mandei no grupo**/ 
-    string aux = getPath();
+    std::ofstream arq; /**Meu editor de texto indicava erro aqui por isso tentei reescrever usando fwrite e ai surgiu a duvida que mandei no grupo**/ 
+    std::string aux = getPath();
     
     int tam = aux.length();
     char* path = new char[tam + 1];
     strcpy(path, aux.c_str());
 
-    arq.open(path, ios::out | ios::trunc );    
+    arq.open(path, std::ios::out | std::ios::trunc );    
 
     arq << reg.GetKey() << separador_cam;
     arq << reg.GetLastName() << separador_cam;
@@ -163,12 +162,14 @@ bool ArquivoVAR::escreverReg(Registro reg){
     
     arq.close();
 
-    /**Possibilidade com fwrite se for permitido gravar o objeto direto no arquivo binario**?
-    /*FILE *arq;
-    string aux = getPath();
-    string aux2 = getTipo();
+    return true;
 
-    //conversao de string para char*
+    /**Possibilidade com fwrite se for permitido gravar o objeto direto no arquivo binario**
+    /*FILE *arq;
+    std::string aux = getPath();
+    std::string aux2 = getTipo();
+
+    //conversao de std::string para char*
     int tam = aux.length();
     char* path = new char[tam + 1];
     strcpy(path, aux.c_str());
@@ -197,9 +198,10 @@ bool ArquivoVAR::escreverReg(Registro reg){
 }
 
 Registro ArquivoVAR::buscaKey(int key){
+    /**Leitura se for permitido gravar o objeto inteiro em binario, ainda nao implementei da outra forma**/
     FILE *arq;
-    string aux = getPath();
-    string aux2 = getTipo();
+    std::string aux = getPath();
+    std::string aux2 = getTipo();
     Registro auxReg;
 
     int tam = aux.length();
@@ -226,8 +228,9 @@ Registro ArquivoVAR::buscaKey(int key){
 }
 
 
-// Registro Arquivo::buscaNome(string nome)
-// {
-    
-// }
+/*Registro Arquivo::buscaNome(std::string nome){
+    Registro auxReg;
+    // to do
+    return auxReg; 
+ }*/
 

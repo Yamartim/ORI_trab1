@@ -25,7 +25,7 @@ Registro::Registro(){
     phone.numero = 0;
 }
 
-Registro::Registro(int k, string ln, string fn, string al, int an, string ac, string ci, string st, int zc, int pd, int pn)
+Registro::Registro(int k, std::string ln, std::string fn, std::string al, int an, std::string ac, std::string ci, std::string st, int zc, int pd, int pn)
 {
     //Set(Requisitado) ? : Senão Set(Padrão)
     SetKey(k) ? : SetKey(0);
@@ -70,17 +70,17 @@ bool Registro::SetKey(int k){
     return 0;
 }
 
-bool Registro::SetLastName(string ln){
+bool Registro::SetLastName(std::string ln){
     lastname = ln;
     return 1;
 }
 
-bool Registro::SetFirstName(string fn){
+bool Registro::SetFirstName(std::string fn){
     firstname = fn;
     return 1;
 }
 
-bool Registro::SetLogradouro(string al){
+bool Registro::SetLogradouro(std::string al){
     address.logradouro = al;
     return 1;
 }
@@ -90,17 +90,17 @@ bool Registro::SetANumero(int an){
     return 1;
 }
 
-bool Registro::SetComplemento(string ac){
+bool Registro::SetComplemento(std::string ac){
     address.complemento = ac;
     return 1;
 }
 
-bool Registro::SetCity(string ci){
+bool Registro::SetCity(std::string ci){
     city = ci;
     return 1;
 }
 
-bool Registro::SetState(string st){
+bool Registro::SetState(std::string st){
     if(st.length() == 2){
         state = st;
         return 1;
@@ -133,4 +133,47 @@ bool Registro::SetPNumero(int pn){
 }
 
 // Get
+int Registro::GetKey(){
+    return this->key;
+}
+
+std::string Registro::GetLastName(){
+    return this->lastname;
+}
+
+std::string Registro::GetFirstName(){
+    return this->firstname;
+}
+
+std::string Registro::GetLogradouro(){
+    return this->address.logradouro;
+}
+
+int Registro::GetANumero(){
+    return this->address.numero;
+}
+
+std::string Registro::GetComplemento(){
+    return this->address.complemento;
+}
+
+std::string Registro::GetCity(){
+    return this->city;
+}
+
+std::string Registro::GetState(){
+    return this->state;
+}
+
+int Registro::GetZipcode(){
+    return this->zipcode;
+}
+
+int Registro::GetDDD(){
+    return this->phone.ddd;
+}
+
+int Registro::GetPNumero(){
+    return this->phone.numero;
+}
 //TODO

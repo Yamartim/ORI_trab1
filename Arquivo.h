@@ -1,4 +1,11 @@
+#ifndef ARQUIVO_H
+#define ARQUIVO_H
 #include <string>
+#include <stdio.h>
+#include <iostream>
+#include <fstream>
+#include <cstring>
+#include <iomanip>
 #include "Registro.h"
 
 using std::string;
@@ -69,13 +76,13 @@ public:
     //getters
 
     Registro buscaKey(int key);
-    Registro buscaNome(string nome);
+    //Registro buscaNome(string nome);
 
     bool escreverReg(Registro reg);
-    bool removerReg(Registro reg);
-    bool atualizaIndice(Registro reg);
+   // bool removerReg(Registro reg);
+    //bool atualizaIndice(Registro reg);
 
-    Registro buscaNumReg(int n);
+    //Registro buscaNumReg(int n);
 
 };
 
@@ -92,10 +99,11 @@ public:
     void setSeparadores(char sepCam, char sepReg);
 
     Registro buscaKey(int key);
-    Registro buscaNome(string nome);
+   // Registro buscaNome(string nome);
 
     bool escreverReg(Registro reg);
-    bool removerReg(Registro reg);
-    bool atualizaIndice(Registro reg);
+    //bool removerReg(Registro reg);
+    //bool atualizaIndice(Registro reg);
 
 };
+#endif
