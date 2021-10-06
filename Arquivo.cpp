@@ -208,10 +208,7 @@ bool ArquivoVAR::escreverReg(Registro reg){
     
     arq.close();
 
-
-
-    /**Possibilidade com fwrite se for permitido gravar o objeto direto no arquivo binario**
-    /*FILE *arq;
+    FILE *arq;
     std::string aux = getPath();
     std::string aux2 = getTipo();
 
@@ -274,7 +271,7 @@ Registro ArquivoVAR::buscaKey(int key){
 }
 
 
-/*Registro Arquivo::buscaNome(std::string nome){
+Registro Arquivo::buscaNome(std::string nome){
     Registro auxReg;
     // to do
     return auxReg; 

@@ -28,22 +28,22 @@ Registro::Registro(){
 Registro::Registro(int k, std::string ln, std::string fn, std::string al, int an, std::string ac, std::string ci, std::string st, int zc, int pd, int pn)
 {
     //Set(Requisitado) ? : Senão Set(Padrão)
-    SetKey(k) ? : SetKey(0);
+    SetKey(k) ? true : SetKey(0);
 
-    SetFirstName(fn) ? : SetFirstName("");
-    SetLastName(ln) ? : SetLastName("");
+    SetFirstName(fn) ? true : SetFirstName("");
+    SetLastName(ln) ? true : SetLastName("");
 
-    SetLogradouro(al) ? : SetLogradouro("");
-    SetANumero(an) ? : SetANumero(0);
-    SetComplemento(ac) ? : SetComplemento("");
+    SetLogradouro(al) ? true : SetLogradouro("");
+    SetANumero(an) ? true : SetANumero(0);
+    SetComplemento(ac) ? true : SetComplemento("");
 
-    SetCity(ci) ? : SetCity("");
-    SetState(st) ? : SetState("NA");
+    SetCity(ci) ? true : SetCity("");
+    SetState(st) ? true : SetState("NA");
 
-    SetZipcode(zc) ? : SetZipcode(0);
+    SetZipcode(zc) ? true : SetZipcode(0);
 
-    SetDDD(pd) ? : SetDDD(0);
-    SetPNumero(pn) ? : SetPNumero(0);
+    SetDDD(pd) ? true : SetDDD(0);
+    SetPNumero(pn) ? true : SetPNumero(0);
 }
 
 void Registro::print()
