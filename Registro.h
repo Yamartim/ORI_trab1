@@ -15,8 +15,7 @@ private:
     string lastname;
     string firstname;
 
-    struct Address
-    {
+    struct Address{
         string logradouro;
         int numero;
         string complemento;

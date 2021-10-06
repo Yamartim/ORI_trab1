@@ -119,7 +119,7 @@ int main(int argc, char const *argv[])
     //     }
     // }
     //Criando objeto de Arquivo
-    ArquivoFIX arquivoFix("arquivo.txt", "indices.txt", 't');
+    ArquivoFIX arquivoFix("arquivo", "indices", 't');
     
     // Loop principal do programa
     // Input(Operacao) -> Loop da operacao Secundário -> Input(sair) -> Saída

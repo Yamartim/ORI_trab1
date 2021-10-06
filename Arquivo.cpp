@@ -1,8 +1,10 @@
 #include "Arquivo.h"
 #include "Registro.h"
+#include <fstream>
 
 using std::cout;
 using std::endl;
+
 
 /**Construtor de arquivo geral**/
 Arquivo::Arquivo(){
@@ -30,6 +32,13 @@ ArquivoFIX::ArquivoFIX(std::string p, std::string p_indice, char t){
     setOffset();
 }
 
+//getter
+
+int ArquivoFIX::getOffsetReg(){
+    return this->offset_reg;
+}
+
+//setter
 void ArquivoFIX::setOffset(){
     offset_reg = 100;
     offset_cam = new int[7];
@@ -44,70 +53,87 @@ void ArquivoFIX::setOffset(){
     offset_cam[7] = PHONE;
 
 }
+/*Ajusta os campos para escrita no registro de tamanho fixo*/
+    /*
+        Total(100 bytes offset)
+        KEY (i.e., número que identifica a pessoa) (4 bytes)
+        LASTNAME (i.e., sobrenome da pessoa) (16 bytes)
+        FIRSTNAME (i.e., primeiro nome da pessoa) (16 bytes)
+        ADDRESS (i.e., endereço com logradouro, número e complemento) (32 bytes)
+        CITY (i.e., cidade) (20 bytes)
+        STATE (i.e., sigla do estado com 2 caracteres, tal como SP) (2 bytes)
+        ZIP (i.e., CEP, tal como 222222-222) (4 bytes)
+        PHONE (i.e., número do telefone com DDD, tal como (022)2222-2222) (6 bytes)
+    */
+void ajustaCampo(Registro* reg){
+    if(reg->GetLastName().length() < 16){
+
+    }
+}
 
 bool ArquivoFIX::escreverReg(Registro reg){
-    /**Possibilidade com fwrite se for permitido gravar o objeto direto no arquivo binario**/
-    FILE *arq;
+    std::fstream arq; //arquivo para leitura e escrita
+    char c; //variavel para receber os caracteres 1 a 1 do arquivo
     
+    //convertendo de string para char*
     std::string aux = getPath();
-    std::string aux2 = getTipo();
-
     int tam = aux.length();
     char* path = new char[tam + 1];
     strcpy(path, aux.c_str());
-
-    tam = aux2.length();
-    char* type = new char[tam + 1];
-    strcpy(type, aux2.c_str());
     
-    arq = fopen(path, type);
+    ajustaCampo(&reg);
 
-    if(arq == NULL){
-        puts("Erro: Nao foi possivel abrir o arquivo");
+    arq.open(path, std::ios::in | std::ios::out);    
+    
+    if(!arq.is_open()){
+        cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
         return false;
     }
 
-    if(fwrite(&reg, sizeof(reg), 1, arq) != 1){
-        puts("Erro: Nao foi possivel escrever o registro no arquivo");
-        return false;
+    arq.get(c);
+
+    while(c != '*' && !arq.eof()){
+        arq.seekg(getOffsetReg() , std::ios::cur);
+        arq.get(c);
     }
+    
+    arq.write((char*)&reg, sizeof(reg));
 
-    fclose(arq);
-
-    puts("Registro gravado com sucesso");
+    arq.close();
 
     return true;
-   
 }
 
  Registro ArquivoFIX::buscaKey(int key) {
      /**Leitura se for permitido gravar o objeto inteiro em binario, ainda nao implementei da outra forma**/
-    FILE *arq;
+    std:: ifstream arq;
     std::string aux = getPath();
-    std::string aux2 = getTipo();
     Registro auxReg;
-
+    int keyValue;
+    bool achou;
     int tam = aux.length();
     char* path = new char[tam + 1];
     strcpy(path, aux.c_str());
 
-    tam = aux2.length();
-    char* type = new char[tam + 1];
-    strcpy(type, aux2.c_str());
+    arq.open(path, std::ios::in);
+
+    arq.read((char*)&keyValue, sizeof(int));
+    while(keyValue != key ){
+        arq.seekg(getOffsetReg(), std::ios::cur);
+        if(!arq.eof())
+            arq.read((char*)&keyValue, sizeof(int));
+        if(keyValue == key)
+            achou = true;
+    }
+
+    if(achou){
+        arq.seekg(-sizeof(int), std::ios::cur);
+        arq.read((char*)&auxReg, sizeof(auxReg));
+    }
     
-    arq = fopen(path, type);
-    if(arq == NULL){
-        puts("Erro: Nao foi possivel abrir o arquivo");
-        return auxReg;
-    }
+    arq.close();
 
-    while (!feof(arq) && (auxReg.GetKey() != key)){
-        fread(&auxReg, sizeof(Registro), 1, arq);
-    }
-
-    fclose(arq);
-
-    return auxReg;
+    return auxReg;    
  }
 
 
@@ -116,6 +142,17 @@ bool ArquivoFIX::escreverReg(Registro reg){
     //to do
     return auxReg;     
 }*/
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -138,14 +175,14 @@ bool ArquivoVAR::escreverReg(Registro reg){
     /**Tentativa de escrever individualmente cada campo direto no arquivo sem fwrite 
       (se for fazer assim a assinatura da funcao volta a ser void)**/
 
-    std::ofstream arq; /**Meu editor de texto indicava erro aqui por isso tentei reescrever usando fwrite e ai surgiu a duvida que mandei no grupo**/ 
+    std::ofstream arq; 
     std::string aux = getPath();
     
     int tam = aux.length();
     char* path = new char[tam + 1];
     strcpy(path, aux.c_str());
 
-    arq.open(path, std::ios::out | std::ios::trunc );    
+    arq.open(path, std::ios::out | std::ios::trunc);    
 
     arq << reg.GetKey() << separador_cam;
     arq << reg.GetLastName() << separador_cam;
@@ -162,7 +199,7 @@ bool ArquivoVAR::escreverReg(Registro reg){
     
     arq.close();
 
-    return true;
+
 
     /**Possibilidade com fwrite se for permitido gravar o objeto direto no arquivo binario**
     /*FILE *arq;
