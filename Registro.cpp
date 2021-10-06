@@ -61,7 +61,7 @@ void Registro::print()
 }
 
 // Sets
-//! Talvez faltem algumas verificações aqui
+//! Talvez faltem algumas verificações aqui -> Registro fixo ou variável?
 bool Registro::SetKey(int k){
     if(k >= 0){
         key = k;
@@ -176,4 +176,52 @@ int Registro::GetDDD(){
 int Registro::GetPNumero(){
     return this->phone.numero;
 }
-//TODO
+
+// Sets do Fixo (Restrições a mais no tamanho das strings)
+bool RegistroFIX::SetLastName(std::string ln){
+    if(ln.length() > 16){
+        return 0;
+    }
+    lastname = ln;
+    return 1;
+}
+
+bool RegistroFIX::SetFirstName(std::string fn){
+    if(fn.length() > 16){
+        return 0;
+    }
+    firstname = fn;
+    return 1;
+}
+
+bool RegistroFIX::SetLogradouro(std::string al){
+    if(al.length() > 20){
+        return 0;
+    }
+    address.logradouro = al;
+    return 1;
+}
+
+bool RegistroFIX::SetComplemento(std::string ac){
+    if(ac.length() > 10){
+        return 0;
+    }
+    address.complemento = ac;
+    return 1;
+}
+
+bool RegistroFIX::SetCity(std::string ci){
+    if(ci.length() > 16){
+        return 0;
+    }
+    city = ci;
+    return 1;
+}
+
+bool RegistroFIX::SetState(std::string st){
+    if(st.length() == 2){
+        state = st;
+        return 1;
+    }
+    return 0;
+}
