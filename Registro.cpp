@@ -49,7 +49,7 @@ Registro::Registro(int k, std::string ln, std::string fn, std::string al, int an
 void Registro::print()
 {
     cout << endl;
-    cout << "REGISTRO-------------------" << endl << endl;
+    cout << "REGISTRO-------------------" << endl;
     cout << "- chave: " << key << endl;
     cout << "- nome: " << firstname << " " << lastname << endl;
     cout << "- endereço: " << address.logradouro << ", num " << address.numero << ", " << address.complemento << endl;

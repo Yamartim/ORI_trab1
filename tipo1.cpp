@@ -94,6 +94,10 @@ void inputGravarDados(Arquivo *arq){
             cin.ignore();
         }while(!inRegistro.SetPNumero(intaux));
 
+        //DEBUG
+        cout << "\n\nImprimindo valores do registro";
+        inRegistro.print();
+
         if(arq->escreverReg(&inRegistro)){
             cout << " gravado com sucesso" << endl;
         }
