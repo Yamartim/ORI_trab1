@@ -42,7 +42,7 @@ public:
     virtual Registro buscaKey(int key) = 0;
     virtual Registro buscaNome(string nome) = 0;
 
-    virtual bool escreverReg(Registro reg) = 0;
+    virtual bool escreverReg(Registro* reg) = 0;
     virtual bool removerReg(Registro reg) = 0;
     virtual bool atualizaIndice(Registro reg) = 0;
 
@@ -67,7 +67,7 @@ public:
     Registro buscaNome(string nome);
 
     void ajustaCampo(Registro* reg);
-    bool escreverReg(Registro reg);
+    bool escreverReg(Registro* reg);
     bool removerReg(Registro reg);
     bool atualizaIndice(Registro reg);
 

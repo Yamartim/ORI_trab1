@@ -65,27 +65,34 @@ void ArquivoFIX::setOffset(){
         PHONE (i.e., número do telefone com DDD, tal como (022)2222-2222) (6 bytes)
     */
 void ArquivoFIX::ajustaCampo(Registro* reg){
+    std::string aux;
     while(reg->GetLastName().length() < 16){
-        reg->GetLastName() = reg->GetLastName() + '#';
+        aux = reg->GetLastName();
+        reg->SetLastName(aux.append("#"));
     }
     while(reg->GetFirstName().length() < 16){
-        reg->GetFirstName() = reg->GetFirstName() + '#';
+        aux = reg->GetFirstName();
+        reg->SetFirstName(aux.append("#"));
     }
     while(reg->GetLogradouro().length() < 20){
-        reg->GetLogradouro() = reg->GetLogradouro() + '#';
+        aux = reg->GetLogradouro();
+        reg->SetLogradouro(aux.append("#"));
     }   
     while(reg->GetComplemento().length() < 10){
-        reg->GetComplemento() = reg->GetComplemento() + '#';
+        aux = reg->GetComplemento();
+        reg->SetComplemento(aux.append("#"));
     }
     while(reg->GetCity().length() < 20){
-        reg->GetCity() = reg->GetCity() + '#';
+        aux = reg->GetCity();
+        reg->SetCity(aux.append("#"));
     }
     while(reg->GetState().length() < 2){
-        reg->GetState() = reg->GetState() + '#';
+        aux = reg->GetState();
+        reg->SetState(aux.append("#"));
     }
 }
 
-bool ArquivoFIX::escreverReg(Registro reg){
+bool ArquivoFIX::escreverReg(Registro *reg){
 
     std::fstream arq; //arquivo para leitura e escrita
     char c; //variavel para receber os caracteres 1 a 1 do arquivo
@@ -96,9 +103,9 @@ bool ArquivoFIX::escreverReg(Registro reg){
     char* path = new char[tam + 1];
     strcpy(path, aux.c_str());
     
-    ajustaCampo(&reg);
+    ajustaCampo(reg);
 
-    arq.open(path, std::ios::in | std::ios::out);    
+    arq.open(path, std::ios::in | std::ios::out | std::ios::binary);    
     
     if(!arq.is_open()){
         cout << "Erro: Nao foi possivel abrir o arquivo" << endl;

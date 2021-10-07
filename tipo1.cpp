@@ -94,8 +94,10 @@ void inputGravarDados(Arquivo *arq){
             cin.ignore();
         }while(!inRegistro.SetPNumero(intaux));
 
-        arq->escreverReg(inRegistro);
-        cout << " gravado com sucesso" << endl;
+        if(arq->escreverReg(&inRegistro)){
+            cout << " gravado com sucesso" << endl;
+        }
+        else cout << "Erro" << endl;
         cout << "\nContinuar? (S/N)" << endl;
         cin >> straux;
 
@@ -133,7 +135,7 @@ void visualizar(Arquivo *arq){
 int main(int argc, char const *argv[])
 {
     //Criando objeto de Arquivo
-    ArquivoFIX arquivoFix("arquivo", "indices", 't');
+    ArquivoFIX arquivoFix("arquivo.bin", "indices.bin", 't');
     
     // Loop principal do programa
     // Input(Operacao) -> Loop da operacao Secundário -> Input(sair) -> Saída
