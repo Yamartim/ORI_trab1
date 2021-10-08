@@ -1,6 +1,10 @@
 #include <fstream>
 #include <iostream>
+#include "Registro.h"
+#include "Arquivo.h"
 
+using std::cout;
+using std::endl;
 void write_txt_value(int v)
 {
   std::ofstream txt_out("txt.out");
@@ -17,8 +21,49 @@ int read_txt_value()
 
 void write_bin_value(int v)
 {
-  std::fstream bin_out("bin.out",std::ios_base::binary|std::ios_base::out);
-  bin_out.write((char*)&v,sizeof(int));
+  ArquivoFIX arquivoFix("arquivo.dat", "indices.bin", 't');
+  std::fstream arq;//arquivo para leitura e escrita
+  char c; //variavel para receber os caracteres 1 a 1 do arquivo
+    //convertendo de string para char*
+    std::string aux = arquivoFix.getPath();
+    int tam = aux.length();
+    char* path = new char[tam + 1];
+    strcpy(path, aux.c_str());
+    
+   // arquivoFix.ajustaCampo(reg);
+
+    //criando arquivo caso ele nao exista
+    arq.open(path,std::ios_base::out | std::ios_base::binary);
+    arq.close();
+
+    //std::fstream arq(path, std::ios_base::binary|std::ios_base::out|std::ios_base::in);
+    arq.open(path, std::ios_base::in | std::ios_base::out | std::ios_base::binary);
+
+    //caso falhe em abrir o arquivo
+    if(!arq.is_open()){
+        cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
+        return;
+    }
+
+    //garantindo que os ponteiros de leitura e escrita começam no começo do arquivo
+    arq.seekg(0, std::ios::beg);
+    arq.seekp(0, std::ios::beg);
+
+    arq.get(c);
+
+    //verificando por remoçoes logicas
+    while(c != '*' && !arq.eof()){
+        //arq.seekg(getOffsetReg() , std::ios::cur);
+        //arq.seekp(getOffsetReg() , std::ios::cur);
+        arq.get(c);
+        arq.clear();
+    }
+
+    arq.clear();
+    arq.write((char*)&v, sizeof(int));
+
+    arq.close();
+
 }
 
 int read_bin_value()

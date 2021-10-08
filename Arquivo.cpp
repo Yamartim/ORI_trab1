@@ -133,10 +133,13 @@ bool ArquivoFIX::escreverReg(Registro *reg){
 
     //verificando por remoçoes logicas
     while(c != '*' && !arq.eof()){
+        arq.clear();
         arq.seekg(getOffsetReg() , std::ios::cur);
         arq.seekp(getOffsetReg() , std::ios::cur);
         arq.get(c);
     }
+
+    arq.clear();
     
     arq.write((char*)&reg, sizeof(Registro));
 
@@ -188,11 +191,12 @@ bool ArquivoFIX::escreverReg(Registro *reg){
     //arq.read((char*)&keyValue, sizeof(int));    
     arq.read((char*)&auxReg, sizeof(Registro));
     while((auxReg.GetKey() != key) && !arq.eof()){
+        arq.clear();
         arq.seekg(getOffsetReg(), std::ios::cur);
         if(!arq.eof())
             arq.read((char*)&auxReg, sizeof(Registro));
+        arq.clear();
     }
-
     arq.close();
 
     //caso achou, atribui retorna o registro do arquivo
