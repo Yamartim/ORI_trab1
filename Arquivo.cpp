@@ -185,8 +185,9 @@ bool ArquivoFIX::escreverReg(Registro *reg){
      /*----DEBUG-------*/
     bool fimArquivo = arq.eof();
     std::cout<<"Arquivo vazio? " << fimArquivo << endl;
+    arq.clear();
     /*------------*/
-
+    
     //procurando registro com a chave especificada no arquivo
     //arq.read((char*)&keyValue, sizeof(int));    
     arq.read((char*)&auxReg, sizeof(Registro));
@@ -194,8 +195,8 @@ bool ArquivoFIX::escreverReg(Registro *reg){
         arq.clear();
         arq.seekg(getOffsetReg(), std::ios::cur);
         if(!arq.eof())
+            arq.clear();
             arq.read((char*)&auxReg, sizeof(Registro));
-        arq.clear();
     }
     arq.close();
 
