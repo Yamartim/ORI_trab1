@@ -93,10 +93,8 @@ void ArquivoFIX::ajustaCampo(Registro* reg){
 }
 
 bool ArquivoFIX::escreverReg(Registro *reg){
-
-    std::fstream arq; //arquivo para leitura e escrita
+    std::fstream arq;//arquivo para leitura e escrita
     char c; //variavel para receber os caracteres 1 a 1 do arquivo
-    
     //convertendo de string para char*
     std::string aux = getPath();
     int tam = aux.length();
@@ -105,17 +103,38 @@ bool ArquivoFIX::escreverReg(Registro *reg){
     
     ajustaCampo(reg);
 
-    arq.open(path, std::ios::in | std::ios::out | std::ios::binary);    
-    
+    //criando arquivo caso ele nao exista
+    arq.open(path,std::ios_base::out | std::ios_base::binary);
+    arq.close();
+
+    //std::fstream arq(path, std::ios_base::binary|std::ios_base::out|std::ios_base::in);
+    arq.open(path, std::ios_base::in | std::ios_base::out | std::ios_base::binary);
+
+    //caso falhe em abrir o arquivo
     if(!arq.is_open()){
         cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
         return false;
     }
 
+    //garantindo que os ponteiros de leitura e escrita começam no começo do arquivo
+    arq.seekg(0, std::ios::beg);
+    arq.seekp(0, std::ios::beg);
+
+    /*------DEBUG--------*/
+    int pos;
+
+    pos = arq.tellg();
+    std::cout << "Posicao do pointer get " << pos << endl;
+    pos = arq.tellp();
+    std::cout << "Posicao do pointer put " << pos << endl;
+
+    /*--------------*/
     arq.get(c);
 
+    //verificando por remoçoes logicas
     while(c != '*' && !arq.eof()){
         arq.seekg(getOffsetReg() , std::ios::cur);
+        arq.seekp(getOffsetReg() , std::ios::cur);
         arq.get(c);
     }
     
@@ -127,35 +146,61 @@ bool ArquivoFIX::escreverReg(Registro *reg){
 }
 
  Registro ArquivoFIX::buscaKey(int key) {
-     /**Leitura se for permitido gravar o objeto inteiro em binario, ainda nao implementei da outra forma**/
     std:: ifstream arq;
     std::string aux = getPath();
     Registro auxReg;
-    int keyValue;
-    bool achou;
+    Registro regVazio;
+    //int keyValue;
+    bool achou = false;
+
+    //convertendo de string para char
     int tam = aux.length();
     char* path = new char[tam + 1];
     strcpy(path, aux.c_str());
 
-    arq.open(path, std::ios::in);
+    arq.open(path, std::ios::in | std::ios::binary);
 
-    arq.read((char*)&keyValue, sizeof(int));
-    while(keyValue != key ){
+    //caso falhe em abrir o arquivo
+    if(!arq.is_open()){
+        cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
+        return regVazio; //retorna registro vazio, tratar na main esse retorno
+    }
+    /*------DEBUG--------*/
+    int pos;
+    pos = arq.tellg();
+    std::cout << "Posicao do pointer get antes " << pos << endl;
+    /*--------------*/
+
+    //garantindo que os ponteiros de leitura e escrita começam no começo do arquivo
+    arq.seekg(0, std::ios::beg);
+
+    /*------DEBUG--------*/
+    pos = arq.tellg();
+    std::cout << "Posicao do pointer get depois " << pos << endl;
+    /*--------------*/
+
+     /*----DEBUG-------*/
+    bool fimArquivo = arq.eof();
+    std::cout<<"Arquivo vazio? " << fimArquivo << endl;
+    /*------------*/
+
+    //procurando registro com a chave especificada no arquivo
+    //arq.read((char*)&keyValue, sizeof(int));    
+    arq.read((char*)&auxReg, sizeof(Registro));
+    while((auxReg.GetKey() != key) && !arq.eof()){
         arq.seekg(getOffsetReg(), std::ios::cur);
         if(!arq.eof())
-            arq.read((char*)&keyValue, sizeof(int));
-        if(keyValue == key)
-            achou = true;
+            arq.read((char*)&auxReg, sizeof(Registro));
     }
 
-    if(achou){
-        arq.seekg(-sizeof(int), std::ios::cur);
-        arq.read((char*)&auxReg, sizeof(auxReg));
-    }
-    
     arq.close();
 
-    return auxReg;    
+    //caso achou, atribui retorna o registro do arquivo
+    if(auxReg.GetKey() == key){
+        return auxReg;
+    }
+    
+    return regVazio;    
  }
 
 
