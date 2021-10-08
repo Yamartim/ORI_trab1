@@ -151,7 +151,7 @@ bool ArquivoFIX::escreverReg(Registro *reg){
     Registro auxReg;
     Registro regVazio;
     //int keyValue;
-    bool achou = false;
+    //bool achou = false;
 
     //convertendo de string para char
     int tam = aux.length();
