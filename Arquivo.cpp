@@ -138,7 +138,7 @@ bool ArquivoFIX::escreverReg(Registro *reg){
         arq.get(c);
     }
     
-    arq.write((char*)&reg, sizeof(reg));
+    arq.write((char*)&reg, sizeof(Registro));
 
     arq.close();
 

@@ -145,7 +145,7 @@ void visualizar(Arquivo *arq){
 int main(int argc, char const *argv[])
 {
     //Criando objeto de Arquivo
-    ArquivoFIX arquivoFix("arquivo.bin", "indices.bin", 't');
+    ArquivoFIX arquivoFix("arquivo.dat", "indices.bin", 't');
     
     // Loop principal do programa
     // Input(Operacao) -> Loop da operacao Secundário -> Input(sair) -> Saída
