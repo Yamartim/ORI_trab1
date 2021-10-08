@@ -1,5 +1,6 @@
 #include "Arquivo.h"
 #include "Registro.h"
+#include <exception>
 
 using std::cout;
 using std::endl;
@@ -66,30 +67,23 @@ void ArquivoFIX::setOffset(){
     */
 void ArquivoFIX::ajustaCampo(Registro* reg){
     std::string aux;
-    while(reg->GetLastName().length() < 16){
-        aux = reg->GetLastName();
-        reg->SetLastName(aux.append("#"));
-    }
-    while(reg->GetFirstName().length() < 16){
-        aux = reg->GetFirstName();
-        reg->SetFirstName(aux.append("#"));
-    }
-    while(reg->GetLogradouro().length() < 20){
-        aux = reg->GetLogradouro();
-        reg->SetLogradouro(aux.append("#"));
-    }   
-    while(reg->GetComplemento().length() < 10){
-        aux = reg->GetComplemento();
-        reg->SetComplemento(aux.append("#"));
-    }
-    while(reg->GetCity().length() < 20){
-        aux = reg->GetCity();
-        reg->SetCity(aux.append("#"));
-    }
-    while(reg->GetState().length() < 2){
-        aux = reg->GetState();
-        reg->SetState(aux.append("#"));
-    }
+    aux = reg->GetFirstName();
+    reg->SetFirstName(aux.append((15 - reg->GetFirstName().length()), '#'));
+    
+    aux = reg->GetLastName();
+    reg->SetLastName(aux.append((15 - reg->GetLastName().length()), '#'));
+
+    aux = reg->GetLogradouro();
+    reg->SetLogradouro(aux.append((15 - reg->GetLogradouro().length()), '#'));
+
+    aux = reg->GetComplemento();
+    reg->SetComplemento(aux.append((15 - reg->GetComplemento().length()), '#'));
+
+    aux = reg->GetCity();
+    reg->SetCity(aux.append((15 - reg->GetCity().length()), '#'));
+
+    aux = reg->GetState();
+    reg->SetState(aux.append((15 - reg->GetState().length()), '#'));
 }
 
 bool ArquivoFIX::escreverReg(Registro *reg){
@@ -103,47 +97,63 @@ bool ArquivoFIX::escreverReg(Registro *reg){
     
     ajustaCampo(reg);
 
-    //criando arquivo caso ele nao exista
-    arq.open(path,std::ios_base::out | std::ios_base::binary);
-    arq.close();
-
     //std::fstream arq(path, std::ios_base::binary|std::ios_base::out|std::ios_base::in);
     arq.open(path, std::ios_base::in | std::ios_base::out | std::ios_base::binary);
 
     //caso falhe em abrir o arquivo
     if(!arq.is_open()){
-        cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
-        return false;
+        //criando arquivo caso ele nao exista
+        arq.open(path,std::ios_base::out | std::ios_base::binary);
+        cout << "Criando arquivo novo" << endl;
+        if(!arq.is_open()){
+            cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
+            return false;
+        }
+        
     }
 
     //garantindo que os ponteiros de leitura e escrita começam no começo do arquivo
     arq.seekg(0, std::ios::beg);
     arq.seekp(0, std::ios::beg);
 
-    /*------DEBUG--------*/
-    int pos;
-
-    pos = arq.tellg();
-    std::cout << "Posicao do pointer get " << pos << endl;
-    pos = arq.tellp();
-    std::cout << "Posicao do pointer put " << pos << endl;
-
-    /*--------------*/
     arq.get(c);
 
     //verificando por remoçoes logicas
     while(c != '*' && !arq.eof()){
         arq.clear();
-        arq.seekg(getOffsetReg() , std::ios::cur);
-        arq.seekp(getOffsetReg() , std::ios::cur);
-        arq.get(c);
-    }
+        arq.seekg(-1 , std::ios::cur);
+        arq.seekg(sizeof(Registro) , std::ios::cur);
+        arq.seekp(sizeof(Registro) , std::ios::cur);
 
+        arq.get(c);
+    } 
+    
     arq.clear();
     
-    arq.write((char*)&reg, sizeof(Registro));
-
+    //arq.seekg(0, std::ios::beg);  
+    arq.write((char*)reg, sizeof(Registro));
+    
     arq.close();
+
+
+    Registro reg2;
+    std::fstream file2;
+    file2.open(path, std::fstream::in | std::fstream::binary);
+    file2.read((char*)&reg2, sizeof(Registro));
+    file2.close();
+
+    cout << " Chave: " << reg2.GetKey() << '\n';
+    cout << " First Name: " << reg2.GetFirstName() << '\n';
+    cout << " Last Name: " << reg2.GetLastName() << '\n'; cout << "\n";
+    cout << " Endereço" << '\n';
+    cout << " Logradouro: " << reg2.GetLogradouro() << '\n';
+    cout << " Número: " << reg2.GetANumero() << '\n';
+    cout << " Complemento: " << reg2.GetComplemento() << '\n';
+    cout << " Cidade: " << reg2.GetCity() << '\n';
+    cout << " Estado: " << reg2.GetState() << '\n';
+    cout << " ZIP: " << reg2.GetZipcode() << '\n';
+    cout << " Telefone: " << reg2.GetPNumero() << '\n';
+    cout << " Digite enter para continuar, ou 0 para parar" << endl;
 
     return true;
 }
@@ -153,8 +163,6 @@ bool ArquivoFIX::escreverReg(Registro *reg){
     std::string aux = getPath();
     Registro auxReg;
     Registro regVazio;
-    //int keyValue;
-    //bool achou = false;
 
     //convertendo de string para char
     int tam = aux.length();
@@ -168,37 +176,31 @@ bool ArquivoFIX::escreverReg(Registro *reg){
         cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
         return regVazio; //retorna registro vazio, tratar na main esse retorno
     }
-    /*------DEBUG--------*/
-    int pos;
-    pos = arq.tellg();
-    std::cout << "Posicao do pointer get antes " << pos << endl;
-    /*--------------*/
 
     //garantindo que os ponteiros de leitura e escrita começam no começo do arquivo
     arq.seekg(0, std::ios::beg);
+    int pos = arq.tellg();
+    std::cout << "posicao inicial do ponteiro get " << pos << endl;   
 
-    /*------DEBUG--------*/
-    pos = arq.tellg();
-    std::cout << "Posicao do pointer get depois " << pos << endl;
-    /*--------------*/
 
-     /*----DEBUG-------*/
-    bool fimArquivo = arq.eof();
-    std::cout<<"Arquivo vazio? " << fimArquivo << endl;
-    arq.clear();
-    /*------------*/
-    
-    //procurando registro com a chave especificada no arquivo
-    //arq.read((char*)&keyValue, sizeof(int));    
     arq.read((char*)&auxReg, sizeof(Registro));
+
+   
+    //**LOGICA INCOMPLETA**
     while((auxReg.GetKey() != key) && !arq.eof()){
         arq.clear();
+        pos = arq.tellg();
+        std::cout << "posicao antes do ponteiro get " << pos << endl;
         arq.seekg(getOffsetReg(), std::ios::cur);
-        if(!arq.eof())
+        pos = arq.tellg();
+        std::cout << "posicao depois do ponteiro get " << pos << endl;
+        if(!arq.eof()){
             arq.clear();
             arq.read((char*)&auxReg, sizeof(Registro));
+        }
     }
-    arq.close();
+    arq.close();           
+
 
     //caso achou, atribui retorna o registro do arquivo
     if(auxReg.GetKey() == key){
