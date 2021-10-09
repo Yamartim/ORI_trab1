@@ -189,11 +189,6 @@ bool ArquivoFIX::escreverReg(Registro *reg){
     //**LOGICA INCOMPLETA**
     while((auxReg.GetKey() != key) && !arq.eof()){
         arq.clear();
-        pos = arq.tellg();
-        std::cout << "posicao antes do ponteiro get " << pos << endl;
-        arq.seekg(getOffsetReg(), std::ios::cur);
-        pos = arq.tellg();
-        std::cout << "posicao depois do ponteiro get " << pos << endl;
         if(!arq.eof()){
             arq.clear();
             arq.read((char*)&auxReg, sizeof(Registro));
