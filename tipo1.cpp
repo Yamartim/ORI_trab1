@@ -125,19 +125,18 @@ void visualizar(Arquivo *arq){
         // Usar função de leitura sequencial para colocar o registro i no regAux
 
         cout << " Chave: " << regAux.GetKey() << '\n';
-        cout << " First Name: " << regAux.GetKey() << '\n';
-        cout << " Last Name: " << regAux.GetKey() << '\n';
-
+        cout << " First Name: " << regAux.GetFirstName() << '\n';
+        cout << " Last Name: " << regAux.GetLastName() << '\n'; 
         cout << "\n";
-        cout << "Endereço" << '\n';
-        cout << " Logradouro: " << regAux.GetKey() << '\n';
-        cout << " Número: " << regAux.GetKey() << '\n';
-        cout << " Complemento: " << regAux.GetKey() << '\n';
-        cout << " Cidade: " << regAux.GetKey() << '\n';
-        cout << " Estado: " << regAux.GetKey() << '\n';
-        cout << " ZIP: " << regAux.GetKey() << '\n';
-        cout << " Telefone: " << regAux.GetKey() << '\n';
-        cout << "Digite enter para continuar, ou 0 para parar" << endl;
+        cout << " Endereço" << '\n';
+        cout << " Logradouro: " << regAux.GetLogradouro() << '\n';
+        cout << " Número: " << regAux.GetANumero() << '\n';
+        cout << " Complemento: " << regAux.GetComplemento() << '\n';
+        cout << " Cidade: " << regAux.GetCity() << '\n';
+        cout << " Estado: " << regAux.GetState() << '\n';
+        cout << " ZIP: " << regAux.GetZipcode() << '\n';
+        cout << " Telefone: " << regAux.GetPNumero() << '\n';
+        cout << " Digite enter para continuar, ou 0 para parar" << endl;
         std::getline(cin, aux);
     }while(aux.length() != 0); // Se digitar algo sair do loop
 }

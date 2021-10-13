@@ -92,17 +92,15 @@ void ArquivoFIX::ajustaCampo(Registro* reg){
 }
 
 bool ArquivoFIX::escreverReg(Registro *reg){
-    std::fstream arq;//arquivo para leitura e escrita
-    std::fstream arqIndice; //arquivo de indice secundario
-    char c; //variavel para receber os caracteres 1 a 1 do arquivo
+    std::fstream arq;
+    std::fstream arqIndice; 
+    char c; 
     char nome[FIRSTNAME];
     int pos;
+    int intAux;
+    short int shortIntAux;
 
     //convertendo de string para char*
-    
-    /*std::string aux = getPath();
-    std::string aux2 = getIndicePath();*/
-
     int tam = getPath().length();
     char* path = new char[tam + 1];
     strcpy(path, getPath().c_str());
@@ -145,18 +143,27 @@ bool ArquivoFIX::escreverReg(Registro *reg){
     arq.seekp(0, std::ios::beg);
 
     arq.get(c);
+    //std::cout << "C: " << c << endl;
 
+    pos = arq.tellg();
+    std::cout << "posicao get: " << pos << endl;
     //verificando por remoçoes logicas
     while(c != '*' && !arq.eof()){
         arq.clear();
+        pos = arq.tellg();
+        std::cout << "posicao get 2: " << pos << endl;
         arq.seekg(-1 , std::ios::cur);
+        pos = arq.tellg();
+        std::cout << "posicao get3: " << pos << endl;
         arq.seekg(getOffsetReg() , std::ios::cur);
-        arq.seekp(getOffsetReg() , std::ios::cur);
+        //arq.seekp(getOffsetReg() , std::ios::cur);
+        pos = arq.tellg();
+        std::cout << "posicao get4 :  " << pos << endl;
 
         arq.get(c);
     } 
     arq.clear();
-    
+
     //escrevendo no arquivo de indice
     strcpy(nome, reg->GetFirstName().c_str());
     pos = arq.tellp();
@@ -165,18 +172,27 @@ bool ArquivoFIX::escreverReg(Registro *reg){
 
 
     //extraindo campos da classe registro e escrevendo no arquivo
-    //arq->write((char*)reg, sizeof(Registro));
-    arq << reg->GetKey();
+    //arq << reg->GetKey();
+    intAux = reg->GetKey();
+    arq.write((char*)&intAux, sizeof(intAux));
     arq << reg->GetFirstName();
     arq << reg->GetLastName();
     arq << reg->GetLogradouro();              
-    arq << reg->GetANumero();
+    //arq << reg->GetANumero();
+    shortIntAux = reg->GetANumero();
+    arq.write((char*)&shortIntAux, sizeof(shortIntAux));
     arq << reg->GetComplemento();
     arq << reg->GetCity();
     arq << reg->GetState(); 
-    arq << reg->GetZipcode(); 
-    arq << reg->GetDDD();
-    arq << reg->GetPNumero();
+    //arq << reg->GetZipcode(); 
+    intAux = reg->GetZipcode();
+    arq.write((char*)&intAux, sizeof(intAux));
+    //arq << reg->GetDDD();
+    shortIntAux = reg->GetDDD();
+    arq.write((char*)&shortIntAux, sizeof(shortIntAux));
+    //arq << reg->GetPNumero();
+    intAux = reg->GetPNumero();
+    arq.write((char*)&intAux, sizeof(intAux));
     
     arq.close();
     arqIndice.close();
