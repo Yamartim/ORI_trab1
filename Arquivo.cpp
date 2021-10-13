@@ -73,22 +73,22 @@ void ArquivoFIX::setOffset(){
 void ArquivoFIX::ajustaCampo(Registro* reg){
     std::string aux;
     aux = reg->GetFirstName();
-    reg->SetFirstName(aux.append((15 - reg->GetFirstName().length()), '#'));
+    reg->SetFirstName(aux.append((16 - reg->GetFirstName().length()), '#'));
     
     aux = reg->GetLastName();
-    reg->SetLastName(aux.append((15 - reg->GetLastName().length()), '#'));
+    reg->SetLastName(aux.append((16 - reg->GetLastName().length()), '#'));
 
     aux = reg->GetLogradouro();
-    reg->SetLogradouro(aux.append((15 - reg->GetLogradouro().length()), '#'));
+    reg->SetLogradouro(aux.append((20 - reg->GetLogradouro().length()), '#'));
 
     aux = reg->GetComplemento();
-    reg->SetComplemento(aux.append((15 - reg->GetComplemento().length()), '#'));
+    reg->SetComplemento(aux.append((10 - reg->GetComplemento().length()), '#'));
 
     aux = reg->GetCity();
-    reg->SetCity(aux.append((15 - reg->GetCity().length()), '#'));
+    reg->SetCity(aux.append((20 - reg->GetCity().length()), '#'));
 
     aux = reg->GetState();
-    reg->SetState(aux.append((15 - reg->GetState().length()), '#'));
+    reg->SetState(aux.append((2 - reg->GetState().length()), '#'));
 }
 
 bool ArquivoFIX::escreverReg(Registro *reg){
@@ -164,7 +164,7 @@ bool ArquivoFIX::escreverReg(Registro *reg){
     } 
     arq.clear();
 
-    //escrevendo no arquivo de indice
+    //escrevendo no arquivo de indice (imcompleto, esta escrevendo em char e nao binario ainda)
     strcpy(nome, reg->GetFirstName().c_str());
     pos = arq.tellp();
 
@@ -172,26 +172,21 @@ bool ArquivoFIX::escreverReg(Registro *reg){
 
 
     //extraindo campos da classe registro e escrevendo no arquivo
-    //arq << reg->GetKey();
-    intAux = reg->GetKey();
+    intAux = reg->GetKey(); //key
     arq.write((char*)&intAux, sizeof(intAux));
-    arq << reg->GetFirstName();
-    arq << reg->GetLastName();
-    arq << reg->GetLogradouro();              
-    //arq << reg->GetANumero();
-    shortIntAux = reg->GetANumero();
+    arq << reg->GetFirstName().c_str(); //fname
+    arq << reg->GetLastName().c_str(); //lname
+    arq << reg->GetLogradouro().c_str();//logradouro           
+    shortIntAux = reg->GetANumero(); //anumero
     arq.write((char*)&shortIntAux, sizeof(shortIntAux));
-    arq << reg->GetComplemento();
-    arq << reg->GetCity();
-    arq << reg->GetState(); 
-    //arq << reg->GetZipcode(); 
-    intAux = reg->GetZipcode();
+    arq << reg->GetComplemento().c_str(); //complemento
+    arq << reg->GetCity().c_str(); //city
+    arq << reg->GetState().c_str(); //state
+    intAux = reg->GetZipcode();//zip
     arq.write((char*)&intAux, sizeof(intAux));
-    //arq << reg->GetDDD();
-    shortIntAux = reg->GetDDD();
+    shortIntAux = reg->GetDDD();//ddd
     arq.write((char*)&shortIntAux, sizeof(shortIntAux));
-    //arq << reg->GetPNumero();
-    intAux = reg->GetPNumero();
+    intAux = reg->GetPNumero();//pnumero
     arq.write((char*)&intAux, sizeof(intAux));
     
     arq.close();
@@ -247,27 +242,47 @@ bool ArquivoFIX::escreverReg(Registro *reg){
         int zipCode;
         short int ddd;
         int pNumero;
+        std::string converter;
 
         //lendo do arquivo para colocar no registro auxiliar de retorno
         arq.read(firstName, sizeof(firstName));
         arq.read(lastName, sizeof(lastName));
         arq.read(logradouro, sizeof(logradouro));
-        arq.read(complemento, sizeof(complemento));
         arq.read((char*)&aNumero, sizeof(aNumero));
+        arq.read(complemento, sizeof(complemento));
         arq.read(city, sizeof(city));
         arq.read(state, sizeof(state));
         arq.read((char*)&zipCode, sizeof(zipCode));
         arq.read((char*)&ddd, sizeof(ddd));
         arq.read((char*)&pNumero, sizeof(pNumero));
-
+ 
         auxReg.SetKey(auxKey);
-        auxReg.SetFirstName(firstName);
-        auxReg.SetLastName(lastName);
-        auxReg.SetLogradouro(logradouro);
-        auxReg.SetComplemento(complemento);
+
+        converter.assign(firstName, FIRSTNAME);
+        auxReg.SetFirstName(converter);
+
+        converter.clear();
+        converter.assign(lastName, LASTNAME);
+        auxReg.SetLastName(converter);
+
+        converter.clear();
+        converter.assign(logradouro, LOGRADOURO);
+        auxReg.SetLogradouro(converter);
+
         auxReg.SetANumero(aNumero);
-        auxReg.SetCity(city);
-        auxReg.SetState(state);
+
+        converter.clear();
+        converter.assign(complemento, COMPLEMENTO);
+        auxReg.SetComplemento(converter);
+
+        converter.clear();
+        converter.assign(city, CITY);
+        auxReg.SetCity(converter);
+
+        converter.clear();
+        converter.assign(state, STATE);
+        auxReg.SetState(converter);
+
         auxReg.SetZipcode(zipCode);
         auxReg.SetDDD(ddd);
         auxReg.SetPNumero(pNumero);
@@ -275,7 +290,6 @@ bool ArquivoFIX::escreverReg(Registro *reg){
         arq.close();     
         return auxReg;
     }
-
     arq.close();
     return regVazio;    
  }
