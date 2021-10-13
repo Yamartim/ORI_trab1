@@ -25,7 +25,9 @@ std::string Arquivo::getPath(){
 std::string Arquivo::getTipo(){
     return this->tipo;
 }
-
+std::string Arquivo::getIndicePath(){
+    return this->pathindice;
+}
 /**ArquivoFIX**/
 ArquivoFIX::ArquivoFIX(std::string p, std::string p_indice, char t){
     setPaths(p, p_indice, t);
@@ -40,6 +42,7 @@ int ArquivoFIX::getOffsetReg(){
 
 //setter
 void ArquivoFIX::setOffset(){
+    separadorIndice = '|';
     offset_reg = 100;
     offset_cam = new int[7];
 
@@ -65,6 +68,8 @@ void ArquivoFIX::setOffset(){
         ZIP (i.e., CEP, tal como 222222-222) (4 bytes)
         PHONE (i.e., número do telefone com DDD, tal como (022)2222-2222) (6 bytes)
     */
+
+//remover daqui e colocar na classe de registro depois
 void ArquivoFIX::ajustaCampo(Registro* reg){
     std::string aux;
     aux = reg->GetFirstName();
@@ -88,17 +93,29 @@ void ArquivoFIX::ajustaCampo(Registro* reg){
 
 bool ArquivoFIX::escreverReg(Registro *reg){
     std::fstream arq;//arquivo para leitura e escrita
+    std::fstream arqIndice; //arquivo de indice secundario
     char c; //variavel para receber os caracteres 1 a 1 do arquivo
+    char nome[FIRSTNAME];
+    int pos;
+
     //convertendo de string para char*
-    std::string aux = getPath();
-    int tam = aux.length();
+    
+    /*std::string aux = getPath();
+    std::string aux2 = getIndicePath();*/
+
+    int tam = getPath().length();
     char* path = new char[tam + 1];
-    strcpy(path, aux.c_str());
+    strcpy(path, getPath().c_str());
+
+    tam = getIndicePath().length();
+    char* pathIndice = new char[tam + 1];
+    strcpy(pathIndice, getIndicePath().c_str());
+
     
     ajustaCampo(reg);
 
-    //std::fstream arq(path, std::ios_base::binary|std::ios_base::out|std::ios_base::in);
     arq.open(path, std::ios_base::in | std::ios_base::out | std::ios_base::binary);
+    arqIndice.open(pathIndice, std::ios_base::in | std::ios_base::binary | std::ios_base::app);
 
     //caso falhe em abrir o arquivo
     if(!arq.is_open()){
@@ -106,6 +123,17 @@ bool ArquivoFIX::escreverReg(Registro *reg){
         arq.open(path,std::ios_base::out | std::ios_base::binary);
         cout << "Criando arquivo novo" << endl;
         if(!arq.is_open()){
+            cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
+            return false;
+        }
+        
+    }
+
+    if(!arqIndice.is_open()){
+        //criando arquivo caso ele nao exista
+        arqIndice.open(pathIndice, std::ios_base::out | std::ios_base::binary);
+        cout << "Criando arquivo novo" << endl;
+        if(!arqIndice.is_open()){
             cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
             return false;
         }
@@ -122,52 +150,50 @@ bool ArquivoFIX::escreverReg(Registro *reg){
     while(c != '*' && !arq.eof()){
         arq.clear();
         arq.seekg(-1 , std::ios::cur);
-        arq.seekg(sizeof(Registro) , std::ios::cur);
-        arq.seekp(sizeof(Registro) , std::ios::cur);
+        arq.seekg(getOffsetReg() , std::ios::cur);
+        arq.seekp(getOffsetReg() , std::ios::cur);
 
         arq.get(c);
     } 
-    
     arq.clear();
     
-    //arq.seekg(0, std::ios::beg);  
-    arq.write((char*)reg, sizeof(Registro));
+    //escrevendo no arquivo de indice
+    strcpy(nome, reg->GetFirstName().c_str());
+    pos = arq.tellp();
+
+    arqIndice << nome << pos << separadorIndice;
+
+
+    //extraindo campos da classe registro e escrevendo no arquivo
+    //arq->write((char*)reg, sizeof(Registro));
+    arq << reg->GetKey();
+    arq << reg->GetFirstName();
+    arq << reg->GetLastName();
+    arq << reg->GetLogradouro();              
+    arq << reg->GetANumero();
+    arq << reg->GetComplemento();
+    arq << reg->GetCity();
+    arq << reg->GetState(); 
+    arq << reg->GetZipcode(); 
+    arq << reg->GetDDD();
+    arq << reg->GetPNumero();
     
     arq.close();
-
-
-    Registro reg2;
-    std::fstream file2;
-    file2.open(path, std::fstream::in | std::fstream::binary);
-    file2.read((char*)&reg2, sizeof(Registro));
-    file2.close();
-
-    cout << " Chave: " << reg2.GetKey() << '\n';
-    cout << " First Name: " << reg2.GetFirstName() << '\n';
-    cout << " Last Name: " << reg2.GetLastName() << '\n'; cout << "\n";
-    cout << " Endereço" << '\n';
-    cout << " Logradouro: " << reg2.GetLogradouro() << '\n';
-    cout << " Número: " << reg2.GetANumero() << '\n';
-    cout << " Complemento: " << reg2.GetComplemento() << '\n';
-    cout << " Cidade: " << reg2.GetCity() << '\n';
-    cout << " Estado: " << reg2.GetState() << '\n';
-    cout << " ZIP: " << reg2.GetZipcode() << '\n';
-    cout << " Telefone: " << reg2.GetPNumero() << '\n';
-    cout << " Digite enter para continuar, ou 0 para parar" << endl;
+    arqIndice.close();
 
     return true;
 }
 
  Registro ArquivoFIX::buscaKey(int key) {
     std:: ifstream arq;
-    std::string aux = getPath();
     Registro auxReg;
     Registro regVazio;
+    int auxKey;
 
     //convertendo de string para char
-    int tam = aux.length();
+    int tam = getPath().length();
     char* path = new char[tam + 1];
-    strcpy(path, aux.c_str());
+    strcpy(path, getPath().c_str());
 
     arq.open(path, std::ios::in | std::ios::binary);
 
@@ -179,29 +205,62 @@ bool ArquivoFIX::escreverReg(Registro *reg){
 
     //garantindo que os ponteiros de leitura e escrita começam no começo do arquivo
     arq.seekg(0, std::ios::beg);
-    int pos = arq.tellg();
-    std::cout << "posicao inicial do ponteiro get " << pos << endl;   
 
-
-    arq.read((char*)&auxReg, sizeof(Registro));
-
-   
-    //**LOGICA INCOMPLETA**
-    while((auxReg.GetKey() != key) && !arq.eof()){
+    arq.read((char*)&auxKey, sizeof(auxKey));
+    
+    while(auxKey != key && !arq.eof()){
         arq.clear();
+        arq.seekg(-sizeof(auxKey), std::ios::cur);
+        arq.seekg(getOffsetReg(), std::ios::cur);
+
         if(!arq.eof()){
             arq.clear();
-            arq.read((char*)&auxReg, sizeof(Registro));
+            arq.read((char*)&auxKey, sizeof(auxKey));
         }
-    }
-    arq.close();           
-
+    }          
 
     //caso achou, atribui retorna o registro do arquivo
-    if(auxReg.GetKey() == key){
+    if(auxKey == key){
+        char firstName[FIRSTNAME];
+        char lastName[LASTNAME];
+        char logradouro[LOGRADOURO];
+        char complemento[COMPLEMENTO];
+        short int aNumero;
+        char city[CITY];
+        char state[STATE];
+        int zipCode;
+        short int ddd;
+        int pNumero;
+
+        //lendo do arquivo para colocar no registro auxiliar de retorno
+        arq.read(firstName, sizeof(firstName));
+        arq.read(lastName, sizeof(lastName));
+        arq.read(logradouro, sizeof(logradouro));
+        arq.read(complemento, sizeof(complemento));
+        arq.read((char*)&aNumero, sizeof(aNumero));
+        arq.read(city, sizeof(city));
+        arq.read(state, sizeof(state));
+        arq.read((char*)&zipCode, sizeof(zipCode));
+        arq.read((char*)&ddd, sizeof(ddd));
+        arq.read((char*)&pNumero, sizeof(pNumero));
+
+        auxReg.SetKey(auxKey);
+        auxReg.SetFirstName(firstName);
+        auxReg.SetLastName(lastName);
+        auxReg.SetLogradouro(logradouro);
+        auxReg.SetComplemento(complemento);
+        auxReg.SetANumero(aNumero);
+        auxReg.SetCity(city);
+        auxReg.SetState(state);
+        auxReg.SetZipcode(zipCode);
+        auxReg.SetDDD(ddd);
+        auxReg.SetPNumero(pNumero);
+
+        arq.close();     
         return auxReg;
     }
-    
+
+    arq.close();
     return regVazio;    
  }
 

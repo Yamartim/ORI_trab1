@@ -17,7 +17,7 @@ protected:
 
     struct Address{
         string logradouro;
-        int numero;
+        short int numero;
         string complemento;
     } address;
     
@@ -28,7 +28,7 @@ protected:
     
     struct Phone
     {
-        int ddd;
+        short int ddd;
         int numero;
     } phone;
     

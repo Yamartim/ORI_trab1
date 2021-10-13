@@ -14,6 +14,8 @@ using std::string;
 #define LASTNAME 16
 #define FIRSTNAME 16
 #define ADDRESS 32
+#define LOGRADOURO 20
+#define COMPLEMENTO 10
 #define CITY 20
 #define STATE 2
 #define ZIP 4
@@ -38,6 +40,7 @@ public:
     //getters
     string getPath();
     string getTipo();
+    string getIndicePath();
 
     virtual Registro buscaKey(int key) = 0;
     virtual Registro buscaNome(string nome) = 0;
@@ -55,6 +58,7 @@ class ArquivoFIX: public Arquivo
 private:
     int offset_reg; 
     int* offset_cam;
+    char separadorIndice;
 public:
     ArquivoFIX(string p, string p_indice, char t);
 
