@@ -5,23 +5,18 @@
 using std::cout;
 using std::endl;
 
-
 /**Construtor de arquivo geral**/
-Arquivo::Arquivo(){
-    
-}
+Arquivo::Arquivo(){}
 //setter dos paths do arquivo
 void Arquivo::setPaths(std::string p, std::string p_indice, char t){
     path = p;
     pathindice = p_indice;
     tipo = t;
 }
-
 //getter do path do arquivo
 std::string Arquivo::getPath(){
     return this->path;
 }
-
 std::string Arquivo::getTipo(){
     return this->tipo;
 }
@@ -35,7 +30,6 @@ ArquivoFIX::ArquivoFIX(std::string p, std::string p_indice, char t){
 }
 
 //getter
-
 int ArquivoFIX::getOffsetReg(){
     return this->offset_reg;
 }
@@ -54,7 +48,6 @@ void ArquivoFIX::setOffset(){
     offset_cam[5] = STATE;
     offset_cam[6] = ZIP;
     offset_cam[7] = PHONE;
-
 }
 /*Ajusta os campos para escrita no registro de tamanho fixo*/
     /*
@@ -108,7 +101,6 @@ bool ArquivoFIX::escreverReg(Registro *reg){
     tam = getIndicePath().length();
     char* pathIndice = new char[tam + 1];
     strcpy(pathIndice, getIndicePath().c_str());
-
     
     ajustaCampo(reg);
 
@@ -123,8 +115,7 @@ bool ArquivoFIX::escreverReg(Registro *reg){
         if(!arq.is_open()){
             cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
             return false;
-        }
-        
+        }    
     }
 
     if(!arqIndice.is_open()){
@@ -135,7 +126,6 @@ bool ArquivoFIX::escreverReg(Registro *reg){
             cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
             return false;
         }
-        
     }
 
     //garantindo que os ponteiros de leitura e escrita começam no começo do arquivo
@@ -296,7 +286,6 @@ bool ArquivoFIX::escreverReg(Registro *reg){
     return regVazio;    
  }
 
-
 Registro ArquivoFIX::buscaNome(std::string nome){
     Registro auxReg;
     //to do
@@ -310,7 +299,6 @@ Registro ArquivoFIX::buscaNumReg(int n){
     Registro auxReg;
     return auxReg;
 }
-
 
 /**ArquivoVAR**/
 /*
