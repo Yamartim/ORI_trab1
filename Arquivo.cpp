@@ -168,8 +168,10 @@ bool ArquivoFIX::escreverReg(Registro *reg){
     strcpy(nome, reg->GetFirstName().c_str());
     pos = arq.tellp();
 
-    arqIndice << nome << pos << separadorIndice;
-
+    //arqIndice << nome << pos << separadorIndice;
+    arqIndice << nome;
+    arqIndice.write((char*)&pos, sizeof(pos));
+    arqIndice << separadorIndice;
 
     //extraindo campos da classe registro e escrevendo no arquivo
     intAux = reg->GetKey(); //key
