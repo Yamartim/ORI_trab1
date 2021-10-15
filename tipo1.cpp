@@ -2,6 +2,8 @@
 #include <string>
 #include <fstream>
 #include <iomanip>
+#include <stdlib.h>
+#include <locale>
 
 #include "Arquivo.h"
 #include "Registro.h"
@@ -12,13 +14,13 @@ using std::cin;
 using std::endl;
 
 int inputOperacao(){
-    //Exibe opÃ§Ãµes
+    //Exibe opções
     cout << '\n';
-    cout << "Escolha a operaÃ§Ã£o desejada:" << '\n';
+    cout << "Escolha a operação desejada:" << '\n';
     cout << "(0) - Para sair" << '\n';
-    cout << "(1) - GravaÃ§Ã£o de Dados" << '\n';
+    cout << "(1) - Gravação de Dados" << '\n';
     cout << "(2) - Visualizar registros" << '\n';
-    //cout << "(3) - Recuperar registro por nÃºmero" << '\n';
+    //cout << "(3) - Recuperar registro por número" << '\n';
     //cout << "(4) - Recuperar registro por KEY" << '\n';
     //cout << "(5) - Recuperar registro por FIRSTNAME" << '\n';
     //cout << "(6) - Remover logicamente um registro" << '\n';
@@ -39,7 +41,7 @@ void inputGravarDados(Arquivo *arq){
     do{
         //cin.ignore() usado para ignorar /n que seria absorvido pelo getline()
 
-        cout << "Iniciando gravaÃ§Ã£o." << endl;
+        cout << "Iniciando gravação." << endl;
         do{
             cout << "KEY: ";
             cin >> intaux; 
@@ -54,13 +56,13 @@ void inputGravarDados(Arquivo *arq){
             getline(cin, straux); 
         }while(!inRegistro.SetLastName(straux));
 
-        cout << "Sobre o endereÃ§o," << endl;
+        cout << "Sobre o endereço," << endl;
         do{
             cout << "Logradouro: ";
             getline(cin, straux);
         }while(!inRegistro.SetLogradouro(straux));
         do{
-            cout << "NÃºmero: ";
+            cout << "Número: ";
             cin >> intaux; 
             cin.ignore();
         }while(!inRegistro.SetANumero(intaux));
@@ -73,7 +75,7 @@ void inputGravarDados(Arquivo *arq){
             getline(cin, straux);
         }while(!inRegistro.SetCity(straux));
         do{
-            cout << "Estado (CÃ³digo de 2 letras): ";
+            cout << "Estado (Código de 2 letras): ";
             cin >> straux; 
         }while(!inRegistro.SetState(straux));
         do{
@@ -89,7 +91,7 @@ void inputGravarDados(Arquivo *arq){
             cin.ignore();
         }while(!inRegistro.SetDDD(intaux));
         do{
-            cout << "NÃºmero: ";
+            cout << "Número: ";
             cin >> intaux; 
             cin.ignore();
         }while(!inRegistro.SetPNumero(intaux));
@@ -132,9 +134,9 @@ void visualizar(Arquivo *arq){
         cout << " First Name: " << regAux.GetFirstName() << '\n';
         cout << " Last Name: " << regAux.GetLastName() << '\n'; 
         cout << "\n";
-        cout << " EndereÃ§o" << '\n';
+        cout << " Endereço" << '\n';
         cout << " Logradouro: " << regAux.GetLogradouro() << '\n';
-        cout << " NÃºmero: " << regAux.GetANumero() << '\n';
+        cout << " Número: " << regAux.GetANumero() << '\n';
         cout << " Complemento: " << regAux.GetComplemento() << '\n';
         cout << " Cidade: " << regAux.GetCity() << '\n';
         cout << " Estado: " << regAux.GetState() << '\n';
@@ -149,7 +151,7 @@ int main(int argc, char const *argv[])
 {
     //Criando objeto de Arquivo
     ArquivoFIX arquivoFix("arquivo.dat", "indices.bin", 't');
-    
+    setlocale(LC_ALL, "Portuguese");
     // Loop principal do programa
     // Input(Operacao) -> Loop da operacao SecundÃ¡rio -> Input(sair) -> SaÃ­da
 
@@ -170,7 +172,7 @@ int main(int argc, char const *argv[])
             break;
             //TODO Adicionar outros casos
             default:
-                cout << "NÃ£o reconhecido" << endl;
+                cout << "Não reconhecido" << endl;
             break;
         }
     }
