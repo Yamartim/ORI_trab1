@@ -112,13 +112,17 @@ void inputGravarDados(Arquivo *arq){
 void visualizar(Arquivo *arq){
     Registro regAux;
     string aux;
-    int key;
+    string nome;
+    //int key;
     int i = 0;
-    cout << "Digite a chave do registro em que deseja visualizar os dados" << endl;
-    cin >> key;
+    //cout << "Digite a chave do registro em que deseja visualizar os dados" << endl;
+    //cin >> key;
 
-    regAux = arq->buscaKey(key);
+    cout << "Digite o nome do registro em que deseja visualizar os dados" << endl;
+    cin >> nome;
 
+    //regAux = arq->buscaKey(key);
+    regAux = arq->buscaNome(nome);
     do{
         i++;
         cout << "== Exibindo registro " << i << " ==" << '\n';
