@@ -46,8 +46,8 @@ public:
     virtual Registro buscaNome(string nome) = 0;
 
     virtual bool escreverReg(Registro* reg) = 0;
-    virtual bool removerReg(Registro reg) = 0;
-    virtual bool atualizaIndice(Registro reg) = 0;
+    virtual bool removerReg(int key) = 0;
+    virtual bool atualizaIndice(int key, std::string nome) = 0;
 
 
 
@@ -73,8 +73,8 @@ public:
 
     void ajustaCampo(Registro* reg);
     bool escreverReg(Registro* reg);
-    bool removerReg(Registro reg);
-    bool atualizaIndice(Registro reg);
+    bool removerReg(int key);
+    bool atualizaIndice(int key, std::string nome);
 
     Registro buscaNumReg(int n);
 

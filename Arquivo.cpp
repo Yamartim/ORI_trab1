@@ -436,10 +436,11 @@ Registro ArquivoFIX::buscaNome(std::string nome){
     return auxReg;     
 }
 
-bool ArquivoFIX::removerReg(Registro reg){
+bool ArquivoFIX::removerReg(int key){
     std::fstream arq;
-    int key;
-
+    int auxKey;
+    char nome[FIRSTNAME];
+    std::string auxStr;
     //convertendo de string para char*
     int tam = getPath().length();
     char* path = new char[tam + 1];
@@ -456,33 +457,40 @@ bool ArquivoFIX::removerReg(Registro reg){
     arq.seekg(0, std::ios::beg);
     arq.seekp(0, std::ios::beg);
 
-    arq.read((char*)&key, sizeof(key));
+    arq.read((char*)&auxKey, sizeof(auxKey));
 
-    while(reg.GetKey() != key && !arq.eof()){
+    while(auxKey != key && !arq.eof()){
         arq.clear();
-        arq.seekg(-sizeof(key), std::ios::cur);
+        arq.seekg(-sizeof(auxKey), std::ios::cur);
         arq.seekg(getOffsetReg(), std::ios::cur);
 
         if(!arq.eof()){
             arq.clear();
-            arq.read((char*)&key, sizeof(key));
+            arq.read((char*)&auxKey, sizeof(auxKey));
         }
     }
     //fazendo a remoçao logica
-    arq.seekg(-sizeof(key), std::ios::cur);
-    arq.write(&removedorLogico, sizeof(char));
+    arq.read(nome, sizeof(nome));
 
-    atualizaIndice(reg);
+    for(int i=0; i < FIRSTNAME; i++)
+        auxStr += nome[i];
+        
+    arq.seekg(-sizeof(nome), std::ios::cur);
+    arq.seekg(-sizeof(auxKey), std::ios::cur);
+    arq.write(&removedorLogico, sizeof(char));
+    atualizaIndice(key, auxStr);
 
     arq.close();
     return true;
 }
 
-bool ArquivoFIX::atualizaIndice(Registro reg){
+bool ArquivoFIX::atualizaIndice(int key, std::string nome){
     std::fstream arqIndice; 
     char auxArray[FIRSTNAME];
     bool achou;
     std::string auxStr;
+    int auxKey;
+
     int tam = getIndicePath().length();
     char* pathIndice = new char[tam + 1];
     strcpy(pathIndice, getIndicePath().c_str());
@@ -493,7 +501,6 @@ bool ArquivoFIX::atualizaIndice(Registro reg){
         cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
         return false; //retorna false caso falhe em abrir o arquivo
     }
-
     //buscando pelo nome no arquivo de indices
     arqIndice.read(auxArray, sizeof(auxArray));
 
@@ -502,7 +509,7 @@ bool ArquivoFIX::atualizaIndice(Registro reg){
         for(int i = 0; i < FIRSTNAME && auxArray[i] != '#'; i++){
             auxStr += auxArray[i];
         } 
-        if(auxStr == reg.GetFirstName())
+        if(auxStr == nome)
             achou = true;
         else{
             arqIndice.seekg(sizeof(int), std::ios::cur);
