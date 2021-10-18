@@ -20,9 +20,9 @@ int inputOperacao(){
     cout << "(0) - Para sair" << '\n';
     cout << "(1) - Gravação de Dados" << '\n';
     cout << "(2) - Visualizar registros" << '\n';
+    cout << "(3) - Recuperar registro por KEY" << '\n';
     //cout << "(3) - Recuperar registro por número" << '\n';
-    //cout << "(4) - Recuperar registro por KEY" << '\n';
-    //cout << "(5) - Recuperar registro por FIRSTNAME" << '\n';
+    cout << "(4) - Recuperar registro por FIRSTNAME" << '\n';
     //cout << "(6) - Remover logicamente um registro" << '\n';
     
     cout << endl;
@@ -115,15 +115,45 @@ void visualizar(Arquivo *arq){
     Registro regAux;
     string aux;
     string nome;
-    //int key;
+    int key;
     int i = 0;
-    //cout << "Digite a chave do registro em que deseja visualizar os dados" << endl;
-    //cin >> key;
+    cout << "Digite a chave do registro em que deseja visualizar os dados" << endl;
+    cin >> key;
 
     cout << "Digite o nome do registro em que deseja visualizar os dados" << endl;
     cin >> nome;
 
-    //regAux = arq->buscaKey(key);
+    regAux = arq->buscaKey(key);
+    //regAux = arq->buscaNome(nome);
+    do{
+        i++;
+        cout << "== Exibindo registro " << i << " ==" << '\n';
+        // Usar funÃ§Ã£o de leitura sequencial para colocar o registro i no regAux
+
+        cout << " Chave: " << regAux.GetKey() << '\n';
+        cout << " First Name: " << regAux.GetFirstName() << '\n';
+        cout << " Last Name: " << regAux.GetLastName() << '\n'; 
+        cout << "\n";
+        cout << " Endereço" << '\n';
+        cout << " Logradouro: " << regAux.GetLogradouro() << '\n';
+        cout << " Número: " << regAux.GetANumero() << '\n';
+        cout << " Complemento: " << regAux.GetComplemento() << '\n';
+        cout << " Cidade: " << regAux.GetCity() << '\n';
+        cout << " Estado: " << regAux.GetState() << '\n';
+        cout << " ZIP: " << regAux.GetZipcode() << '\n';
+        cout << " Telefone: " << regAux.GetPNumero() << '\n';
+        cout << " Digite enter para continuar, ou 0 para parar" << endl;
+        std::getline(cin, aux);
+    }while(aux.length() != 0); // Se digitar algo sair do loop
+}
+
+void visualizarNome(Arquivo *arq){
+    Registro regAux;
+    string aux;
+    string nome;
+    int i = 0;
+    cout << "Digite o nome do registro em que deseja visualizar os dados" << endl;
+    cin >> nome;
     regAux = arq->buscaNome(nome);
     do{
         i++;
@@ -147,6 +177,37 @@ void visualizar(Arquivo *arq){
     }while(aux.length() != 0); // Se digitar algo sair do loop
 }
 
+void visualizarKey(Arquivo *arq){
+    Registro regAux;
+    string aux;
+    int key;
+    int i = 0;
+    cout << "Digite a chave do registro em que deseja visualizar os dados" << endl;
+    cin >> key;
+    regAux = arq->buscaKey(key);
+    do{
+        i++;
+        cout << "== Exibindo registro " << i << " ==" << '\n';
+        // Usar funÃ§Ã£o de leitura sequencial para colocar o registro i no regAux
+
+        cout << " Chave: " << regAux.GetKey() << '\n';
+        cout << " First Name: " << regAux.GetFirstName() << '\n';
+        cout << " Last Name: " << regAux.GetLastName() << '\n'; 
+        cout << "\n";
+        cout << " Endereço" << '\n';
+        cout << " Logradouro: " << regAux.GetLogradouro() << '\n';
+        cout << " Número: " << regAux.GetANumero() << '\n';
+        cout << " Complemento: " << regAux.GetComplemento() << '\n';
+        cout << " Cidade: " << regAux.GetCity() << '\n';
+        cout << " Estado: " << regAux.GetState() << '\n';
+        cout << " ZIP: " << regAux.GetZipcode() << '\n';
+        cout << " Telefone: " << regAux.GetPNumero() << '\n';
+        cout << " Digite enter para continuar, ou 0 para parar" << endl;
+        std::getline(cin, aux);
+    }while(aux.length() != 0); // Se digitar algo sair do loop
+}
+
+
 int main(int argc, char const *argv[])
 {
     //Criando objeto de Arquivo
@@ -169,6 +230,12 @@ int main(int argc, char const *argv[])
             break;
             case 2:
                 visualizar(&arquivoFix);
+            break;
+            case 3:
+                visualizarKey(&arquivoFix);
+            break;
+            case 4:
+                visualizarNome(&arquivoFix);
             break;
             //TODO Adicionar outros casos
             default:

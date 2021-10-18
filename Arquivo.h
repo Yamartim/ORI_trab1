@@ -59,6 +59,7 @@ private:
     int offset_reg; 
     int* offset_cam;
     char separadorIndice;
+    char removedorLogico;
 public:
     ArquivoFIX(string p, string p_indice, char t);
 

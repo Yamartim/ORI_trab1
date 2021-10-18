@@ -37,6 +37,7 @@ int ArquivoFIX::getOffsetReg(){
 //setter
 void ArquivoFIX::setOffset(){
     separadorIndice = '|';
+    removedorLogico = '*';
     offset_reg = 100;
     offset_cam = new int[7];
 
@@ -92,7 +93,9 @@ bool ArquivoFIX::escreverReg(Registro *reg){
     char nome[FIRSTNAME];
     int pos;
     int intAux;
+    int auxKey;
     short int shortIntAux;
+    bool existe = false;
 
     //convertendo de string para char*
     int tam = getPath().length();
@@ -106,7 +109,7 @@ bool ArquivoFIX::escreverReg(Registro *reg){
     ajustaCampo(reg);
 
     arq.open(path, std::ios_base::in | std::ios_base::out | std::ios_base::binary);
-    arqIndice.open(pathIndice, std::ios_base::in | std::ios_base::binary | std::ios_base::app);
+    arqIndice.open(pathIndice, std::ios_base::in | std::ios_base::out | std::ios_base::binary);
 
     //caso falhe em abrir o arquivo
     if(!arq.is_open()){
@@ -132,36 +135,63 @@ bool ArquivoFIX::escreverReg(Registro *reg){
     //garantindo que os ponteiros de leitura e escrita começam no começo do arquivo
     arq.seekg(0, std::ios::beg);
     arq.seekp(0, std::ios::beg);
+    arqIndice.seekg(0, std::ios::beg);
+    arqIndice.seekp(0, std::ios::beg);
 
     arq.get(c);
-
-    pos = arq.tellg();
-    std::cout << "posicao get: " << pos << endl;
 
     //verificando por remoçoes logicas
     while(c != '*' && !arq.eof()){
         arq.clear();
-        pos = arq.tellg();
-        std::cout << "posicao get 2: " << pos << endl;
         arq.seekg(-1 , std::ios::cur);
-        pos = arq.tellg();
-        std::cout << "posicao get3: " << pos << endl;
         arq.seekg(getOffsetReg() , std::ios::cur);
-        pos = arq.tellg();
-        std::cout << "posicao get4 :  " << pos << endl;
-
         arq.get(c);
     } 
     arq.clear();
-
-    //escrevendo no arquivo de indice (imcompleto, esta escrevendo em char e nao binario ainda)
     strcpy(nome, reg->GetFirstName().c_str());
     pos = arq.tellp();
+     
+    arqIndice.get(c);
+    //verificando por remoçoes logicas no arquivo de indices
+    int batata;
+    batata = arqIndice.tellg();
+    std::cout << "Pointer g: " << batata << std::endl;
+    while(c != '*' && !arqIndice.eof()){
+        arqIndice.clear();
+        arqIndice.seekg(-1 , std::ios::cur);
+        batata = arqIndice.tellg();
+        std::cout << "Pointer g(2): " << batata << std::endl;
+        arqIndice.seekg(FIRSTNAME , std::ios::cur);
+        batata = arqIndice.tellg();
+        std::cout << "Pointer g(3): " << batata << std::endl;
+        arqIndice.seekg(sizeof(int) , std::ios::cur);
+        batata = arqIndice.tellg();
+        std::cout << "Pointer g(4): " << batata << std::endl;
+        /*arqIndice.read((char*)&auxKey, sizeof(auxKey));
+        if(auxKey == reg->GetKey()){
+            existe = true;
+        }*/
+        arqIndice.get(c);
+    } 
 
-    arqIndice << nome;
-    arqIndice.write((char*)&pos, sizeof(pos));
-    arqIndice << separadorIndice;
-
+    if(existe){
+        cout << "Registro com chave ja existente!" << endl;
+        arq.close();
+        arqIndice.close();
+        return false;
+    }
+    //else
+    //escrevendo no arquivo de indice
+    arqIndice.clear();
+    if(c == '*'){   
+        arqIndice.seekp(-1 , std::ios::cur);
+        arqIndice << nome;
+        arqIndice.write((char*)&pos, sizeof(pos));
+    }
+    else{
+        arqIndice << nome;
+        arqIndice.write((char*)&pos, sizeof(int));
+    }
     //extraindo campos da classe registro e escrevendo no arquivo
     intAux = reg->GetKey(); //key
     arq.write((char*)&intAux, sizeof(intAux));
@@ -327,7 +357,7 @@ Registro ArquivoFIX::buscaNome(std::string nome){
         if(auxStr == nome)
             achou = true;
         else{
-            arqIndice.seekg(sizeof(int) + 1 , std::ios::cur);
+            arqIndice.seekg(sizeof(int), std::ios::cur);
             arqIndice.read(auxArray, sizeof(auxArray));
         }
     }   
@@ -406,8 +436,93 @@ Registro ArquivoFIX::buscaNome(std::string nome){
     return auxReg;     
 }
 
-bool ArquivoFIX::removerReg(Registro reg){return false;}
-bool ArquivoFIX::atualizaIndice(Registro reg){return false;}
+bool ArquivoFIX::removerReg(Registro reg){
+    std::fstream arq;
+    int key;
+
+    //convertendo de string para char*
+    int tam = getPath().length();
+    char* path = new char[tam + 1];
+    strcpy(path, getPath().c_str());
+
+    arq.open(path, std::ios_base::in | std::ios_base::out | std::ios_base::binary);
+
+    if(!arq.is_open()){
+        cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
+        return false; //retorna false caso falhe em abrir o arquivo
+    }
+
+    //garantindo que os ponteiros de leitura e escrita começam no começo do arquivo
+    arq.seekg(0, std::ios::beg);
+    arq.seekp(0, std::ios::beg);
+
+    arq.read((char*)&key, sizeof(key));
+
+    while(reg.GetKey() != key && !arq.eof()){
+        arq.clear();
+        arq.seekg(-sizeof(key), std::ios::cur);
+        arq.seekg(getOffsetReg(), std::ios::cur);
+
+        if(!arq.eof()){
+            arq.clear();
+            arq.read((char*)&key, sizeof(key));
+        }
+    }
+    //fazendo a remoçao logica
+    arq.seekg(-sizeof(key), std::ios::cur);
+    arq.write(&removedorLogico, sizeof(char));
+
+    atualizaIndice(reg);
+
+    arq.close();
+    return true;
+}
+
+bool ArquivoFIX::atualizaIndice(Registro reg){
+    std::fstream arqIndice; 
+    char auxArray[FIRSTNAME];
+    bool achou;
+    std::string auxStr;
+    int tam = getIndicePath().length();
+    char* pathIndice = new char[tam + 1];
+    strcpy(pathIndice, getIndicePath().c_str());
+
+    arqIndice.open(pathIndice, std::ios_base::in | std::ios_base::binary | std::ios_base::app);
+
+    if(!arqIndice.is_open()){
+        cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
+        return false; //retorna false caso falhe em abrir o arquivo
+    }
+
+    //buscando pelo nome no arquivo de indices
+    arqIndice.read(auxArray, sizeof(auxArray));
+
+    while(!arqIndice.eof() && !achou){
+        auxStr.clear();
+        for(int i = 0; i < FIRSTNAME && auxArray[i] != '#'; i++){
+            auxStr += auxArray[i];
+        } 
+        if(auxStr == reg.GetFirstName())
+            achou = true;
+        else{
+            arqIndice.seekg(sizeof(int), std::ios::cur);
+            arqIndice.read(auxArray, sizeof(auxArray));
+        }
+    }   
+    
+    //caso nao tenha encontrado o nome, retorna false
+    if(!achou){
+        arqIndice.close();
+        return false;
+    }
+    //else
+    //fazendo a remoçao logica
+    arqIndice.seekg(-sizeof(auxArray), std::ios::cur);
+    arqIndice.write(&removedorLogico, sizeof(char));
+
+    arqIndice.close();
+    return true;
+}
 
 Registro ArquivoFIX::buscaNumReg(int n){
     Registro auxReg;
