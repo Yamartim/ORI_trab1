@@ -157,24 +157,11 @@ bool ArquivoFIX::escreverReg(Registro *reg){
      
     arqIndice.get(c);
     //verificando por remoçoes logicas no arquivo de indices
-    int batata;
-    batata = arqIndice.tellg();
-    std::cout << "Pointer g: " << batata << std::endl;
     while(c != '*' && !arqIndice.eof()){
         arqIndice.clear();
         arqIndice.seekg(-1 , std::ios::cur);
-        batata = arqIndice.tellg();
-        std::cout << "Pointer g(2): " << batata << std::endl;
         arqIndice.seekg(FIRSTNAME , std::ios::cur);
-        batata = arqIndice.tellg();
-        std::cout << "Pointer g(3): " << batata << std::endl;
         arqIndice.seekg(sizeof(int) , std::ios::cur);
-        batata = arqIndice.tellg();
-        std::cout << "Pointer g(4): " << batata << std::endl;
-        /*arqIndice.read((char*)&auxKey, sizeof(auxKey));
-        if(auxKey == reg->GetKey()){
-            existe = true;
-        }*/
         arqIndice.get(c);
     } 
 
@@ -339,7 +326,7 @@ Registro ArquivoFIX::buscaNome(std::string nome){
     strcpy(pathIndice, getIndicePath().c_str());
 
     arq.open(path, std::ios_base::in | std::ios_base::out | std::ios_base::binary);
-    arqIndice.open(pathIndice, std::ios_base::in | std::ios_base::binary | std::ios_base::app);
+    arqIndice.open(pathIndice, std::ios_base::in | std::ios_base::binary);
 
     if(!arq.is_open()){
         cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
@@ -473,12 +460,17 @@ bool ArquivoFIX::removerReg(int key){
             arq.read((char*)&auxKey, sizeof(auxKey));
         }
     }
+    
+    if(auxKey != key){
+        arq.close();
+        return false;
+    }
     //fazendo a remoçao logica
     arq.read(nome, sizeof(nome));
 
-    for(int i=0; i < FIRSTNAME; i++)
+    for(int i = 0; (i < FIRSTNAME) && (nome[i] != '#'); i++){
         auxStr += nome[i];
-        
+    }    
     arq.seekg(-sizeof(nome), std::ios::cur);
     arq.seekg(-sizeof(auxKey), std::ios::cur);
     arq.write(&removedorLogico, sizeof(char));
@@ -499,7 +491,7 @@ bool ArquivoFIX::atualizaIndice(int key, std::string nome){
     char* pathIndice = new char[tam + 1];
     strcpy(pathIndice, getIndicePath().c_str());
 
-    arqIndice.open(pathIndice, std::ios_base::in | std::ios_base::binary | std::ios_base::app);
+    arqIndice.open(pathIndice, std::ios_base::in | std::ios_base::out | std::ios_base::binary);
 
     if(!arqIndice.is_open()){
         cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
