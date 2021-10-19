@@ -148,6 +148,8 @@ bool ArquivoFIX::escreverReg(Registro *reg){
         arq.get(c);
     } 
     arq.clear();
+    if(c == '*')
+        arq.seekg(-1, std::ios::cur);
     strcpy(nome, reg->GetFirstName().c_str());
     pos = arq.tellp();
      
