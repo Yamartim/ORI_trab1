@@ -174,7 +174,7 @@ void visualizarNome(Arquivo *arq){
         cout << " Telefone: " << regAux.GetPNumero() << '\n';
         cout << " Digite enter para continuar, ou 0 para parar" << endl;
         std::getline(cin, aux);
-    }while(aux.length() != 0); // Se digitar algo sair do loop
+    }while(aux.length() == 0); // Se digitar algo sair do loop
 }
 
 void visualizarKey(Arquivo *arq){
@@ -204,7 +204,7 @@ void visualizarKey(Arquivo *arq){
         cout << " Telefone: " << regAux.GetPNumero() << '\n';
         cout << " Digite enter para continuar, ou 0 para parar" << endl;
         std::getline(cin, aux);
-    }while(aux.length() != 0); // Se digitar algo sair do loop
+    }while(aux.length() == 0); // Se digitar algo sair do loop
 }
 
 void removerLogicamente(Arquivo *arq){
@@ -213,6 +213,7 @@ void removerLogicamente(Arquivo *arq){
     do{
         cout << "Digite a chave do registro que deseja remover" << endl;
         cin >> key;
+        cin.ignore();
 
         if(arq->removerReg(key)){
             cout << "Registro removido com sucesso" << endl;
