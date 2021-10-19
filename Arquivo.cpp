@@ -209,6 +209,7 @@ bool ArquivoFIX::escreverReg(Registro *reg){
     Registro regVazio;
     int auxKey;
     int i;
+
     //convertendo de string para char
     int tam = getPath().length();
     char* path = new char[tam + 1];
@@ -549,8 +550,106 @@ bool ArquivoFIX::atualizaIndice(int key, std::string nome){
 }
 
 Registro ArquivoFIX::buscaNumReg(int n){
+    std:: ifstream arq;
     Registro auxReg;
-    return auxReg;
+    Registro regVazio;
+    int i;
+    //convertendo de string para char
+    int tam = getPath().length();
+    char* path = new char[tam + 1];
+    strcpy(path, getPath().c_str());
+
+    arq.open(path, std::ios::in | std::ios::binary);
+    
+    //caso falhe em abrir o arquivo
+    if(!arq.is_open()){
+        cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
+        return regVazio; //retorna registro vazio, tratar na main esse retorno
+    }
+    //int batata;
+    //bool fim;
+    arq.seekg((n-1) * getOffsetReg(), std::ios::beg);
+    //batata = arq.tellg();
+    //std::cout << "pos g " << batata << std::endl;
+    //arq.seekg(1, std::ios::cur);
+    //fim = arq.eof();
+    if(!arq.eof()){
+        arq.clear();
+        arq.seekg(-1, std::ios::cur);
+        int auxKey;
+        char firstName[FIRSTNAME];
+        char lastName[LASTNAME];
+        char logradouro[LOGRADOURO];
+        char complemento[COMPLEMENTO];
+        short int aNumero;
+        char city[CITY];
+        char state[STATE];
+        int zipCode;
+        short int ddd;
+        int pNumero;
+        std::string converter;
+
+        //lendo do arquivo para colocar no registro auxiliar de retorno
+        arq.read((char*)&auxKey, sizeof(auxKey));
+        arq.read(firstName, sizeof(firstName));
+        arq.read(lastName, sizeof(lastName));
+        arq.read(logradouro, sizeof(logradouro));
+        arq.read((char*)&aNumero, sizeof(aNumero));
+        arq.read(complemento, sizeof(complemento));
+        arq.read(city, sizeof(city));
+        arq.read(state, sizeof(state));
+        arq.read((char*)&zipCode, sizeof(zipCode));
+        arq.read((char*)&ddd, sizeof(ddd));
+        arq.read((char*)&pNumero, sizeof(pNumero));
+
+        auxReg.SetKey(auxKey);
+
+        for(i = 0; i < FIRSTNAME && firstName[i] != '#'; i++){
+            converter += firstName[i];
+        }
+        auxReg.SetFirstName(converter);
+
+        converter.clear();
+        for(i = 0; i < LASTNAME && lastName[i] != '#'; i++){
+            converter += lastName[i];
+        }
+        auxReg.SetLastName(converter);
+
+        converter.clear();
+        for(i = 0; i < LOGRADOURO && logradouro[i] != '#'; i++){
+            converter += logradouro[i];
+        }
+        auxReg.SetLogradouro(converter);
+
+        auxReg.SetANumero(aNumero);
+
+        converter.clear();
+        for(i = 0; i < COMPLEMENTO && complemento[i] != '#'; i++){
+            converter += complemento[i];
+        }
+        auxReg.SetComplemento(converter);
+
+        converter.clear();
+        for(i = 0; i < CITY && city[i] != '#'; i++){
+            converter += city[i];
+        }
+        auxReg.SetCity(converter);
+
+        converter.clear();
+        for(i = 0; i < STATE && state[i] != '#'; i++){
+            converter += state[i];
+        }
+        auxReg.SetState(converter);
+
+        auxReg.SetZipcode(zipCode);
+        auxReg.SetDDD(ddd);
+        auxReg.SetPNumero(pNumero);
+
+        arq.close();
+        return auxReg;
+    }
+    arq.close();
+    return regVazio;
 }
 
 
