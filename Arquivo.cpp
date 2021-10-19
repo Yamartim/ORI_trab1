@@ -93,7 +93,7 @@ bool ArquivoFIX::escreverReg(Registro *reg){
     char nome[FIRSTNAME];
     int pos;
     int intAux;
-    int auxKey;
+    //int auxKey;
     short int shortIntAux;
     bool existe = false;
 
@@ -489,7 +489,7 @@ bool ArquivoFIX::atualizaIndice(int key, std::string nome){
     char auxArray[FIRSTNAME];
     bool achou;
     std::string auxStr;
-    int auxKey;
+    //int auxKey;
 
     int tam = getIndicePath().length();
     char* pathIndice = new char[tam + 1];
