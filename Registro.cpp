@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include "Registro.h"
 
@@ -54,8 +55,8 @@ void Registro::print()
     cout << "- nome: " << firstname << " " << lastname << endl;
     cout << "- endereço: " << address.logradouro << ", num " << address.numero << ", " << address.complemento << endl;
     cout << "- cidade: " << city << " no estado de " << state << endl;
-    cout << "- cep: " << zipcode/1000 << "-" << zipcode%1000 << endl;
-    cout << "- telefone: (" << phone.ddd << ") " << phone.numero/10000 << "-" << phone.numero%10000 << endl;
+    cout << "- cep: " << std::setw(5) << std::setfill('0') << zipcode/1000 << "-" << std::setw(3) << zipcode%1000 << endl;
+    cout << "- telefone: (" << phone.ddd << ") " << std::setw(5) << std::setfill('0') << phone.numero/10000 << "-" << std::setw(4) << phone.numero%10000 << endl;
     cout << "--------------------------" << endl << endl;
 
 }
