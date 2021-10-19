@@ -62,8 +62,6 @@ void ArquivoFIX::setOffset(){
         ZIP (i.e., CEP, tal como 222222-222) (4 bytes)
         PHONE (i.e., número do telefone com DDD, tal como (022)2222-2222) (6 bytes)
     */
-
-//remover daqui e colocar na classe de registro depois
 void ArquivoFIX::ajustaCampo(Registro* reg){
     std::string aux;
     aux = reg->GetFirstName();
@@ -86,8 +84,6 @@ void ArquivoFIX::ajustaCampo(Registro* reg){
 }
 
 /*TRATAR INSERÇAO DE CHAVES REPETIDAS*/
-/*Debugar Atualiza indice*/
-/*Testar remocao logica*/
 bool ArquivoFIX::escreverReg(Registro *reg){
     std::fstream arq;
     std::fstream arqIndice; 
@@ -212,7 +208,7 @@ bool ArquivoFIX::escreverReg(Registro *reg){
     Registro auxReg;
     Registro regVazio;
     int auxKey;
-
+    int i;
     //convertendo de string para char
     int tam = getPath().length();
     char* path = new char[tam + 1];
@@ -270,29 +266,41 @@ bool ArquivoFIX::escreverReg(Registro *reg){
  
         auxReg.SetKey(auxKey);
 
-        converter.assign(firstName, FIRSTNAME);
+        for(i = 0; i < FIRSTNAME && firstName[i] != '#'; i++){
+            converter += firstName[i];
+        }
         auxReg.SetFirstName(converter);
 
         converter.clear();
-        converter.assign(lastName, LASTNAME);
+        for(i = 0; i < LASTNAME && lastName[i] != '#'; i++){
+            converter += lastName[i];
+        }
         auxReg.SetLastName(converter);
 
         converter.clear();
-        converter.assign(logradouro, LOGRADOURO);
+        for(i = 0; i < LOGRADOURO && logradouro[i] != '#'; i++){
+            converter += logradouro[i];
+        }
         auxReg.SetLogradouro(converter);
 
         auxReg.SetANumero(aNumero);
 
         converter.clear();
-        converter.assign(complemento, COMPLEMENTO);
+        for(i = 0; i < COMPLEMENTO && complemento[i] != '#'; i++){
+            converter += complemento[i];
+        }
         auxReg.SetComplemento(converter);
 
         converter.clear();
-        converter.assign(city, CITY);
+        for(i = 0; i < CITY && city[i] != '#'; i++){
+            converter += city[i];
+        }
         auxReg.SetCity(converter);
 
         converter.clear();
-        converter.assign(state, STATE);
+        for(i = 0; i < STATE && state[i] != '#'; i++){
+            converter += state[i];
+        }
         auxReg.SetState(converter);
 
         auxReg.SetZipcode(zipCode);
@@ -315,6 +323,7 @@ Registro ArquivoFIX::buscaNome(std::string nome){
     char auxArray[FIRSTNAME];
     bool achou = false;
     int offset;
+    int i;
 
     //convertendo de string para char*
     int tam = getPath().length();
@@ -393,29 +402,41 @@ Registro ArquivoFIX::buscaNome(std::string nome){
 
     auxReg.SetKey(auxKey);
 
-    converter.assign(firstName, FIRSTNAME);
+    for(i = 0; i < FIRSTNAME && firstName[i] != '#'; i++){
+        converter += firstName[i];
+    }
     auxReg.SetFirstName(converter);
 
     converter.clear();
-    converter.assign(lastName, LASTNAME);
+    for(i = 0; i < LASTNAME && lastName[i] != '#'; i++){
+        converter += lastName[i];
+    }
     auxReg.SetLastName(converter);
 
     converter.clear();
-    converter.assign(logradouro, LOGRADOURO);
+    for(i = 0; i < LOGRADOURO && logradouro[i] != '#'; i++){
+        converter += logradouro[i];
+    }
     auxReg.SetLogradouro(converter);
 
     auxReg.SetANumero(aNumero);
 
     converter.clear();
-    converter.assign(complemento, COMPLEMENTO);
+    for(i = 0; i < COMPLEMENTO && complemento[i] != '#'; i++){
+        converter += complemento[i];
+    }
     auxReg.SetComplemento(converter);
 
     converter.clear();
-    converter.assign(city, CITY);
+    for(i = 0; i < CITY && city[i] != '#'; i++){
+        converter += city[i];
+    }
     auxReg.SetCity(converter);
 
     converter.clear();
-    converter.assign(state, STATE);
+    for(i = 0; i < STATE && state[i] != '#'; i++){
+        converter += state[i];
+    }
     auxReg.SetState(converter);
 
     auxReg.SetZipcode(zipCode);
