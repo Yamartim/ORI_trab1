@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <stdlib.h>
 #include <locale>
+#include <limits>
 
 #include "Arquivo.h"
 #include "Registro.h"
@@ -12,6 +13,11 @@ using std::string;
 using std::cout;
 using std::cin;
 using std::endl; 
+
+void ignoreLine()
+{
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
 
 // Prompt de opera��o
 int inputOperacao(){
@@ -44,69 +50,80 @@ void inputGravarDados(Arquivo *arq){
 
         cout << "Iniciando grava��o." << endl;
         do{
+            cin.clear();
+            ignoreLine();
             cout << "KEY: ";
             cin >> intaux; 
-            cin.ignore();
-        }while(!inRegistro.SetKey(intaux));
+        }while(std::cin.fail() || !inRegistro.SetKey(intaux));
         do{
+            ignoreLine();
             cout << "First Name: ";
             getline(cin, straux);
         }while(!inRegistro.SetFirstName(straux));
         do{
+            ignoreLine();
             cout << "Last Name: ";
             getline(cin, straux); 
         }while(!inRegistro.SetLastName(straux));
 
         cout << "Sobre o endere�o," << endl;
         do{
+            ignoreLine();
             cout << "Logradouro: ";
             getline(cin, straux);
         }while(!inRegistro.SetLogradouro(straux));
         do{
+            cin.clear();
+            ignoreLine();
             cout << "N�mero: ";
             cin >> intaux; 
-            cin.ignore();
-        }while(!inRegistro.SetANumero(intaux));
+        }while(std::cin.fail() || !inRegistro.SetANumero(intaux));
         do{
+            ignoreLine();
             cout << "Complemento: ";
             getline(cin, straux);
         }while(!inRegistro.SetComplemento(straux));
         do{
+            ignoreLine();
             cout << "Cidade: ";
             getline(cin, straux);
         }while(!inRegistro.SetCity(straux));
         do{
+            ignoreLine();
             cout << "Estado (C�digo de 2 letras): ";
             cin >> straux; 
         }while(!inRegistro.SetState(straux));
         do{
+            cin.clear();
+            ignoreLine();
             cout << "Zipcode/CEP: ";
             cin >> intaux; 
-            cin.ignore();
-        }while(!inRegistro.SetZipcode(intaux));
+        }while(std::cin.fail() || !inRegistro.SetZipcode(intaux));
 
         cout << "Sobre o celular," << endl;
         do{
+            cin.clear();
+            ignoreLine();
             cout << "DDD: ";
             cin >> intaux; 
-            cin.ignore();
-        }while(!inRegistro.SetDDD(intaux));
+        }while(std::cin.fail() || !inRegistro.SetDDD(intaux));
         do{
+            cin.clear();
+            ignoreLine();
             cout << "N�mero: ";
             cin >> intaux; 
-            cin.ignore();
-        }while(!inRegistro.SetPNumero(intaux));
+        }while(std::cin.fail() || !inRegistro.SetPNumero(intaux));
 
         //DEBUG
-        cout << "\n\nImprimindo valores do registro";
-        inRegistro.print();
+        // cout << "\n\nImprimindo valores do registro";
+        // inRegistro.print();
 
         if(arq->escreverReg(&inRegistro)){
             cout << " gravado com sucesso" << endl;
         }
         else cout << "Erro" << endl;
 
-        cin.ignore();
+        ignoreLine();
         cout << endl << "Digite enter para continuar, ou 0 para parar" << endl;
         std::getline(cin, straux);
 
