@@ -152,10 +152,13 @@ void visualizarNome(Arquivo *arq){
     string aux;
     string nome;
     int i = 0;
-    cout << "Digite o nome do registro em que deseja visualizar os dados" << endl;
-    cin >> nome;
-    regAux = arq->buscaNome(nome);
+
     do{
+        cout << "Digite o nome do registro em que deseja visualizar os dados" << endl;
+        cin >> nome;
+        regAux = arq->buscaNome(nome);
+        cin.ignore();
+
         i++;
         cout << "== Exibindo registro " << i << " ==" << '\n';
         // Usar funÃ§Ã£o de leitura sequencial para colocar o registro i no regAux
@@ -185,26 +188,20 @@ void visualizarKey(Arquivo *arq){
     cout << "Digite a chave do registro em que deseja visualizar os dados" << endl;
     cin >> key;
     regAux = arq->buscaKey(key);
-    do{
-        i++;
-        cout << "== Exibindo registro " << i << " ==" << '\n';
-        // Usar funÃ§Ã£o de leitura sequencial para colocar o registro i no regAux
 
-        cout << " Chave: " << regAux.GetKey() << '\n';
-        cout << " First Name: " << regAux.GetFirstName() << '\n';
-        cout << " Last Name: " << regAux.GetLastName() << '\n'; 
-        cout << "\n";
-        cout << " Endereço" << '\n';
-        cout << " Logradouro: " << regAux.GetLogradouro() << '\n';
-        cout << " Número: " << regAux.GetANumero() << '\n';
-        cout << " Complemento: " << regAux.GetComplemento() << '\n';
-        cout << " Cidade: " << regAux.GetCity() << '\n';
-        cout << " Estado: " << regAux.GetState() << '\n';
-        cout << " ZIP: " << regAux.GetZipcode() << '\n';
-        cout << " Telefone: " << regAux.GetPNumero() << '\n';
-        cout << " Digite enter para continuar, ou 0 para parar" << endl;
-        std::getline(cin, aux);
-    }while(aux.length() == 0); // Se digitar algo sair do loop
+    cout << " Chave: " << regAux.GetKey() << '\n';
+    cout << " First Name: " << regAux.GetFirstName() << '\n';
+    cout << " Last Name: " << regAux.GetLastName() << '\n'; 
+    cout << "\n";
+    cout << " Endereço" << '\n';
+    cout << " Logradouro: " << regAux.GetLogradouro() << '\n';
+    cout << " Número: " << regAux.GetANumero() << '\n';
+    cout << " Complemento: " << regAux.GetComplemento() << '\n';
+    cout << " Cidade: " << regAux.GetCity() << '\n';
+    cout << " Estado: " << regAux.GetState() << '\n';
+    cout << " ZIP: " << regAux.GetZipcode() << '\n';
+    cout << " Telefone: " << regAux.GetPNumero() << '\n';
+
 }
 
 void removerLogicamente(Arquivo *arq){
