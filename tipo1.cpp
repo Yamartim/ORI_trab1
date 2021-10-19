@@ -11,7 +11,7 @@
 using std::string;
 using std::cout;
 using std::cin;
-using std::endl;
+using std::endl; 
 
 int inputOperacao(){
     //Exibe opções
@@ -23,7 +23,7 @@ int inputOperacao(){
     cout << "(3) - Recuperar registro por KEY" << '\n';
     //cout << "(3) - Recuperar registro por número" << '\n';
     cout << "(4) - Recuperar registro por FIRSTNAME" << '\n';
-    //cout << "(6) - Remover logicamente um registro" << '\n';
+    cout << "(5) - Remover logicamente um registro" << '\n';
     
     cout << endl;
 
@@ -207,6 +207,24 @@ void visualizarKey(Arquivo *arq){
     }while(aux.length() != 0); // Se digitar algo sair do loop
 }
 
+void removerLogicamente(Arquivo *arq){
+    int key;
+    string aux;
+    do{
+        cout << "Digite a chave do registro que deseja remover" << endl;
+        cin >> key;
+
+        if(arq->removerReg(key)){
+            cout << "Registro removido com sucesso" << endl;
+        }else{
+            cout << "Registro não encontrado" << endl;
+        }
+
+        cout << " Digite enter para continuar, ou 0 para parar" << endl;
+        std::getline(cin, aux);
+    }while(aux.length() == 0);
+    
+}
 
 int main(int argc, char const *argv[])
 {
@@ -236,6 +254,9 @@ int main(int argc, char const *argv[])
             break;
             case 4:
                 visualizarNome(&arquivoFix);
+            break;
+            case 5:
+                removerLogicamente(&arquivoFix);
             break;
             //TODO Adicionar outros casos
             default:
