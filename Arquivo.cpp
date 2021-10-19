@@ -550,29 +550,25 @@ bool ArquivoFIX::atualizaIndice(int key, std::string nome){
 }
 
 Registro ArquivoFIX::buscaNumReg(int n){
-    std:: ifstream arq;
+    std::fstream arq;
     Registro auxReg;
     Registro regVazio;
     int i;
+    char c;
     //convertendo de string para char
     int tam = getPath().length();
     char* path = new char[tam + 1];
     strcpy(path, getPath().c_str());
 
-    arq.open(path, std::ios::in | std::ios::binary);
+    arq.open(path, std::ios_base::in | std::ios_base::out |std::ios_base::binary);
     
     //caso falhe em abrir o arquivo
     if(!arq.is_open()){
         cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
         return regVazio; //retorna registro vazio, tratar na main esse retorno
     }
-    //int batata;
-    //bool fim;
     arq.seekg((n-1) * getOffsetReg(), std::ios::beg);
-    //batata = arq.tellg();
-    //std::cout << "pos g " << batata << std::endl;
-    //arq.seekg(1, std::ios::cur);
-    //fim = arq.eof();
+    arq.get(c); 
     if(!arq.eof()){
         arq.clear();
         arq.seekg(-1, std::ios::cur);
