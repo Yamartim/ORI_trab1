@@ -86,6 +86,8 @@ void ArquivoFIX::ajustaCampo(Registro* reg){
 }
 
 /*TRATAR INSERÇAO DE CHAVES REPETIDAS*/
+/*Debugar Atualiza indice*/
+/*Testar remocao logica*/
 bool ArquivoFIX::escreverReg(Registro *reg){
     std::fstream arq;
     std::fstream arqIndice; 
