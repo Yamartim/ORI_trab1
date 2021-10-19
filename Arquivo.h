@@ -56,6 +56,7 @@ public:
 class ArquivoFIX: public Arquivo
 {
 private:
+    int numRegistros;
     int offset_reg; 
     int* offset_cam;
     char separadorIndice;

@@ -35,7 +35,7 @@ int inputOperacao(){
 }
 
 // Loop de input dos dados de pessoas
-void inputGravarDados(Arquivo *arq){
+void inputGravarDados(ArquivoFIX *arq){
     Registro inRegistro;
     int intaux;
     string straux;
@@ -114,38 +114,39 @@ void inputGravarDados(Arquivo *arq){
 }
 
 // Loop de "browsing" do arquivo
-void visualizarSequencial(Arquivo *arq){
+void visualizarSequencial(ArquivoFIX *arq){
     Registro regAux;
     string aux;
-    int i = 0;
-
-    do{
-        i++;
-
-        //regAux = arq->buscaNumero(i);
+    int i = 1;
+    regAux = arq->buscaNumReg(i);
+    while(regAux.GetFirstName() != ""){
+        cout << "Exibindo registro " << i << endl;
+        regAux = arq->buscaNumReg(i);
 
         regAux.print();
 
-        cout << endl << "Digite enter para continuar, ou 0 para parar" << endl;
+        //cout << endl << "Digite enter para continuar, ou 0 para parar" << endl;
         //cin.ignore() <- Tire o coment�rio se por algum motivo entrar em um loop infinito aqui (N�o deveria entrar, avisar dini)
-        std::getline(cin, aux);
-    }while(aux.length() == 0); // Se digitar algo sair do loop
+        //std::getline(cin, aux);
+        i++;
+     // Se digitar algo sair do loop
+    }
 }
 
 // Recupera��o por n�mero
-void visualizarNumero(Arquivo *arq){
+void visualizarNumero(ArquivoFIX *arq){
     Registro regAux;
     int num;
     cout << "Digite o n�mero que deseja visualizar: ";
     cin >> num;
     
-    //regAux = arq->buscaNumero(num);
+    regAux = arq->buscaNumReg(num);
 
     regAux.print();
 }
 
 // Recupera��o por nome
-void visualizarNome(Arquivo *arq){
+void visualizarNome(ArquivoFIX *arq){
     Registro regAux;
     string aux;
     string nome;
@@ -159,27 +160,14 @@ void visualizarNome(Arquivo *arq){
 
         i++;
         cout << "== Exibindo registro " << i << " ==" << '\n';
-        // Usar fun��o de leitura sequencial para colocar o registro i no regAux
-
-        cout << " Chave: " << regAux.GetKey() << '\n';
-        cout << " First Name: " << regAux.GetFirstName() << '\n';
-        cout << " Last Name: " << regAux.GetLastName() << '\n'; 
-        cout << "\n";
-        cout << " Endere�o" << '\n';
-        cout << " Logradouro: " << regAux.GetLogradouro() << '\n';
-        cout << " N�mero: " << regAux.GetANumero() << '\n';
-        cout << " Complemento: " << regAux.GetComplemento() << '\n';
-        cout << " Cidade: " << regAux.GetCity() << '\n';
-        cout << " Estado: " << regAux.GetState() << '\n';
-        cout << " ZIP: " << regAux.GetZipcode() << '\n';
-        cout << " Telefone: " << regAux.GetPNumero() << '\n';
+        regAux.print();
         cout << endl << "Digite enter para continuar, ou 0 para parar" << endl;
         std::getline(cin, aux);
     }while(aux.length() == 0); // Se digitar algo sair do loop
 }
 
 // Recupera��o por chave
-void visualizarKey(Arquivo *arq){
+void visualizarKey(ArquivoFIX *arq){
     Registro regAux;
     string aux;
     int key;
@@ -192,7 +180,7 @@ void visualizarKey(Arquivo *arq){
 }
 
 // Remo��o L�gica
-void removerLogicamente(Arquivo *arq){
+void removerLogicamente(ArquivoFIX *arq){
     int key;
     string aux;
     do{
