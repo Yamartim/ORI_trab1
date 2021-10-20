@@ -91,7 +91,7 @@ bool ArquivoFIX::escreverReg(Registro *reg){
     char nome[FIRSTNAME];
     int pos;
     int intAux;
-    //int auxKey;
+    int auxKey;
     short int shortIntAux;
     bool existe = false;
 
@@ -142,12 +142,24 @@ bool ArquivoFIX::escreverReg(Registro *reg){
     while(c != '*' && !arq.eof()){
         arq.clear();
         arq.seekg(-1 , std::ios::cur);
-        arq.seekg(getOffsetReg() , std::ios::cur);
+        arq.read((char*)&auxKey, sizeof(auxKey));
+        if(auxKey == reg->GetKey())
+            existe = true;
+        arq.seekg(getOffsetReg() - sizeof(int), std::ios::cur);
         arq.get(c);
     } 
     arq.clear();
+    
+    if(existe){
+        cout << "Registro com chave ja existente!" << endl;
+        arq.close();
+        arqIndice.close();
+        return false;
+    }
+
     if(c == '*')
         arq.seekg(-1, std::ios::cur);
+
     strcpy(nome, reg->GetFirstName().c_str());
     pos = arq.tellp();
      
@@ -161,13 +173,7 @@ bool ArquivoFIX::escreverReg(Registro *reg){
         arqIndice.get(c);
     } 
 
-    if(existe){
-        cout << "Registro com chave ja existente!" << endl;
-        arq.close();
-        arqIndice.close();
-        return false;
-    }
-    //else
+   
     //escrevendo no arquivo de indice
     arqIndice.clear();
     if(c == '*'){   
