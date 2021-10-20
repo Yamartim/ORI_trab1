@@ -14,18 +14,17 @@ using std::cout;
 using std::cin;
 using std::endl; 
 
-// Prompt de operaï¿œï¿œo
+// Prompt de operação
 int inputOperacao(){
-    //Exibe opï¿œï¿œes
+    //Exibe opções
     cout << '\n';
-    cout << "Escolha a operaï¿œï¿œo desejada:" << '\n';
+    cout << "Escolha a operação desejada:" << '\n';
     cout << "(0) - Para sair" << '\n';
-    cout << "(1) - Gravaï¿œï¿œo de Dados" << '\n';
+    cout << "(1) - Gravação de Dados" << '\n';
     cout << "(2) - Visualizar registros" << '\n';
-    cout << "(3) - Recuperar registro por nï¿œmero" << '\n';
-    cout << "(4) - Recuperar registro por KEY" << '\n';
-    cout << "(5) - Recuperar registro por FIRSTNAME" << '\n';
-    cout << "(6) - Remover logicamente um registro" << '\n';
+    cout << "(3) - Recuperar registro por KEY" << '\n';
+    cout << "(4) - Recuperar registro por FIRSTNAME" << '\n';
+    cout << "(5) - Remover logicamente um registro" << '\n';
     
     cout << endl;
 
@@ -39,7 +38,7 @@ int inputOperacao(){
         if(myStream >> operacao){
             break;
         }
-        cout << "NÃºmero invÃ¡lido, tente novamente.";
+        cout << "Número inválido, tente novamente.";
     }
     return operacao;
 }
@@ -50,9 +49,7 @@ void inputGravarDados(ArquivoVAR *arq){
     int intaux;
     string straux = "";
     do{
-        //cin.ignore() usado para ignorar /n que seria absorvido pelo getline()
-
-        cout << "Iniciando gravaï¿œï¿œo." << endl;
+        cout << "Iniciando gravação." << endl;
         do{
             cout << "KEY: ";
             getline(cin, straux);
@@ -63,7 +60,7 @@ void inputGravarDados(ArquivoVAR *arq){
                     break;
                 }
             }
-            cout << "NÃºmero invÃ¡lido, tente novamente" << endl;
+            cout << "Número inválido, tente novamente" << endl;
         }while(true);
         do{
             cout << "First Name: ";
@@ -74,13 +71,13 @@ void inputGravarDados(ArquivoVAR *arq){
             getline(cin, straux); 
         }while(!inRegistro.SetLastName(straux));
 
-        cout << "Sobre o endereï¿œo," << endl;
+        cout << "Sobre o endereço," << endl;
         do{
             cout << "Logradouro: ";
             getline(cin, straux);
         }while(!inRegistro.SetLogradouro(straux));
         do{
-            cout << "NÃºmero: ";
+            cout << "Número: ";
             getline(cin, straux);
 
             std::stringstream myStream(straux);
@@ -89,7 +86,7 @@ void inputGravarDados(ArquivoVAR *arq){
                     break;
                 }
             }
-            cout << "NÃºmero invÃ¡lido, tente novamente" << endl;
+            cout << "Número inválido, tente novamente" << endl;
         }while(true);
         do{
             cout << "Complemento: ";
@@ -100,7 +97,7 @@ void inputGravarDados(ArquivoVAR *arq){
             getline(cin, straux);
         }while(!inRegistro.SetCity(straux));
         do{
-            cout << "Estado (Cï¿œdigo de 2 letras): ";
+            cout << "Estado (Código de 2 letras): ";
             getline(cin, straux);
         }while(!inRegistro.SetState(straux));
         do{
@@ -113,7 +110,7 @@ void inputGravarDados(ArquivoVAR *arq){
                     break;
                 }
             }
-            cout << "NÃºmero invÃ¡lido, tente novamente" << endl;
+            cout << "Número inválido, tente novamente" << endl;
         }while(true);
 
         cout << "Sobre o celular," << endl;
@@ -127,10 +124,10 @@ void inputGravarDados(ArquivoVAR *arq){
                     break;
                 }
             }
-            cout << "NÃºmero invÃ¡lido, tente novamente" << endl;
-        }while(std::cin.fail() || !inRegistro.SetDDD(intaux));
+            cout << "Número inválido, tente novamente" << endl;
+        }while(true);
         do{
-            cout << "NÃºmero: ";
+            cout << "Número: ";
             getline(cin, straux);
 
             std::stringstream myStream(straux);
@@ -139,7 +136,7 @@ void inputGravarDados(ArquivoVAR *arq){
                     break;
                 }
             }
-            cout << "NÃºmero invÃ¡lido, tente novamente" << endl;
+            cout << "Número inválido, tente novamente" << endl;
         }while(true);
 
         //DEBUG
@@ -149,94 +146,143 @@ void inputGravarDados(ArquivoVAR *arq){
         if(arq->escreverReg(&inRegistro)){
             cout << "Registro gravado com sucesso" << endl;
         }
-        else cout << "Erro na gravaÃ§Ã£o do registro" << endl;
+        else{
+            cout << "Erro na gravação do registro" << endl;
+        }        
 
-        
         cout << endl << "Digite enter para continuar, ou 0 para parar" << endl;
-        std::getline(cin, straux);
+        getline(cin, straux);
 
     }while(straux.length() == 0);
 }
 
 // Loop de "browsing" do arquivo
 void visualizarSequencial(ArquivoVAR *arq){
+    cout << "Função buscaSequencial não implementada" << endl;
+    return;
     Registro regAux;
     string aux;
     int i = 1;
-    //regAux = arq->buscaNumReg(i);
-    while(regAux.GetFirstName() != ""){
-        //regAux = arq->buscaNumReg(i);
-        if(regAux.GetFirstName()!= "")
+
+    // Visualiza registros um-a-um até o usuário parar
+    do{
+        //regAux = arq->buscaSequencial();
+        if(regAux.GetFirstName() != ""){
             regAux.print();
-        i++;
-    }
-}
-
-// Recuperaï¿œï¿œo por nï¿œmero
-void visualizarNumero(ArquivoVAR *arq){
-    Registro regAux;
-    int num;
-    cout << "Digite o nï¿œmero que deseja visualizar: ";
-    cin >> num;
-    
-   // regAux = arq->buscaNumReg(num);
-
-    regAux.print();
-}
-
-// Recuperaï¿œï¿œo por nome
-void visualizarNome(ArquivoVAR *arq){
-    Registro regAux;
-    string aux;
-    string nome;
-    int i = 0;
-
-    do{
-        cout << "Digite o nome do registro em que deseja visualizar os dados" << endl;
-        cin >> nome;
-        regAux = arq->buscaNome(nome);
-        cin.ignore();
-
-        i++;
-        cout << "== Exibindo registro " << i << " ==" << '\n';
-        regAux.print();
-        cout << endl << "Digite enter para continuar, ou 0 para parar" << endl;
-        std::getline(cin, aux);
-    }while(aux.length() == 0); // Se digitar algo sair do loop
-}
-
-// Recuperaï¿œï¿œo por chave
-void visualizarKey(ArquivoVAR *arq){
-    Registro regAux;
-    string aux;
-    int key;
-
-    cout << "Digite a chave do registro em que deseja visualizar os dados" << endl;
-    cin >> key;
-    regAux = arq->buscaKey(key);
-
-    regAux.print();
-}
-
-// Remoï¿œï¿œo Lï¿œgica
-void removerLogicamente(ArquivoVAR *arq){
-    int key;
-    string aux;
-    do{
-        cout << "Digite a chave do registro que deseja remover" << endl;
-        cin >> key;
-        cin.ignore();
-
-        if(arq->removerReg(key)){
-            cout << "Registro removido com sucesso" << endl;
+            i++;
         }else{
-            cout << "Registro nï¿œo encontrado" << endl;
+            // Reinicia para o ínicio dos registros
+            cout << "== Fim dos registros, voltando ao ínicio... ==";
+            i = 1;
         }
 
         cout << endl << "Digite enter para continuar, ou 0 para parar" << endl;
         std::getline(cin, aux);
     }while(aux.length() == 0);
-    
+}
+
+// Recuperação por nome
+void visualizarNome(ArquivoVAR *arq){
+    Registro regAux;
+    string input;
+    int i = 0;
+
+    // Loop de visualização para i nomes até o usuário parar
+    do{
+        // Input do nome para pesquisar e verificação
+        do{
+            cout << "Digite o nome do registro para visualização dos dados: ";
+            getline(cin, input);
+
+            // Usando a verificação do registro
+            if(regAux.SetFirstName(input)){
+                break;
+            }
+
+            cout << "Nome inválido, tente novamente" << endl;
+        }while(true);
+
+        // Busca do nome e exibição do registro/erro
+        regAux = arq->buscaNome(input);
+        if(regAux.GetFirstName() != ""){ // Testa se não é um registro vazio
+            //TODO Exibição de todos os registros com o mesmo nome
+            i++;
+            cout << "== Exibindo registro " << i << " ==" << '\n';
+            regAux.print();
+        }else{
+            cout << "Erro: Nome não encontrado." << endl;
+        }
+
+        cout << endl << "Digite enter para continuar, ou 0 para parar" << endl;
+        std::getline(cin, input);
+
+    }while(input.length() == 0); // Se digitar algo sair do loop
+}
+
+// Recuperação por chave
+void visualizarKey(ArquivoVAR *arq){
+Registro regAux;
+    int key;
+    string input;
+    do{
+
+        // Verificação de número válido
+        do{
+            cout << "Digite a chave do registro em que deseja visualizar os dados: ";
+            getline(cin, input);
+
+            std::stringstream myStream(input);
+            if (myStream >> key){
+                break;
+            }
+            cout << "Número inválido, tente novamente" << endl;
+        }while(true);
+        
+        // Busca e exibição do registro / erro
+        regAux = arq->buscaKey(key);
+        if(regAux.GetFirstName() != ""){ // Testa se não é um registro vazio
+            cout << "== Exibindo registro de chave " << key << " ==" << '\n';
+            regAux.print();
+        }else{
+            cout << "Erro: Registro não encontrado." << endl;
+        }
+
+        cout << endl << "Digite enter para continuar, ou 0 para parar" << endl;
+        std::getline(cin, input);
+
+    }while(input.length() == 0);
+}
+
+// Remoção Lógica
+void removerLogicamente(ArquivoVAR *arq){
+Registro regAux;
+    int key;
+    string input;
+    do{
+
+        // Verificação de número válido
+        do{
+            cout << "Digite a chave do registro que deseja remover : ";
+            getline(cin, input);
+
+            std::stringstream myStream(input);
+            if (myStream >> key){
+                break;
+            }
+            cout << "Número inválido, tente novamente" << endl;
+        }while(true);
+        
+        // Busca e exibição do registro / erro
+        if(arq->removerReg(key)){
+            cout << "Registro de chave " << key << " removido com sucesso." << endl;
+        }else{
+            cout << "Não foi possível remover o registro... " << endl;
+        }
+
+        cout << endl << "Digite enter para continuar, ou 0 para parar" << endl;
+        std::getline(cin, input);
+
+    }while(input.length() == 0);
 }
 
 int main(int argc, char const *argv[])
@@ -248,7 +294,7 @@ int main(int argc, char const *argv[])
 
     bool sair = false;
     while(!sair){
-        // Apresenta opï¿œï¿œes na tela, retorna operaï¿œï¿œo
+        // Apresenta opções na tela, retorna operação
         switch(inputOperacao())
         {
             case 0:
@@ -261,27 +307,23 @@ int main(int argc, char const *argv[])
                 inputGravarDados(&arquivoVar);
             break;
             case 2:
-            // RECUPERAï¿œï¿œO SEQUENCIAL
+            // RECUPERAÇÃO SEQUENCIAL
                 visualizarSequencial(&arquivoVar);
             break;
             case 3:
-            // RECUPERAï¿œï¿œO Nï¿œMERO
-                visualizarNumero(&arquivoVar);
-            break;
-            case 4:
-            // RECUPERAï¿œï¿œO POR CHAVE
+            // RECUPERAÇÃO POR CHAVE
                 visualizarKey(&arquivoVar);
             break;
-            case 5:
-            // RECUPERAï¿œï¿œO POR NOME
+            case 4:
+            // RECUPERAÇÃO POR NOME
                 visualizarNome(&arquivoVar);
             break;
-            case 6:
-            // REMOï¿œï¿œO Lï¿œGICA
+            case 5:
+            // REMOÇÃO LÓGICA
                 removerLogicamente(&arquivoVar);
             break;
             default:
-                cout << "NÃºmero nÃ£o reconhecido" << endl;
+                cout << "Número não reconhecido" << endl;
             break;
         }
     }

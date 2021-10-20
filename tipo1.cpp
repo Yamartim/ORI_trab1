@@ -327,7 +327,7 @@
 
 //     bool sair = false;
 //     while(!sair){
-//         // Apresenta op��es na tela, retorna opera��o
+//         // Apresenta opções na tela, retorna operação
 //         switch(inputOperacao())
 //         {
 //             case 0:
@@ -340,23 +340,23 @@
 //                 inputGravarDados(&arquivoFix);
 //             break;
 //             case 2:
-//             // RECUPERA��O SEQUENCIAL
+//             // RECUPERAÇÃO SEQUENCIAL
 //                 visualizarSequencial(&arquivoFix);
 //             break;
 //             case 3:
-//             // RECUPERA��O N�MERO
+//             // RECUPERAÇÃO NÚMERO
 //                 visualizarNumero(&arquivoFix);
 //             break;
 //             case 4:
-//             // RECUPERA��O POR CHAVE
+//             // RECUPERAÇÃO POR CHAVE
 //                 visualizarKey(&arquivoFix);
 //             break;
 //             case 5:
-//             // RECUPERA��O POR NOME
+//             // RECUPERAÇÃO POR NOME
 //                 visualizarNome(&arquivoFix);
 //             break;
 //             case 6:
-//             // REMO��O L�GICA
+//             // REMOÇÃO LÓGICA
 //                 removerLogicamente(&arquivoFix);
 //             break;
 //             default:
