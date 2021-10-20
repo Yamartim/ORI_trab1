@@ -68,53 +68,74 @@ bool Registro::SetKey(int k){
         key = k;
         return 1;
     }
+    cout << "[!] - Número inválido, esperava (>=0), recebeu " << k << endl;
     return 0;
 }
 
 bool Registro::SetLastName(std::string ln){
-    if(ln.length() > 0){
+    if(ln.length() > 0 && ln.length() <= 16){
         lastname = ln;
         return 1;
     }else{
+        cout << "[!] - Tamanho inválido, esperava (0-16), recebeu " << ln.length() << endl;
         return 0;
     }
 }
 
 bool Registro::SetFirstName(std::string fn){
-    if(fn.length() > 0){
+    if(fn.length() > 0 && fn.length() <= 16){
         firstname = fn;
         return 1;
     }else{
+        cout << "[!] - Tamanho inválido, esperava (0-16), recebeu " << fn.length() << endl;
         return 0;
     }
 }
 
 bool Registro::SetLogradouro(std::string al){
-    address.logradouro = al;
-    return 1;
+    if(al.length() > 0 && al.length() <= 20){
+        address.logradouro = al;
+        return 1;
+    }else{
+        cout << "[!] - Tamanho inválido, esperava (0-20), recebeu " << al.length() << endl;
+        return 0;
+    }
 }
 
-bool Registro::SetANumero(int an){
+bool Registro::SetANumero(short int an){
     address.numero = an;
     return 1;
 }
 
 bool Registro::SetComplemento(std::string ac){
-    address.complemento = ac;
-    return 1;
+    if(ac.length() > 0 && ac.length() <= 10){
+        address.complemento = ac;
+        return 1;
+    }else{
+        cout << "[!] - Tamanho inválido, esperava (0-10), recebeu " << ac.length() << endl;
+        return 0;
+    }
 }
 
 bool Registro::SetCity(std::string ci){
-    city = ci;
-    return 1;
+    if(ci.length() > 0 && ci.length() <= 20){
+        city = ci;
+        return 1;
+    }else{
+        cout << "[!] - Tamanho inválido, esperava (0-20), recebeu " << ci.length() << endl;
+        return 0;
+    }
 }
 
 bool Registro::SetState(std::string st){
     if(st.length() == 2){
         state = st;
         return 1;
+    }else{
+        cout << "[!] - Tamanho inválido, esperava (2), recebeu " << st.length() << endl;
+        return 0;
     }
-    return 0;
+    
 }
 
 bool Registro::SetZipcode(int zc){
@@ -125,7 +146,7 @@ bool Registro::SetZipcode(int zc){
     return 0;
 }
 
-bool Registro::SetDDD(int pd){
+bool Registro::SetDDD(short int pd){
     if(pd >= 0){
         phone.ddd = pd;
         return 1;
@@ -158,7 +179,7 @@ std::string Registro::GetLogradouro(){
     return this->address.logradouro;
 }
 
-int Registro::GetANumero(){
+short int Registro::GetANumero(){
     return this->address.numero;
 }
 
@@ -178,59 +199,10 @@ int Registro::GetZipcode(){
     return this->zipcode;
 }
 
-int Registro::GetDDD(){
+short int Registro::GetDDD(){
     return this->phone.ddd;
 }
 
 int Registro::GetPNumero(){
     return this->phone.numero;
-}
-
-// Sets do Fixo (Restrições a mais no tamanho das strings)
-bool RegistroFIX::SetLastName(std::string ln){
-    if(ln.length() > 16){
-        return 0;
-    }
-    lastname = ln;
-    return 1;
-}
-
-bool RegistroFIX::SetFirstName(std::string fn){
-    if(fn.length() > 16){
-        return 0;
-    }
-    firstname = fn;
-    return 1;
-}
-
-bool RegistroFIX::SetLogradouro(std::string al){
-    if(al.length() > 20){
-        return 0;
-    }
-    address.logradouro = al;
-    return 1;
-}
-
-bool RegistroFIX::SetComplemento(std::string ac){
-    if(ac.length() > 10){
-        return 0;
-    }
-    address.complemento = ac;
-    return 1;
-}
-
-bool RegistroFIX::SetCity(std::string ci){
-    if(ci.length() > 16){
-        return 0;
-    }
-    city = ci;
-    return 1;
-}
-
-bool RegistroFIX::SetState(std::string st){
-    if(st.length() == 2){
-        state = st;
-        return 1;
-    }
-    return 0;
 }

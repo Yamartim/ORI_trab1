@@ -57,7 +57,7 @@ public:
     virtual bool SetFirstName(string fn);
     //Endereço
     virtual bool SetLogradouro(string al);
-    bool SetANumero(int an);
+    bool SetANumero(short int an);
     virtual bool SetComplemento(string ac);
     // -- 
 
@@ -66,7 +66,7 @@ public:
     bool SetZipcode(int zc);
     
     //phone
-    bool SetDDD(int pd);
+    bool SetDDD(short int pd);
     bool SetPNumero(int pn);
     // -- 
     // Get
@@ -74,35 +74,14 @@ public:
     string GetLastName();
     string GetFirstName();
     string GetLogradouro();
-    int GetANumero();
+    short int GetANumero();
     string GetComplemento();
     string GetCity();
     string GetState();
     int GetZipcode();
-    int GetDDD();
+    short int GetDDD();
     int GetPNumero();
 
-};
-
-class RegistroFIX: public Registro
-{
-    // Set
-    bool SetKey(int k);
-    bool SetLastName(string ln);
-    bool SetFirstName(string fn);
-    //Endereço
-    bool SetLogradouro(string al);
-    bool SetANumero(int an);
-    bool SetComplemento(string ac);
-    // -- 
-
-    bool SetCity(string ci);
-    bool SetState(string st);
-    bool SetZipcode(int zc);
-    
-    //phone
-    bool SetDDD(int pd);
-    bool SetPNumero(int pn);
 };
 
 #endif
