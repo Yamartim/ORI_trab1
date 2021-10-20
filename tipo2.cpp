@@ -56,7 +56,7 @@ void inputGravarDados(ArquivoVAR *arq){
 
             std::stringstream myStream(straux);
             if (myStream >> intaux){
-                if(inRegistro.SetKey(intaux)){
+                if(inRegistro.SetKeyVAR(intaux)){
                     break;
                 }
             }
@@ -65,24 +65,24 @@ void inputGravarDados(ArquivoVAR *arq){
         do{
             cout << "First Name: ";
             getline(cin, straux);
-        }while(!inRegistro.SetFirstName(straux));
+        }while(!inRegistro.SetFirstNameVAR(straux));
         do{    
             cout << "Last Name: ";
             getline(cin, straux); 
-        }while(!inRegistro.SetLastName(straux));
+        }while(!inRegistro.SetLastNameVAR(straux));
 
         cout << "Sobre o endereço," << endl;
         do{
             cout << "Logradouro: ";
             getline(cin, straux);
-        }while(!inRegistro.SetLogradouro(straux));
+        }while(!inRegistro.SetLogradouroVAR(straux));
         do{
             cout << "Número: ";
             getline(cin, straux);
 
             std::stringstream myStream(straux);
             if (myStream >> intaux){
-                if(inRegistro.SetANumero(intaux)){
+                if(inRegistro.SetANumeroVAR(intaux)){
                     break;
                 }
             }
@@ -91,22 +91,22 @@ void inputGravarDados(ArquivoVAR *arq){
         do{
             cout << "Complemento: ";
             getline(cin, straux);
-        }while(!inRegistro.SetComplemento(straux));
+        }while(!inRegistro.SetComplementoVAR(straux));
         do{
             cout << "Cidade: ";
             getline(cin, straux);
-        }while(!inRegistro.SetCity(straux));
+        }while(!inRegistro.SetCityVAR(straux));
         do{
             cout << "Estado (Código de 2 letras): ";
             getline(cin, straux);
-        }while(!inRegistro.SetState(straux));
+        }while(!inRegistro.SetStateVAR(straux));
         do{
             cout << "Zipcode/CEP: ";
             getline(cin, straux);
 
             std::stringstream myStream(straux);
             if (myStream >> intaux){
-                if(inRegistro.SetZipcode(intaux)){
+                if(inRegistro.SetZipcodeVAR(intaux)){
                     break;
                 }
             }
@@ -120,7 +120,7 @@ void inputGravarDados(ArquivoVAR *arq){
 
             std::stringstream myStream(straux);
             if (myStream >> intaux){
-                if(inRegistro.SetDDD(intaux)){
+                if(inRegistro.SetDDDVAR(intaux)){
                     break;
                 }
             }
@@ -132,7 +132,7 @@ void inputGravarDados(ArquivoVAR *arq){
 
             std::stringstream myStream(straux);
             if (myStream >> intaux){
-                if(inRegistro.SetPNumero(intaux)){
+                if(inRegistro.SetPNumeroVAR(intaux)){
                     break;
                 }
             }
@@ -194,8 +194,7 @@ void visualizarNome(ArquivoVAR *arq){
             cout << "Digite o nome do registro para visualização dos dados: ";
             getline(cin, input);
 
-            // Usando a verificação do registro
-            if(regAux.SetFirstName(input)){
+            if(regAux.SetFirstNameVAR(input)){
                 break;
             }
 

@@ -51,24 +51,43 @@ public:
 
     void print();
 
-    // Set
+    // Sets FIXO
     bool SetKey(int k);
-    virtual bool SetLastName(string ln);
-    virtual bool SetFirstName(string fn);
+    bool SetLastName(string ln);
+    bool SetFirstName(string fn);
     //Endereço
-    virtual bool SetLogradouro(string al);
+    bool SetLogradouro(string al);
     bool SetANumero(short int an);
-    virtual bool SetComplemento(string ac);
+    bool SetComplemento(string ac);
     // -- 
 
-    virtual bool SetCity(string ci);
-    virtual bool SetState(string st);
+    bool SetCity(string ci);
+    bool SetState(string st);
     bool SetZipcode(int zc);
     
     //phone
     bool SetDDD(short int pd);
     bool SetPNumero(int pn);
+
+    // Sets VARIÁVEL
+    bool SetKeyVAR(int k);
+    bool SetLastNameVAR(string ln);
+    bool SetFirstNameVAR(string fn);
+    //Endereço
+    bool SetLogradouroVAR(string al);
+    bool SetANumeroVAR(short int an);
+    bool SetComplementoVAR(string ac);
     // -- 
+
+    bool SetCityVAR(string ci);
+    bool SetStateVAR(string st);
+    bool SetZipcodeVAR(int zc);
+     
+    //phone
+    bool SetDDDVAR(short int pd);
+    bool SetPNumeroVAR(int pn);
+
+
     // Get
     int GetKey();
     string GetLastName();

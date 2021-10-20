@@ -61,8 +61,7 @@ void Registro::print()
 
 }
 
-// Sets
-//! Talvez faltem algumas verificações aqui -> Registro fixo ou variável?
+// Sets Fixo
 bool Registro::SetKey(int k){
     if(k >= 0){
         key = k;
@@ -155,6 +154,106 @@ bool Registro::SetDDD(short int pd){
 }
 
 bool Registro::SetPNumero(int pn){
+    if(pn >= 0){
+        phone.numero = pn;
+        return 1;
+    }
+    return 0;
+}
+
+// Sets Variável
+bool Registro::SetKeyVAR(int k){
+    if(k >= 0){
+        key = k;
+        return 1;
+    }
+    cout << "[!] - Número inválido, esperava (>=0), recebeu " << k << endl;
+    return 0;
+}
+
+bool Registro::SetLastNameVAR(std::string ln){
+    if(ln.length() > 0){
+        lastname = ln;
+        return 1;
+    }else{
+        cout << "[!] - Tamanho inválido, esperava (>0), recebeu " << ln.length() << endl;
+        return 0;
+    }
+}
+
+bool Registro::SetFirstNameVAR(std::string fn){
+    if(fn.length() > 0){
+        firstname = fn;
+        return 1;
+    }else{
+        cout << "[!] - Tamanho inválido, esperava (>0), recebeu " << fn.length() << endl;
+        return 0;
+    }
+}
+
+bool Registro::SetLogradouroVAR(std::string al){
+    if(al.length() > 0){
+        address.logradouro = al;
+        return 1;
+    }else{
+        cout << "[!] - Tamanho inválido, esperava (>0), recebeu " << al.length() << endl;
+        return 0;
+    }
+}
+
+bool Registro::SetANumeroVAR(short int an){
+    address.numero = an;
+    return 1;
+}
+
+bool Registro::SetComplementoVAR(std::string ac){
+    if(ac.length() > 0){
+        address.complemento = ac;
+        return 1;
+    }else{
+        cout << "[!] - Tamanho inválido, esperava (>0), recebeu " << ac.length() << endl;
+        return 0;
+    }
+}
+
+bool Registro::SetCityVAR(std::string ci){
+    if(ci.length() > 0){
+        city = ci;
+        return 1;
+    }else{
+        cout << "[!] - Tamanho inválido, esperava (>0), recebeu " << ci.length() << endl;
+        return 0;
+    }
+}
+
+bool Registro::SetStateVAR(std::string st){
+    if(st.length() == 2){
+        state = st;
+        return 1;
+    }else{
+        cout << "[!] - Tamanho inválido, esperava (2), recebeu " << st.length() << endl;
+        return 0;
+    }
+    
+}
+
+bool Registro::SetZipcodeVAR(int zc){
+    if(zc >= 0){
+        zipcode = zc;
+        return 1;
+    }
+    return 0;
+}
+
+bool Registro::SetDDDVAR(short int pd){
+    if(pd >= 0){
+        phone.ddd = pd;
+        return 1;
+    }
+    return 0;
+}
+
+bool Registro::SetPNumeroVAR(int pn){
     if(pn >= 0){
         phone.numero = pn;
         return 1;
