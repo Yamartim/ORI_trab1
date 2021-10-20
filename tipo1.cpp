@@ -165,16 +165,10 @@ void visualizarSequencial(ArquivoFIX *arq){
     int i = 1;
     regAux = arq->buscaNumReg(i);
     while(regAux.GetFirstName() != ""){
-        cout << "Exibindo registro " << i << endl;
         regAux = arq->buscaNumReg(i);
-
-        regAux.print();
-
-        //cout << endl << "Digite enter para continuar, ou 0 para parar" << endl;
-        //cin.ignore() <- Tire o coment�rio se por algum motivo entrar em um loop infinito aqui (N�o deveria entrar, avisar dini)
-        //std::getline(cin, aux);
+        if(regAux.GetFirstName()!= "")
+            regAux.print();
         i++;
-     // Se digitar algo sair do loop
     }
 }
 
