@@ -1,3 +1,10 @@
+/*
+Arquivo.cpp
+
+    Daniel Kenichi Tiago Tateishi RA: 790837
+    Jo√£o Dini de Miranda RA: 790716
+    Martim Fernandes Ribeiro Lima RA: 756187
+*/
 #include "Arquivo.h"
 #include "Registro.h"
 #include <exception>
@@ -555,6 +562,7 @@ Registro ArquivoFIX::buscaNumReg(int n){
     std::fstream arq;
     Registro auxReg;
     Registro regVazio;
+    std::string removido = "#";
     int i;
     char c;
     //convertendo de string para char
@@ -570,7 +578,12 @@ Registro ArquivoFIX::buscaNumReg(int n){
         return regVazio; //retorna registro vazio, tratar na main esse retorno
     }
     arq.seekg((n-1) * getOffsetReg(), std::ios::beg);
-    arq.get(c); 
+    arq.get(c);
+    if(c == '*'){
+        arq.close();
+        auxReg.SetFirstName(removido);
+        return auxReg;
+    } 
     if(!arq.eof()){
         arq.clear();
         arq.seekg(-1, std::ios::cur);
@@ -655,6 +668,7 @@ Registro ArquivoFIX::buscaNumReg(int n){
  ArquivoVAR::ArquivoVAR(std::string p, std::string p_indice, char t){
     setPaths(p, p_indice, t);
     setSeparadores('|', '#');
+    removedorLogico = '~';
     extra = 44;
 }
 
@@ -845,7 +859,7 @@ Registro ArquivoVAR::buscaKey(int key){
         arq.seekg(-(fieldSize + sizeof(fieldSize)), std::ios::cur);
         arq.seekg(registerSize + extra, std::ios::cur);
         arq.get(c);
-        if(c == '#'){
+        if(c == separador_reg){
             arq.read((char*)&registerSize, sizeof(registerSize));
             arq.read((char*)&fieldSize, sizeof(fieldSize));
             arq.read((char*)&auxKey, sizeof(auxKey));
@@ -1142,6 +1156,63 @@ Registro ArquivoVAR::buscaNome(std::string nome){
 }
 
 bool ArquivoVAR::removerReg(int key){
+    std::fstream arq;
+    std::string nome;
+    int registerSize;
+    int auxKey;
+    int fieldSize;
+    int nameSize;
+    char c;
+    char* auxArray;
+    //convertendo de string para char*
+    int tam = getPath().length();
+    char* path = new char[tam + 1];
+    strcpy(path, getPath().c_str());
+
+    arq.open(path, std::ios_base::in | std::ios_base::out | std::ios_base::binary);
+
+    if(!arq.is_open()){
+        cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
+        return false; //retorna false caso falhe em abrir o arquivo
+    }
+
+    //garantindo que os ponteiros de leitura e escrita come√ßam no come√ßo do arquivo
+    arq.seekg(0, std::ios::beg);
+    arq.seekp(0, std::ios::beg);
+
+    arq.read((char*)&registerSize, sizeof(registerSize));
+    arq.read((char*)&fieldSize, sizeof(fieldSize));
+    arq.read((char*)&auxKey, sizeof(auxKey));
+    
+    while(auxKey != key && !arq.eof()){
+        arq.clear();
+        arq.seekg(-(fieldSize + sizeof(fieldSize)), std::ios::cur);
+        arq.seekg(registerSize + extra, std::ios::cur);
+        arq.get(c);
+        if(c == separador_reg){
+            arq.read((char*)&registerSize, sizeof(registerSize));
+            arq.read((char*)&fieldSize, sizeof(fieldSize));
+            arq.read((char*)&auxKey, sizeof(auxKey));
+        }
+        else{
+            std::cout << "Erro na procura pelo registro em remover registro" << std::endl;
+        }
+    }
+    arq.clear();
+
+    if(auxKey != key){
+        arq.close();
+        return false;
+    }
+
+    arq.read((char*)&nameSize, sizeof(nameSize));
+    auxArray = new char[nameSize];
+    arq.read(auxArray, nameSize);
+    //realizando remoÁ„o logica
+    arq.seekg(-(sizeof(auxKey) + sizeof(fieldSize) + sizeof(registerSize)), std::ios::cur);
+    arq.write(&removedorLogico, sizeof(char));
+    atualizaIndice(key, nome);
+    arq.close();
     return true;
 }
 bool ArquivoVAR::atualizaIndice(int key, std::string nome){

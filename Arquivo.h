@@ -1,3 +1,10 @@
+/*
+Arquivo.h
+
+    Daniel Kenichi Tiago Tateishi RA: 790837
+    João Dini de Miranda RA: 790716
+    Martim Fernandes Ribeiro Lima RA: 756187
+*/
 #ifndef ARQUIVO_H
 #define ARQUIVO_H
 #include <string>
@@ -86,6 +93,7 @@ class ArquivoVAR: public Arquivo
 private:
     char separador_reg;
     char separador_cam;
+    char removedorLogico;
     int extra;
 
 public:
