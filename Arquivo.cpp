@@ -678,6 +678,7 @@ bool ArquivoVAR::escreverReg(Registro* reg){
     std::fstream arqIndice;
     int registerSize;
     int intAux;
+    short int shortIntAux;
     char c;
 
     //convertendo de string para char*
@@ -718,7 +719,7 @@ bool ArquivoVAR::escreverReg(Registro* reg){
 
     arq.get(c);
 
-    while(c != '*' && !arq.eof()){
+    while(c != '~' && !arq.eof()){
         arq.clear();
         arq.get(c);
     }
@@ -761,8 +762,8 @@ bool ArquivoVAR::escreverReg(Registro* reg){
 
     intAux = sizeof(reg->GetANumero());
     arq.write((char*)&intAux, sizeof(intAux)); 
-    intAux = reg->GetANumero();
-    arq.write((char*)&intAux, sizeof(intAux)); 
+    shortIntAux = reg->GetANumero();
+    arq.write((char*)&shortIntAux, sizeof(shortIntAux)); 
     //arq << separador_cam;
 
     intAux = reg->GetComplemento().length();
@@ -785,8 +786,8 @@ bool ArquivoVAR::escreverReg(Registro* reg){
 
     intAux = sizeof(reg->GetDDD());
     arq.write((char*)&intAux, sizeof(intAux)); 
-    intAux = reg->GetDDD();
-    arq.write((char*)&intAux, sizeof(intAux)); 
+    shortIntAux = reg->GetDDD();
+    arq.write((char*)&shortIntAux, sizeof(shortIntAux)); 
     //arq << separador_cam;
 
     intAux = sizeof(reg->GetPNumero());
@@ -859,39 +860,48 @@ Registro ArquivoVAR::buscaKey(int key){
         short int ddd;
         int pNumero;
         std::string converter;
-
+        int batata;
         //lendo do arquivo para colocar no registro auxiliar de retorno
         //key
         auxReg.SetKey(auxKey);
 
         //firstname
         arq.read((char*)&fieldSize, sizeof(fieldSize));
+        batata = arq.tellg();
+        std::cout << "pos g(0) " << batata << std::endl;
         firstName = new char[fieldSize];
-        arq.read(firstName, sizeof(firstName));
+        arq.read(firstName, fieldSize);
+        batata = arq.tellg();
+        std::cout << "pos g(1) " << batata << std::endl;
         for(i = 0; i < fieldSize; i++){
             converter += firstName[i];
         }
         auxReg.SetFirstName(converter);
+        delete firstName;
         converter.clear();
 
         //lastname
         arq.read((char*)&fieldSize, sizeof(fieldSize));
+        batata = arq.tellg();
+        std::cout << "pos g(2) " << batata << std::endl;
         lastName = new char[fieldSize];
-        arq.read(lastName, sizeof(lastName));
+        arq.read(lastName, fieldSize);
         for(i = 0; i < fieldSize; i++){
             converter += lastName[i];
         }
         auxReg.SetLastName(converter);
+        delete lastName;
         converter.clear();
 
         //logradouro
         arq.read((char*)&fieldSize, sizeof(fieldSize));
         logradouro = new char[fieldSize];
-        arq.read(logradouro, sizeof(logradouro));
+        arq.read(logradouro, fieldSize);
         for(i = 0; i < fieldSize; i++){
             converter += logradouro[i];
         }
         auxReg.SetLogradouro(converter);
+        delete logradouro;
         converter.clear();
 
         //aNumero
@@ -902,47 +912,50 @@ Registro ArquivoVAR::buscaKey(int key){
         //complemento
         arq.read((char*)&fieldSize, sizeof(fieldSize));
         complemento = new char[fieldSize];
-        arq.read(complemento, sizeof(complemento));
+        arq.read(complemento, fieldSize);
         for(i = 0; i < fieldSize; i++){
             converter += complemento[i];
         }
         auxReg.SetComplemento(converter);
+        delete complemento;
         converter.clear();
         
         //city
         arq.read((char*)&fieldSize, sizeof(fieldSize));
         city = new char[fieldSize];
-        arq.read(city, sizeof(city));
+        arq.read(city, fieldSize);
         for(i = 0; i < fieldSize; i++){
             converter += city[i];
         }
         auxReg.SetCity(converter);
+        delete city;
         converter.clear();
 
         //state
         arq.read((char*)&fieldSize, sizeof(fieldSize));
         state = new char[fieldSize];
-        arq.read(state, sizeof(state));
+        arq.read(state, fieldSize);
         for(i = 0; i < fieldSize; i++){
             converter += state[i];
         }
         auxReg.SetState(converter);
+        delete state;
         converter.clear();
 
         //Zipcode
         arq.read((char*)&fieldSize, sizeof(fieldSize));
         arq.read((char*)&zipCode, sizeof(zipCode));
-        auxReg.SetANumero(zipCode);
+        auxReg.SetZipcode(zipCode);
         
         //DDD
         arq.read((char*)&fieldSize, sizeof(fieldSize));
         arq.read((char*)&ddd, sizeof(ddd));
-        auxReg.SetANumero(ddd);
+        auxReg.SetDDD(ddd);
         
         //pNumero
         arq.read((char*)&fieldSize, sizeof(fieldSize));
         arq.read((char*)&pNumero, sizeof(pNumero));
-        auxReg.SetANumero(pNumero);
+        auxReg.SetPNumero(pNumero);
 
         arq.close();     
         return auxReg;
