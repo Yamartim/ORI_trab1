@@ -86,6 +86,7 @@ class ArquivoVAR: public Arquivo
 private:
     char separador_reg;
     char separador_cam;
+    char removedorLogico;
     int extra;
 
 public:
