@@ -120,6 +120,8 @@ bool ArquivoFIX::escreverReg(Registro *reg){
         cout << "Criando arquivo novo" << endl;
         if(!arq.is_open()){
             cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
+            delete path;
+            delete pathIndice;
             return false;
         }    
     }
@@ -130,6 +132,8 @@ bool ArquivoFIX::escreverReg(Registro *reg){
         cout << "Criando arquivo novo" << endl;
         if(!arqIndice.is_open()){
             cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
+            delete path;
+            delete pathIndice;
             return false;
         }
     }
@@ -158,6 +162,8 @@ bool ArquivoFIX::escreverReg(Registro *reg){
         cout << "Registro com chave ja existente!" << endl;
         arq.close();
         arqIndice.close();
+        delete path;
+        delete pathIndice;
         return false;
     }
 
@@ -209,6 +215,8 @@ bool ArquivoFIX::escreverReg(Registro *reg){
     arq.close();
     arqIndice.close();
 
+    delete path;
+    delete pathIndice;
     return true;
 }
 
@@ -229,6 +237,7 @@ Registro ArquivoFIX::buscaKey(int key) {
     //caso falhe em abrir o arquivo
     if(!arq.is_open()){
         cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
+        delete path;
         return regVazio; //retorna registro vazio, tratar na main esse retorno
     }
 
@@ -317,10 +326,12 @@ Registro ArquivoFIX::buscaKey(int key) {
         auxReg.SetDDD(ddd);
         auxReg.SetPNumero(pNumero);
 
-        arq.close();     
+        arq.close();    
+        delete path; 
         return auxReg;
     }
     arq.close();
+    delete path;
     return regVazio;    
  }
 
@@ -349,11 +360,15 @@ Registro ArquivoFIX::buscaNome(std::string nome){
 
     if(!arq.is_open()){
         cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
+        delete path;
+        delete pathIndice;
         return regVazio; //retorna registro vazio, tratar na main esse retorno
     }
 
     if(!arqIndice.is_open()){
         cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
+        delete path;
+        delete pathIndice;
         return regVazio; //retorna registro vazio, tratar na main esse retorno
     }
 
@@ -376,6 +391,8 @@ Registro ArquivoFIX::buscaNome(std::string nome){
     if(!achou){
         arq.close();
         arqIndice.close();
+        delete path;
+        delete pathIndice;
         return regVazio;
     }
 
@@ -455,6 +472,8 @@ Registro ArquivoFIX::buscaNome(std::string nome){
 
     arq.close();
     arqIndice.close();
+    delete path;
+    delete pathIndice;
     return auxReg;     
 }
 
@@ -472,6 +491,7 @@ bool ArquivoFIX::removerReg(int key){
 
     if(!arq.is_open()){
         cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
+        delete path;
         return false; //retorna false caso falhe em abrir o arquivo
     }
 
@@ -494,6 +514,7 @@ bool ArquivoFIX::removerReg(int key){
     
     if(auxKey != key){
         arq.close();
+        delete path;
         return false;
     }
     //fazendo a remoÃ§ao logica
@@ -508,6 +529,7 @@ bool ArquivoFIX::removerReg(int key){
     atualizaIndice(key, auxStr);
 
     arq.close();
+    delete path;
     return true;
 }
 
@@ -526,6 +548,7 @@ bool ArquivoFIX::atualizaIndice(int key, std::string nome){
 
     if(!arqIndice.is_open()){
         cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
+        delete pathIndice;
         return false; //retorna false caso falhe em abrir o arquivo
     }
     //buscando pelo nome no arquivo de indices
@@ -547,6 +570,7 @@ bool ArquivoFIX::atualizaIndice(int key, std::string nome){
     //caso nao tenha encontrado o nome, retorna false
     if(!achou){
         arqIndice.close();
+        delete pathIndice;
         return false;
     }
     //else
@@ -555,6 +579,7 @@ bool ArquivoFIX::atualizaIndice(int key, std::string nome){
     arqIndice.write(&removedorLogico, sizeof(char));
 
     arqIndice.close();
+    delete pathIndice;
     return true;
 }
 
@@ -574,6 +599,7 @@ Registro ArquivoFIX::buscaNumReg(int n){
     //caso falhe em abrir o arquivo
     if(!arq.is_open()){
         cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
+        delete path;
         return regVazio; //retorna registro vazio, tratar na main esse retorno
     }
     arq.seekg((n-1) * getOffsetReg(), std::ios::beg);
@@ -656,9 +682,11 @@ Registro ArquivoFIX::buscaNumReg(int n){
         auxReg.SetPNumero(pNumero);
 
         arq.close();
+        delete path;
         return auxReg;
     }
     arq.close();
+    delete path;
     return regVazio;
 }
 
@@ -820,6 +848,8 @@ bool ArquivoVAR::escreverReg(Registro* reg){
 
     arq << separador_reg;
     
+    delete path;
+    delete pathIndice;
     arq.close();
     return true;
 }
@@ -971,9 +1001,11 @@ Registro ArquivoVAR::buscaKey(int key){
         arq.read((char*)&pNumero, sizeof(pNumero));
         auxReg.SetPNumero(pNumero);
 
-        arq.close();     
+        delete path;
+        arq.close();
         return auxReg;
     }  
+    delete path;
     arq.close();
     return regVazio;
 }
@@ -1032,9 +1064,12 @@ Registro ArquivoVAR::buscaNome(std::string nome){
             arqIndice.read(auxArray, nameSize);
         }
     }
+    delete auxArray;
     if(!achou){
         arq.close();
         arqIndice.close();
+        delete path;
+        delete pathIndice;
         return regVazio;
     }
     //else
@@ -1149,6 +1184,8 @@ Registro ArquivoVAR::buscaNome(std::string nome){
     arq.read((char*)&pNumero, sizeof(pNumero));
     auxReg.SetPNumero(pNumero);
 
+    delete path;
+    delete pathIndice;
     arq.close(); 
     arqIndice.close();    
     return auxReg;
@@ -1207,14 +1244,73 @@ bool ArquivoVAR::removerReg(int key){
     arq.read((char*)&nameSize, sizeof(nameSize));
     auxArray = new char[nameSize];
     arq.read(auxArray, nameSize);
+    for(int i = 0; i < nameSize; i++){
+        nome += auxArray[i];
+    }
+
     //realizando remoção logica
-    //arq.seekg();
+    arq.seekg(-(sizeof(nameSize) + nameSize), std::ios::cur);
     arq.seekg(-(sizeof(auxKey) + sizeof(fieldSize) + sizeof(registerSize)), std::ios::cur);
     arq.write(&removedorLogico, sizeof(char));
     atualizaIndice(key, nome);
+
+    delete auxArray;
+    delete path;
     arq.close();
     return true;
 }
+
 bool ArquivoVAR::atualizaIndice(int key, std::string nome){
+    std::fstream arqIndice; 
+    char* auxArray;
+    bool achou;
+    std::string auxStr;
+    int nameSize;
+
+    int tam = getIndicePath().length();
+    char* pathIndice = new char[tam + 1];
+    strcpy(pathIndice, getIndicePath().c_str());
+
+    arqIndice.open(pathIndice, std::ios_base::in | std::ios_base::out | std::ios_base::binary);
+
+    if(!arqIndice.is_open()){
+        cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
+        return false; //retorna false caso falhe em abrir o arquivo
+    }
+    //buscando pelo nome no arquivo de indices
+    arqIndice.read((char*)&nameSize, sizeof(nameSize));
+    auxArray = new char[nameSize];
+    arqIndice.read(auxArray, nameSize);
+
+    while(!arqIndice.eof() && !achou){
+        auxStr.clear();
+        for(int i = 0; i < nameSize; i++){
+            auxStr += auxArray[i];
+        } 
+        if(auxStr == nome)
+            achou = true;
+        else{
+            delete auxArray;
+            arqIndice.seekg(sizeof(int), std::ios::cur);
+            arqIndice.read((char*)&nameSize, sizeof(nameSize));
+            auxArray = new char[nameSize];
+            arqIndice.read(auxArray, nameSize);
+        }
+    }   
+    
+    //caso nao tenha encontrado o nome, retorna false
+    if(!achou){
+        arqIndice.close();
+        delete auxArray;
+        delete pathIndice;
+        return false;
+    }
+    //else
+    //fazendo a remoÃ§ao logica
+    arqIndice.seekg(-(sizeof(nameSize) + nameSize), std::ios::cur);
+    arqIndice.write(&removedorLogico, sizeof(char));
+    arqIndice.close();
+    delete auxArray;
+    delete pathIndice;
     return true;
 }
