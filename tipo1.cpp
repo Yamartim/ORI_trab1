@@ -166,7 +166,7 @@
 //     // Visualiza registros um-a-um até o usuário parar
 //     do{
 //         regAux = arq->buscaNumReg(i);
-//         if(regAux.SetFirstName(regAux.GetFirstName())){
+//         if(regAux.GetFirstName() != ""){
 //             regAux.print();
 //             i++;
 //         }else{
@@ -201,7 +201,7 @@
         
 //         // Busca e exibição do registro / erro
 //         regAux = arq->buscaNumReg(num);
-//         if(regAux.SetFirstName(regAux.GetFirstName())){ // Testa se não é um registro vazio
+//         if(regAux.GetFirstName() != ""){ // Testa se não é um registro vazio
 //             cout << "== Exibindo registro " << num << " ==" << '\n';
 //             regAux.print();
 //         }else{
@@ -237,7 +237,7 @@
 
 //         // Busca do nome e exibição do registro/erro
 //         regAux = arq->buscaNome(input);
-//         if(regAux.SetFirstName(regAux.GetFirstName())){ // Testa se não é um registro vazio
+//         if(regAux.GetFirstName() != ""){ // Testa se não é um registro vazio
 //             //TODO Exibição de todos os registros com o mesmo nome
 //             i++;
 //             cout << "== Exibindo registro " << i << " ==" << '\n';
@@ -273,7 +273,7 @@
         
 //         // Busca e exibição do registro / erro
 //         regAux = arq->buscaKey(key);
-//         if(regAux.SetFirstName(regAux.GetFirstName())){ // Testa se não é um registro vazio
+//         if(regAux.GetFirstName() != ""){ // Testa se não é um registro vazio
 //             cout << "== Exibindo registro de chave " << key << " ==" << '\n';
 //             regAux.print();
 //         }else{
