@@ -14,11 +14,6 @@ using std::cout;
 using std::cin;
 using std::endl; 
 
-void ignoreLine()
-{
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-}
-
 // Prompt de opera��o
 int inputOperacao(){
     //Exibe op��es
@@ -36,7 +31,16 @@ int inputOperacao(){
 
     //Recebe input
     int operacao;
-    cin >> operacao;
+    string input;
+    while(true){
+        getline(cin, input);
+
+        std::stringstream myStream(input);
+        if(myStream >> operacao){
+            break;
+        }
+        cout << "Número inválido, tente novamente.";
+    }
     return operacao;
 }
 
@@ -44,86 +48,110 @@ int inputOperacao(){
 void inputGravarDados(ArquivoFIX *arq){
     Registro inRegistro;
     int intaux;
-    string straux;
+    string straux = "";
     do{
         //cin.ignore() usado para ignorar /n que seria absorvido pelo getline()
 
         cout << "Iniciando grava��o." << endl;
         do{
-            cin.clear();
-            ignoreLine();
             cout << "KEY: ";
-            cin >> intaux; 
-        }while(std::cin.fail() || !inRegistro.SetKey(intaux));
+            getline(cin, straux);
+
+            std::stringstream myStream(straux);
+            if (myStream >> intaux){
+                if(inRegistro.SetKey(intaux)){
+                    break;
+                }
+            }
+            cout << "Número inválido, tente novamente" << endl;
+        }while(true);
         do{
-            ignoreLine();
             cout << "First Name: ";
             getline(cin, straux);
         }while(!inRegistro.SetFirstName(straux));
-        do{
-            ignoreLine();
+        do{    
             cout << "Last Name: ";
             getline(cin, straux); 
         }while(!inRegistro.SetLastName(straux));
 
         cout << "Sobre o endere�o," << endl;
         do{
-            ignoreLine();
             cout << "Logradouro: ";
             getline(cin, straux);
         }while(!inRegistro.SetLogradouro(straux));
         do{
-            cin.clear();
-            ignoreLine();
-            cout << "N�mero: ";
-            cin >> intaux; 
-        }while(std::cin.fail() || !inRegistro.SetANumero(intaux));
+            cout << "Número: ";
+            getline(cin, straux);
+
+            std::stringstream myStream(straux);
+            if (myStream >> intaux){
+                if(inRegistro.SetANumero(intaux)){
+                    break;
+                }
+            }
+            cout << "Número inválido, tente novamente" << endl;
+        }while(true);
         do{
-            ignoreLine();
             cout << "Complemento: ";
             getline(cin, straux);
         }while(!inRegistro.SetComplemento(straux));
         do{
-            ignoreLine();
             cout << "Cidade: ";
             getline(cin, straux);
         }while(!inRegistro.SetCity(straux));
         do{
-            ignoreLine();
             cout << "Estado (C�digo de 2 letras): ";
-            cin >> straux; 
+            getline(cin, straux);
         }while(!inRegistro.SetState(straux));
         do{
-            cin.clear();
-            ignoreLine();
             cout << "Zipcode/CEP: ";
-            cin >> intaux; 
-        }while(std::cin.fail() || !inRegistro.SetZipcode(intaux));
+            getline(cin, straux);
+
+            std::stringstream myStream(straux);
+            if (myStream >> intaux){
+                if(inRegistro.SetZipcode(intaux)){
+                    break;
+                }
+            }
+            cout << "Número inválido, tente novamente" << endl;
+        }while(true);
 
         cout << "Sobre o celular," << endl;
         do{
-            cin.clear();
-            ignoreLine();
             cout << "DDD: ";
-            cin >> intaux; 
+            getline(cin, straux);
+
+            std::stringstream myStream(straux);
+            if (myStream >> intaux){
+                if(inRegistro.SetDDD(intaux)){
+                    break;
+                }
+            }
+            cout << "Número inválido, tente novamente" << endl;
         }while(std::cin.fail() || !inRegistro.SetDDD(intaux));
         do{
-            cin.clear();
-            ignoreLine();
-            cout << "N�mero: ";
-            cin >> intaux; 
-        }while(std::cin.fail() || !inRegistro.SetPNumero(intaux));
+            cout << "Número: ";
+            getline(cin, straux);
+
+            std::stringstream myStream(straux);
+            if (myStream >> intaux){
+                if(inRegistro.SetPNumero(intaux)){
+                    break;
+                }
+            }
+            cout << "Número inválido, tente novamente" << endl;
+        }while(true);
 
         //DEBUG
         // cout << "\n\nImprimindo valores do registro";
         // inRegistro.print();
 
         if(arq->escreverReg(&inRegistro)){
-            cout << " gravado com sucesso" << endl;
+            cout << "Registro gravado com sucesso" << endl;
         }
-        else cout << "Erro" << endl;
+        else cout << "Erro na gravação do registro" << endl;
 
-        ignoreLine();
+        
         cout << endl << "Digite enter para continuar, ou 0 para parar" << endl;
         std::getline(cin, straux);
 
@@ -259,7 +287,7 @@ int main(int argc, char const *argv[])
                 removerLogicamente(&arquivoFix);
             break;
             default:
-                cout << "N�o reconhecido" << endl;
+                cout << "Número não reconhecido" << endl;
             break;
         }
     }
