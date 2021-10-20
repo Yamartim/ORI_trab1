@@ -107,11 +107,11 @@ bool Registro::SetANumero(short int an){
 }
 
 bool Registro::SetComplemento(std::string ac){
-    if(ac.length() > 0 && ac.length() <= 10){
+    if(ac.length() <= 10){
         address.complemento = ac;
         return 1;
     }else{
-        cout << "[!] - Tamanho inválido, esperava (0-10), recebeu " << ac.length() << endl;
+        cout << "[!] - Tamanho inválido, esperava (<10), recebeu " << ac.length() << endl;
         return 0;
     }
 }
