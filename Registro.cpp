@@ -90,9 +90,6 @@ bool Registro::SetLastName(std::string ln){
 
 bool Registro::SetFirstName(std::string fn){
     if(fn.length() > 0 && fn.length() <= 16){
-        if(fn == "#"){
-            return 0;
-        }
         firstname = fn;
         return 1;
     }else{
