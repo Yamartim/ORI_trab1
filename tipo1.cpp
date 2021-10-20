@@ -161,22 +161,27 @@
 // void visualizarSequencial(ArquivoFIX *arq){
 //     Registro regAux;
 //     string aux;
+//     int ultimaChave = -1;
 //     int i = 1;
 
 //     // Visualiza registros um-a-um até o usuário parar
 //     do{
 //         regAux = arq->buscaNumReg(i);
 //         if(regAux.GetFirstName() != ""){
-//             regAux.print();
+//             if(ultimaChave != regAux.GetKey()){
+//                 regAux.print();
+//             }
 //             i++;
 //         }else{
 //             // Reinicia para o ínicio dos registros
 //             cout << "== Fim dos registros, voltando ao ínicio... ==";
 //             i = 1;
 //         }
-
-//         cout << endl << "Digite enter para continuar, ou 0 para parar" << endl;
-//         std::getline(cin, aux);
+//         if(ultimaChave != regAux.GetKey()){
+//             ultimaChave = regAux.GetKey();
+//             cout << endl << "Digite enter para continuar, ou 0 para parar" << endl;
+//             std::getline(cin, aux);
+//         }
 //     }while(aux.length() == 0);
 // }
 
