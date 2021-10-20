@@ -80,7 +80,7 @@ public:
     Registro buscaNumReg(int n);
 
 };
-/*
+
 class ArquivoVAR: public Arquivo
 {
 private:
@@ -94,11 +94,11 @@ public:
     void setSeparadores(char sepCam, char sepReg);
 
     Registro buscaKey(int key);
-   // Registro buscaNome(string nome);
+    Registro buscaNome(string nome);
 
     bool escreverReg(Registro reg);
-    //bool removerReg(Registro reg);
+   // bool removerReg(Registro reg);
     //bool atualizaIndice(Registro reg);
 
-};*/
+};
 #endif

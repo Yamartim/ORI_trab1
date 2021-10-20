@@ -1,14 +1,12 @@
-//descobrir como ter dois mains em uma pasta sem o vscode ficar louco?
-/*
-
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <iomanip>
 #include <stdlib.h>
 #include <locale>
+#include <limits>
 
-#include "Arquivo.h" //<- vai ser outro .h?
+#include "Arquivo.h"
 #include "Registro.h"
 
 using std::string;
@@ -16,15 +14,15 @@ using std::cout;
 using std::cin;
 using std::endl; 
 
-// Prompt de operação
+// Prompt de operaï¿œï¿œo
 int inputOperacao(){
-    //Exibe opções
+    //Exibe opï¿œï¿œes
     cout << '\n';
-    cout << "Escolha a operação desejada:" << '\n';
+    cout << "Escolha a operaï¿œï¿œo desejada:" << '\n';
     cout << "(0) - Para sair" << '\n';
-    cout << "(1) - Gravação de Dados" << '\n';
+    cout << "(1) - Gravaï¿œï¿œo de Dados" << '\n';
     cout << "(2) - Visualizar registros" << '\n';
-    cout << "(3) - Recuperar registro por número" << '\n';
+    cout << "(3) - Recuperar registro por nï¿œmero" << '\n';
     cout << "(4) - Recuperar registro por KEY" << '\n';
     cout << "(5) - Recuperar registro por FIRSTNAME" << '\n';
     cout << "(6) - Remover logicamente um registro" << '\n';
@@ -33,43 +31,66 @@ int inputOperacao(){
 
     //Recebe input
     int operacao;
-    cin >> operacao;
+    string input;
+    while(true){
+        getline(cin, input);
+
+        std::stringstream myStream(input);
+        if(myStream >> operacao){
+            break;
+        }
+        cout << "NÃºmero invÃ¡lido, tente novamente.";
+    }
     return operacao;
 }
 
 // Loop de input dos dados de pessoas
-void inputGravarDados(Arquivo *arq){
+void inputGravarDados(ArquivoFIX *arq){
     Registro inRegistro;
     int intaux;
-    string straux;
+    string straux = "";
     do{
         //cin.ignore() usado para ignorar /n que seria absorvido pelo getline()
 
-        cout << "Iniciando gravação." << endl;
+        cout << "Iniciando gravaï¿œï¿œo." << endl;
         do{
             cout << "KEY: ";
-            cin >> intaux; 
-            cin.ignore();
-        }while(!inRegistro.SetKey(intaux));
+            getline(cin, straux);
+
+            std::stringstream myStream(straux);
+            if (myStream >> intaux){
+                if(inRegistro.SetKey(intaux)){
+                    break;
+                }
+            }
+            cout << "NÃºmero invÃ¡lido, tente novamente" << endl;
+        }while(true);
         do{
             cout << "First Name: ";
             getline(cin, straux);
         }while(!inRegistro.SetFirstName(straux));
-        do{
+        do{    
             cout << "Last Name: ";
             getline(cin, straux); 
         }while(!inRegistro.SetLastName(straux));
 
-        cout << "Sobre o endereço," << endl;
+        cout << "Sobre o endereï¿œo," << endl;
         do{
             cout << "Logradouro: ";
             getline(cin, straux);
         }while(!inRegistro.SetLogradouro(straux));
         do{
-            cout << "Número: ";
-            cin >> intaux; 
-            cin.ignore();
-        }while(!inRegistro.SetANumero(intaux));
+            cout << "NÃºmero: ";
+            getline(cin, straux);
+
+            std::stringstream myStream(straux);
+            if (myStream >> intaux){
+                if(inRegistro.SetANumero(intaux)){
+                    break;
+                }
+            }
+            cout << "NÃºmero invÃ¡lido, tente novamente" << endl;
+        }while(true);
         do{
             cout << "Complemento: ";
             getline(cin, straux);
@@ -79,35 +100,58 @@ void inputGravarDados(Arquivo *arq){
             getline(cin, straux);
         }while(!inRegistro.SetCity(straux));
         do{
-            cout << "Estado (Código de 2 letras): ";
-            cin >> straux; 
+            cout << "Estado (Cï¿œdigo de 2 letras): ";
+            getline(cin, straux);
         }while(!inRegistro.SetState(straux));
         do{
             cout << "Zipcode/CEP: ";
-            cin >> intaux; 
-            cin.ignore();
-        }while(!inRegistro.SetZipcode(intaux));
+            getline(cin, straux);
+
+            std::stringstream myStream(straux);
+            if (myStream >> intaux){
+                if(inRegistro.SetZipcode(intaux)){
+                    break;
+                }
+            }
+            cout << "NÃºmero invÃ¡lido, tente novamente" << endl;
+        }while(true);
 
         cout << "Sobre o celular," << endl;
         do{
             cout << "DDD: ";
-            cin >> intaux; 
-            cin.ignore();
-        }while(!inRegistro.SetDDD(intaux));
+            getline(cin, straux);
+
+            std::stringstream myStream(straux);
+            if (myStream >> intaux){
+                if(inRegistro.SetDDD(intaux)){
+                    break;
+                }
+            }
+            cout << "NÃºmero invÃ¡lido, tente novamente" << endl;
+        }while(std::cin.fail() || !inRegistro.SetDDD(intaux));
         do{
-            cout << "Número: ";
-            cin >> intaux; 
-            cin.ignore();
-        }while(!inRegistro.SetPNumero(intaux));
+            cout << "NÃºmero: ";
+            getline(cin, straux);
+
+            std::stringstream myStream(straux);
+            if (myStream >> intaux){
+                if(inRegistro.SetPNumero(intaux)){
+                    break;
+                }
+            }
+            cout << "NÃºmero invÃ¡lido, tente novamente" << endl;
+        }while(true);
 
         //DEBUG
-        cout << "\n\nImprimindo valores do registro";
-        inRegistro.print();
+        // cout << "\n\nImprimindo valores do registro";
+        // inRegistro.print();
 
         if(arq->escreverReg(&inRegistro)){
-            cout << " gravado com sucesso" << endl;
+            cout << "Registro gravado com sucesso" << endl;
         }
-        else cout << "Erro" << endl;
+        else cout << "Erro na gravaÃ§Ã£o do registro" << endl;
+
+        
         cout << endl << "Digite enter para continuar, ou 0 para parar" << endl;
         std::getline(cin, straux);
 
@@ -115,38 +159,33 @@ void inputGravarDados(Arquivo *arq){
 }
 
 // Loop de "browsing" do arquivo
-void visualizarSequencial(Arquivo *arq){
+void visualizarSequencial(ArquivoFIX *arq){
     Registro regAux;
     string aux;
-    int i = 0;
-
-    do{
+    int i = 1;
+    regAux = arq->buscaNumReg(i);
+    while(regAux.GetFirstName() != ""){
+        regAux = arq->buscaNumReg(i);
+        if(regAux.GetFirstName()!= "")
+            regAux.print();
         i++;
-
-        //regAux = arq->buscaNumero(i);
-
-        regAux.print();
-
-        cout << endl << "Digite enter para continuar, ou 0 para parar" << endl;
-        //cin.ignore() <- Tire o comentário se por algum motivo entrar em um loop infinito aqui (Não deveria entrar, avisar dini)
-        std::getline(cin, aux);
-    }while(aux.length() == 0); // Se digitar algo sair do loop
+    }
 }
 
-// Recuperação por número
-void visualizarNumero(Arquivo *arq){
+// Recuperaï¿œï¿œo por nï¿œmero
+void visualizarNumero(ArquivoFIX *arq){
     Registro regAux;
     int num;
-    cout << "Digite o número que deseja visualizar: ";
+    cout << "Digite o nï¿œmero que deseja visualizar: ";
     cin >> num;
     
-    //regAux = arq->buscaNumero(num);
+    regAux = arq->buscaNumReg(num);
 
     regAux.print();
 }
 
-// Recuperação por nome
-void visualizarNome(Arquivo *arq){
+// Recuperaï¿œï¿œo por nome
+void visualizarNome(ArquivoFIX *arq){
     Registro regAux;
     string aux;
     string nome;
@@ -160,27 +199,14 @@ void visualizarNome(Arquivo *arq){
 
         i++;
         cout << "== Exibindo registro " << i << " ==" << '\n';
-        // Usar função de leitura sequencial para colocar o registro i no regAux
-
-        cout << " Chave: " << regAux.GetKey() << '\n';
-        cout << " First Name: " << regAux.GetFirstName() << '\n';
-        cout << " Last Name: " << regAux.GetLastName() << '\n'; 
-        cout << "\n";
-        cout << " Endereço" << '\n';
-        cout << " Logradouro: " << regAux.GetLogradouro() << '\n';
-        cout << " Número: " << regAux.GetANumero() << '\n';
-        cout << " Complemento: " << regAux.GetComplemento() << '\n';
-        cout << " Cidade: " << regAux.GetCity() << '\n';
-        cout << " Estado: " << regAux.GetState() << '\n';
-        cout << " ZIP: " << regAux.GetZipcode() << '\n';
-        cout << " Telefone: " << regAux.GetPNumero() << '\n';
+        regAux.print();
         cout << endl << "Digite enter para continuar, ou 0 para parar" << endl;
         std::getline(cin, aux);
     }while(aux.length() == 0); // Se digitar algo sair do loop
 }
 
-// Recuperação por chave
-void visualizarKey(Arquivo *arq){
+// Recuperaï¿œï¿œo por chave
+void visualizarKey(ArquivoFIX *arq){
     Registro regAux;
     string aux;
     int key;
@@ -192,8 +218,8 @@ void visualizarKey(Arquivo *arq){
     regAux.print();
 }
 
-// Remoção Lógica
-void removerLogicamente(Arquivo *arq){
+// Remoï¿œï¿œo Lï¿œgica
+void removerLogicamente(ArquivoFIX *arq){
     int key;
     string aux;
     do{
@@ -204,7 +230,7 @@ void removerLogicamente(Arquivo *arq){
         if(arq->removerReg(key)){
             cout << "Registro removido com sucesso" << endl;
         }else{
-            cout << "Registro não encontrado" << endl;
+            cout << "Registro nï¿œo encontrado" << endl;
         }
 
         cout << endl << "Digite enter para continuar, ou 0 para parar" << endl;
@@ -218,11 +244,11 @@ int main(int argc, char const *argv[])
     setlocale(LC_ALL, "Portuguese");
 
     //Criando objeto de Arquivo
-    ArquivoVAR arquivoVar("arquivo.dat", "indices.bin", 't');
+    ArquivoFIX arquivoFix("arquivo.dat", "indices.bin", 't');
 
     bool sair = false;
     while(!sair){
-        // Apresenta opções na tela, retorna operação
+        // Apresenta opï¿œï¿œes na tela, retorna operaï¿œï¿œo
         switch(inputOperacao())
         {
             case 0:
@@ -232,34 +258,48 @@ int main(int argc, char const *argv[])
             break;
             case 1:
             // GRAVAR DADOS
-                inputGravarDados(&arquivoVar);
+                inputGravarDados(&arquivoFix);
             break;
             case 2:
-            // RECUPERAÇÃO SEQUENCIAL
-                visualizarSequencial(&arquivoVar);
+            // RECUPERAï¿œï¿œO SEQUENCIAL
+                visualizarSequencial(&arquivoFix);
             break;
             case 3:
-            // RECUPERAÇÃO NÚMERO
-                visualizarNumero(&arquivoVar);
+            // RECUPERAï¿œï¿œO Nï¿œMERO
+                visualizarNumero(&arquivoFix);
             break;
             case 4:
-            // RECUPERAÇÃO POR CHAVE
-                visualizarKey(&arquivoVar);
+            // RECUPERAï¿œï¿œO POR CHAVE
+                visualizarKey(&arquivoFix);
             break;
             case 5:
-            // RECUPERAÇÃO POR NOME
-                visualizarNome(&arquivoVar);
+            // RECUPERAï¿œï¿œO POR NOME
+                visualizarNome(&arquivoFix);
             break;
             case 6:
-            // REMOÇÃO LÓGICA
-                removerLogicamente(&arquivoVar);
+            // REMOï¿œï¿œO Lï¿œGICA
+                removerLogicamente(&arquivoFix);
             break;
             default:
-                cout << "Não reconhecido" << endl;
+                cout << "NÃºmero nÃ£o reconhecido" << endl;
             break;
         }
     }
     return 0;
 }
 
-*/
+
+// favor ignorar
+// cout << " Chave: " << regAux.GetKey() << '\n';
+// cout << " First Name: " << regAux.GetFirstName() << '\n';
+// cout << " Last Name: " << regAux.GetLastName() << '\n'; 
+// cout << "\n";
+// cout << " Endereï¿œo" << '\n';
+// cout << " Logradouro: " << regAux.GetLogradouro() << '\n';
+// cout << " Nï¿œmero: " << regAux.GetANumero() << '\n';
+// cout << " Complemento: " << regAux.GetComplemento() << '\n';
+// cout << " Cidade: " << regAux.GetCity() << '\n';
+// cout << " Estado: " << regAux.GetState() << '\n';
+// cout << " ZIP: " << regAux.GetZipcode() << '\n';
+// cout << " Telefone: " << regAux.GetPNumero() << '\n';
+// cout << endl << "Digite enter para continuar, ou 0 para parar" << endl;

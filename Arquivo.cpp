@@ -657,7 +657,7 @@ Registro ArquivoFIX::buscaNumReg(int n){
 
 
 /**ArquivoVAR**/
-/*
+
 //construtor 
  ArquivoVAR::ArquivoVAR(std::string p, std::string p_indice, char t){
     setPaths(p, p_indice, t);
@@ -671,61 +671,131 @@ void ArquivoVAR::setSeparadores(char sepCam, char sepReg){
 }
 
 //Escreve os dados de um registro no arquivo
+/*TRATAR CASOS DE REGISTRS REMOVIDOS LOGICAMENTE*/
 bool ArquivoVAR::escreverReg(Registro reg){
+    std::fstream arq; 
+    std::fstream arqIndice;
+    int registerSize;
+    int intAux;
+    char c;
 
-    std::ofstream arq; 
-    std::string aux = getPath();
-    
-    int tam = aux.length();
+    //convertendo de string para char*
+    int tam = getPath().length();
     char* path = new char[tam + 1];
-    strcpy(path, aux.c_str());
+    strcpy(path, getPath().c_str());
 
-    arq.open(path, std::ios::out | std::ios::trunc);    
+    tam = getIndicePath().length();
+    char* pathIndice = new char[tam + 1];
+    strcpy(pathIndice, getIndicePath().c_str());
+    
+    arq.open(path, std::ios_base::in | std::ios_base::out | std::ios_base::binary);
+    arqIndice.open(pathIndice, std::ios_base::in | std::ios_base::out | std::ios_base::binary);
 
-    arq << reg.GetKey() << separador_cam;
-    arq << reg.GetLastName() << separador_cam;
-    arq << reg.GetFirstName() << separador_cam;
-    arq << reg.GetLogradouro() << separador_cam;              
-    arq << reg.GetANumero() << separador_cam;
-    arq << reg.GetComplemento() << separador_cam;
-    arq << reg.GetCity() << separador_cam;
-    arq << reg.GetState() << separador_cam;
-    arq << reg.GetZipcode() << separador_cam;
-    arq << reg.GetDDD() << separador_cam;
-    arq << reg.GetPNumero() << separador_cam;
+    //caso falhe em abrir o arquivo
+    if(!arq.is_open()){
+        //criando arquivo caso ele nao exista
+        arq.open(path,std::ios_base::out | std::ios_base::binary);
+        cout << "Criando arquivo novo" << endl;
+        if(!arq.is_open()){
+            cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
+            return false;
+        }    
+    }
+
+    if(!arqIndice.is_open()){
+        //criando arquivo caso ele nao exista
+        arqIndice.open(pathIndice, std::ios_base::out | std::ios_base::binary);
+        cout << "Criando arquivo novo" << endl;
+        if(!arqIndice.is_open()){
+            cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
+            return false;
+        }
+    }
+    //garantindo que os ponteiros de leitura e escrita começam no começo do arquivo
+    arq.seekg(0, std::ios::beg);
+    arq.seekp(0, std::ios::beg);
+
+    arq.get(c);
+
+    while(c != '*' && !arq.eof()){
+        arq.clear();
+        arq.get(c);
+    }
+
+    registerSize = 0;
+    registerSize += sizeof(reg.GetKey());
+    registerSize += reg.GetFirstName().length();
+    registerSize += reg.GetLastName().length();
+    registerSize += reg.GetLogradouro().length();
+    registerSize += sizeof(reg.GetANumero());
+    registerSize += reg.GetComplemento().length();
+    registerSize += reg.GetCity().length();
+    registerSize += reg.GetState().length();
+    registerSize += sizeof(reg.GetZipcode());
+    registerSize += sizeof(reg.GetDDD());
+    registerSize += sizeof(reg.GetPNumero());
+
+    //escrevendo no arquivo (12 bytes de marcadores) + 44 indicadores de tamanho = 66 total
+
+    arq.write((char*)&registerSize, sizeof(registerSize)); 
+
+    intAux = sizeof(reg.GetKey());
+    arq.write((char*)&intAux, sizeof(intAux)); 
+    intAux = reg.GetKey();
+    arq.write((char*)&intAux, sizeof(intAux)); 
+    arq << separador_cam;
+
+    intAux = reg.GetFirstName().length();
+    arq.write((char*)&intAux, sizeof(intAux)); 
+    arq << reg.GetFirstName().c_str() << separador_cam;
+
+    intAux = reg.GetLastName().length();
+    arq.write((char*)&intAux, sizeof(intAux));
+    arq << reg.GetLastName().c_str() << separador_cam;
+
+    intAux = reg.GetLogradouro().length();
+    arq.write((char*)&intAux, sizeof(intAux)); 
+    arq << reg.GetLogradouro().c_str() << separador_cam;   
+
+    intAux = sizeof(reg.GetANumero());
+    arq.write((char*)&intAux, sizeof(intAux)); 
+    intAux = reg.GetANumero();
+    arq.write((char*)&intAux, sizeof(intAux)); 
+    arq << separador_cam;
+
+    intAux = reg.GetComplemento().length();
+    arq.write((char*)&intAux, sizeof(intAux)); 
+    arq << reg.GetComplemento().c_str() << separador_cam;
+
+    intAux = reg.GetCity().length();
+    arq.write((char*)&intAux, sizeof(intAux)); 
+    arq << reg.GetCity().c_str() << separador_cam;
+
+    intAux = reg.GetState().length();
+    arq.write((char*)&intAux, sizeof(intAux)); 
+    arq << reg.GetState().c_str() << separador_cam;
+
+    intAux = sizeof(reg.GetZipcode());
+    arq.write((char*)&intAux, sizeof(intAux)); 
+    intAux = reg.GetZipcode();
+    arq.write((char*)&intAux, sizeof(intAux)); 
+    arq << separador_cam;
+
+    intAux = sizeof(reg.GetDDD());
+    arq.write((char*)&intAux, sizeof(intAux)); 
+    intAux = reg.GetDDD();
+    arq.write((char*)&intAux, sizeof(intAux)); 
+    arq << separador_cam;
+
+    intAux = sizeof(reg.GetPNumero());
+    arq.write((char*)&intAux, sizeof(intAux)); 
+    intAux = reg.GetPNumero();
+    arq.write((char*)&intAux, sizeof(intAux)); 
+    arq << separador_cam;
+
     arq << separador_reg;
     
     arq.close();
-
-    FILE *arq;
-    std::string aux = getPath();
-    std::string aux2 = getTipo();
-
-    //conversao de std::string para char*
-    int tam = aux.length();
-    char* path = new char[tam + 1];
-    strcpy(path, aux.c_str());
-
-    tam = aux2.length();
-    char* type = new char[tam + 1];
-    strcpy(type, aux2.c_str());
-    
-    arq = fopen(path, type);
-
-    if(arq == NULL){
-        puts("Erro: Nao foi possivel abrir o arquivo");
-        return false;
-    }
-
-    if(fwrite(&reg, sizeof(reg), 1, arq) != 1){
-        puts("Erro: Nao foi possivel escrever o registro no arquivo");
-        return false;
-    }
-
-    fclose(arq);
-
-    puts("Registro gravado com sucesso");
-
     return true;
 }
 
@@ -764,5 +834,5 @@ Registro Arquivo::buscaNome(std::string nome){
     Registro auxReg;
     // to do
     return auxReg; 
- }*/
+ }
 
