@@ -28,12 +28,10 @@ ArquivoFIX::ArquivoFIX(std::string p, std::string p_indice, char t){
     setPaths(p, p_indice, t);
     setOffset();
 }
-
 //getter
 int ArquivoFIX::getOffsetReg(){
     return this->offset_reg;
 }
-
 //setter
 void ArquivoFIX::setOffset(){
     separadorIndice = '|';
@@ -83,7 +81,6 @@ void ArquivoFIX::ajustaCampo(Registro* reg){
     reg->SetState(aux.append((2 - reg->GetState().length()), '#'));
 }
 
-/*TRATAR INSERÇAO DE CHAVES REPETIDAS*/
 bool ArquivoFIX::escreverReg(Registro *reg){
     std::fstream arq;
     std::fstream arqIndice; 
@@ -172,7 +169,6 @@ bool ArquivoFIX::escreverReg(Registro *reg){
         arqIndice.seekg(sizeof(int) , std::ios::cur);
         arqIndice.get(c);
     } 
-
    
     //escrevendo no arquivo de indice
     arqIndice.clear();
@@ -654,10 +650,7 @@ Registro ArquivoFIX::buscaNumReg(int n){
     return regVazio;
 }
 
-
-
 /**ArquivoVAR**/
-
 //construtor 
  ArquivoVAR::ArquivoVAR(std::string p, std::string p_indice, char t){
     setPaths(p, p_indice, t);
@@ -678,6 +671,7 @@ bool ArquivoVAR::escreverReg(Registro* reg){
     std::fstream arqIndice;
     int registerSize;
     int intAux;
+    int pos;
     short int shortIntAux;
     char c;
 
@@ -725,6 +719,19 @@ bool ArquivoVAR::escreverReg(Registro* reg){
     }
     arq.clear();
 
+    pos = arq.tellp();
+
+    while(c != '~' && !arqIndice.eof()){
+        arqIndice.clear();
+        arqIndice.get(c);
+    }
+
+    //escrevendo no arquivo de indices
+    intAux = reg->GetFirstName().length();
+    arqIndice.write((char*)&intAux, sizeof(intAux));
+    arqIndice << reg->GetFirstName().c_str();
+    arqIndice.write((char*)&pos, sizeof(pos));
+
     registerSize = 0;
     registerSize += sizeof(reg->GetKey());
     registerSize += reg->GetFirstName().length();
@@ -738,7 +745,7 @@ bool ArquivoVAR::escreverReg(Registro* reg){
     registerSize += sizeof(reg->GetDDD());
     registerSize += sizeof(reg->GetPNumero());
 
-    //escrevendo no arquivo 44 indicadores de tamanho , 45 se considerar o indicador de fim de registro
+    //escrevendo no arquivo 44 bytes de indicadores de tamanho , 45 se considerar o indicador de fim de registro
 
     arq.write((char*)&registerSize, sizeof(registerSize)); 
 
@@ -803,7 +810,6 @@ bool ArquivoVAR::escreverReg(Registro* reg){
 }
 
 Registro ArquivoVAR::buscaKey(int key){
-
     std:: ifstream arq;
     Registro auxReg;
     Registro regVazio;
@@ -860,19 +866,14 @@ Registro ArquivoVAR::buscaKey(int key){
         short int ddd;
         int pNumero;
         std::string converter;
-        int batata;
         //lendo do arquivo para colocar no registro auxiliar de retorno
         //key
         auxReg.SetKey(auxKey);
 
         //firstname
         arq.read((char*)&fieldSize, sizeof(fieldSize));
-        batata = arq.tellg();
-        std::cout << "pos g(0) " << batata << std::endl;
         firstName = new char[fieldSize];
         arq.read(firstName, fieldSize);
-        batata = arq.tellg();
-        std::cout << "pos g(1) " << batata << std::endl;
         for(i = 0; i < fieldSize; i++){
             converter += firstName[i];
         }
@@ -882,8 +883,6 @@ Registro ArquivoVAR::buscaKey(int key){
 
         //lastname
         arq.read((char*)&fieldSize, sizeof(fieldSize));
-        batata = arq.tellg();
-        std::cout << "pos g(2) " << batata << std::endl;
         lastName = new char[fieldSize];
         arq.read(lastName, fieldSize);
         for(i = 0; i < fieldSize; i++){
@@ -965,7 +964,178 @@ Registro ArquivoVAR::buscaKey(int key){
 }
 
 Registro ArquivoVAR::buscaNome(std::string nome){
+    std::fstream arq;
+    std::fstream arqIndice;
     Registro auxReg;
+    Registro regVazio;
+    std::string auxStr;
+    int nameSize;
+    int offset;
+    int i;
+    bool achou;
+    char* auxArray;
+
+    //convertendo de string para char*
+    int tam = getPath().length();
+    char* path = new char[tam + 1];
+    strcpy(path, getPath().c_str());
+
+    tam = getIndicePath().length();
+    char* pathIndice = new char[tam + 1];
+    strcpy(pathIndice, getIndicePath().c_str());
+
+    arq.open(path, std::ios_base::in | std::ios_base::out | std::ios_base::binary);
+    arqIndice.open(pathIndice, std::ios_base::in | std::ios_base::binary);
+
+    if(!arq.is_open()){
+        cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
+        return regVazio; //retorna registro vazio, tratar na main esse retorno
+    }
+
+    if(!arqIndice.is_open()){
+        cout << "Erro: Nao foi possivel abrir o arquivo" << endl;
+        return regVazio; //retorna registro vazio, tratar na main esse retorno
+    }
+    
+    arqIndice.read((char*)&nameSize, sizeof(nameSize));
+    auxArray = new char[nameSize];
+    arqIndice.read(auxArray, nameSize);
+
+    while(!achou && !arqIndice.eof()){
+        auxStr.clear();
+        for(i = 0; i  < nameSize; i++){
+            auxStr += auxArray[i];
+        }
+        if(auxStr == nome){
+            achou = true;
+        }
+        else{
+            delete auxArray;
+            arqIndice.seekg(sizeof(int), std::ios::cur);
+            arqIndice.read((char*)&nameSize, sizeof(nameSize));
+            auxArray = new char[nameSize];
+            arqIndice.read(auxArray, nameSize);
+        }
+    }
+    if(!achou){
+        arq.close();
+        arqIndice.close();
+        return regVazio;
+    }
+    //else
+    arqIndice.read((char*)&offset, sizeof(offset));
+
+    int registerSize;
+    int auxKey;
+    int fieldSize;
+    char* firstName;
+    char* lastName;
+    char* logradouro;
+    char* complemento;
+    short int aNumero;
+    char* city;
+    char* state;
+    int zipCode;
+    short int ddd;
+    int pNumero;
+    std::string converter;
+
+    arq.seekg(offset, std::ios::beg);
+    //lendo do arquivo para colocar no registro auxiliar de retorno
+    //key
+    arq.read((char*)&registerSize, sizeof(registerSize));
+    arq.read((char*)&fieldSize, sizeof(fieldSize));
+    arq.read((char*)&auxKey, sizeof(auxKey));
+    auxReg.SetKey(auxKey);
+
+    //firstname
+    arq.read((char*)&fieldSize, sizeof(fieldSize));
+    firstName = new char[fieldSize];
+    arq.read(firstName, fieldSize);
+    for(i = 0; i < fieldSize; i++){
+        converter += firstName[i];
+    }
+    auxReg.SetFirstName(converter);
+    delete firstName;
+    converter.clear();
+
+    //lastname
+    arq.read((char*)&fieldSize, sizeof(fieldSize));
+    lastName = new char[fieldSize];
+    arq.read(lastName, fieldSize);
+    for(i = 0; i < fieldSize; i++){
+        converter += lastName[i];
+    }
+    auxReg.SetLastName(converter);
+    delete lastName;
+    converter.clear();
+
+    //logradouro
+    arq.read((char*)&fieldSize, sizeof(fieldSize));
+    logradouro = new char[fieldSize];
+    arq.read(logradouro, fieldSize);
+    for(i = 0; i < fieldSize; i++){
+        converter += logradouro[i];
+    }
+    auxReg.SetLogradouro(converter);
+    delete logradouro;
+    converter.clear();
+
+    //aNumero
+    arq.read((char*)&fieldSize, sizeof(fieldSize));
+    arq.read((char*)&aNumero, sizeof(aNumero));
+    auxReg.SetANumero(aNumero);
+
+    //complemento
+    arq.read((char*)&fieldSize, sizeof(fieldSize));
+    complemento = new char[fieldSize];
+    arq.read(complemento, fieldSize);
+    for(i = 0; i < fieldSize; i++){
+        converter += complemento[i];
+    }
+    auxReg.SetComplemento(converter);
+    delete complemento;
+    converter.clear();
+    
+    //city
+    arq.read((char*)&fieldSize, sizeof(fieldSize));
+    city = new char[fieldSize];
+    arq.read(city, fieldSize);
+    for(i = 0; i < fieldSize; i++){
+        converter += city[i];
+    }
+    auxReg.SetCity(converter);
+    delete city;
+    converter.clear();
+
+    //state
+    arq.read((char*)&fieldSize, sizeof(fieldSize));
+    state = new char[fieldSize];
+    arq.read(state, fieldSize);
+    for(i = 0; i < fieldSize; i++){
+        converter += state[i];
+    }
+    auxReg.SetState(converter);
+    delete state;
+    converter.clear();
+
+    //Zipcode
+    arq.read((char*)&fieldSize, sizeof(fieldSize));
+    arq.read((char*)&zipCode, sizeof(zipCode));
+    auxReg.SetZipcode(zipCode);
+    
+    //DDD
+    arq.read((char*)&fieldSize, sizeof(fieldSize));
+    arq.read((char*)&ddd, sizeof(ddd));
+    auxReg.SetDDD(ddd);
+    
+    //pNumero
+    arq.read((char*)&fieldSize, sizeof(fieldSize));
+    arq.read((char*)&pNumero, sizeof(pNumero));
+    auxReg.SetPNumero(pNumero);
+
+    arq.close(); 
+    arqIndice.close();    
     return auxReg;
 }
 
@@ -975,9 +1145,3 @@ bool ArquivoVAR::removerReg(int key){
 bool ArquivoVAR::atualizaIndice(int key, std::string nome){
     return true;
 }
-Registro Arquivo::buscaNome(std::string nome){
-    Registro auxReg;
-    // to do
-    return auxReg; 
- }
-
