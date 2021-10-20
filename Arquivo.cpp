@@ -1266,7 +1266,7 @@ bool ArquivoVAR::atualizaIndice(int key, std::string nome){
     bool achou;
     std::string auxStr;
     int nameSize;
-
+    
     int tam = getIndicePath().length();
     char* pathIndice = new char[tam + 1];
     strcpy(pathIndice, getIndicePath().c_str());
@@ -1309,6 +1309,7 @@ bool ArquivoVAR::atualizaIndice(int key, std::string nome){
     //fazendo a remoçao logica
     arqIndice.seekg(-(sizeof(nameSize) + nameSize), std::ios::cur);
     arqIndice.write(&removedorLogico, sizeof(char));
+    arqIndice.write((char*)&nameSize, std::ios::cur);
     arqIndice.close();
     delete auxArray;
     delete pathIndice;
