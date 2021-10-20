@@ -555,7 +555,6 @@ Registro ArquivoFIX::buscaNumReg(int n){
     std::fstream arq;
     Registro auxReg;
     Registro regVazio;
-    std::string removido = "#";
     int i;
     char c;
     //convertendo de string para char
@@ -572,10 +571,10 @@ Registro ArquivoFIX::buscaNumReg(int n){
     }
     arq.seekg((n-1) * getOffsetReg(), std::ios::beg);
     arq.get(c);
-    if(c == '*'){
-        arq.close();
-        auxReg.SetFirstName(removido);
-        return auxReg;
+    while(c == '*'){
+        arq.seekg(-1, std::ios::cur);
+        arq.seekg(getOffsetReg(), std::ios::cur);
+        arq.get(c);
     } 
     if(!arq.eof()){
         arq.clear();
@@ -1202,6 +1201,7 @@ bool ArquivoVAR::removerReg(int key){
     auxArray = new char[nameSize];
     arq.read(auxArray, nameSize);
     //realizando remoção logica
+    //arq.seekg();
     arq.seekg(-(sizeof(auxKey) + sizeof(fieldSize) + sizeof(registerSize)), std::ios::cur);
     arq.write(&removedorLogico, sizeof(char));
     atualizaIndice(key, nome);
