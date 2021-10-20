@@ -710,6 +710,8 @@ bool ArquivoVAR::escreverReg(Registro* reg){
     //garantindo que os ponteiros de leitura e escrita começam no começo do arquivo
     arq.seekg(0, std::ios::beg);
     arq.seekp(0, std::ios::beg);
+    arqIndice.seekg(0, std::ios::beg);
+    arqIndice.seekp(0, std::ios::beg);
 
     arq.get(c);
 
@@ -725,7 +727,7 @@ bool ArquivoVAR::escreverReg(Registro* reg){
         arqIndice.clear();
         arqIndice.get(c);
     }
-
+    arqIndice.clear();
     //escrevendo no arquivo de indices
     intAux = reg->GetFirstName().length();
     arqIndice.write((char*)&intAux, sizeof(intAux));
