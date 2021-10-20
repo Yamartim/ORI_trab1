@@ -250,7 +250,6 @@
 //         // Busca do nome e exibição do registro/erro
 //         regAux = arq->buscaNome(input);
 //         if(regAux.GetFirstName() != ""){ // Testa se não é um registro vazio
-//             //TODO Exibição de todos os registros com o mesmo nome
 //             i++;
 //             cout << "== Exibindo registro " << i << " ==" << '\n';
 //             regAux.print();
