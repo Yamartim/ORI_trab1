@@ -72,13 +72,21 @@ bool Registro::SetKey(int k){
 }
 
 bool Registro::SetLastName(std::string ln){
-    lastname = ln;
-    return 1;
+    if(ln.length() > 0){
+        lastname = ln;
+        return 1;
+    }else{
+        return 0;
+    }
 }
 
 bool Registro::SetFirstName(std::string fn){
-    firstname = fn;
-    return 1;
+    if(fn.length() > 0){
+        firstname = fn;
+        return 1;
+    }else{
+        return 0;
+    }
 }
 
 bool Registro::SetLogradouro(std::string al){
