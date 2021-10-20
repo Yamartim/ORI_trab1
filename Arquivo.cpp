@@ -1,3 +1,10 @@
+/*
+Arquivo.cpp
+
+    Daniel Kenichi Tiago Tateishi RA: 790837
+    João Dini de Miranda RA: 790716
+    Martim Fernandes Ribeiro Lima RA: 756187
+*/
 #include "Arquivo.h"
 #include "Registro.h"
 #include <exception>
