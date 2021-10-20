@@ -673,7 +673,7 @@ void ArquivoVAR::setSeparadores(char sepCam, char sepReg){
 
 //Escreve os dados de um registro no arquivo
 /*TRATAR CASOS DE REGISTRS REMOVIDOS LOGICAMENTE*/
-bool ArquivoVAR::escreverReg(Registro reg){
+bool ArquivoVAR::escreverReg(Registro* reg){
     std::fstream arq; 
     std::fstream arqIndice;
     int registerSize;
@@ -725,73 +725,73 @@ bool ArquivoVAR::escreverReg(Registro reg){
     arq.clear();
 
     registerSize = 0;
-    registerSize += sizeof(reg.GetKey());
-    registerSize += reg.GetFirstName().length();
-    registerSize += reg.GetLastName().length();
-    registerSize += reg.GetLogradouro().length();
-    registerSize += sizeof(reg.GetANumero());
-    registerSize += reg.GetComplemento().length();
-    registerSize += reg.GetCity().length();
-    registerSize += reg.GetState().length();
-    registerSize += sizeof(reg.GetZipcode());
-    registerSize += sizeof(reg.GetDDD());
-    registerSize += sizeof(reg.GetPNumero());
+    registerSize += sizeof(reg->GetKey());
+    registerSize += reg->GetFirstName().length();
+    registerSize += reg->GetLastName().length();
+    registerSize += reg->GetLogradouro().length();
+    registerSize += sizeof(reg->GetANumero());
+    registerSize += reg->GetComplemento().length();
+    registerSize += reg->GetCity().length();
+    registerSize += reg->GetState().length();
+    registerSize += sizeof(reg->GetZipcode());
+    registerSize += sizeof(reg->GetDDD());
+    registerSize += sizeof(reg->GetPNumero());
 
     //escrevendo no arquivo 44 indicadores de tamanho , 45 se considerar o indicador de fim de registro
 
     arq.write((char*)&registerSize, sizeof(registerSize)); 
 
-    intAux = sizeof(reg.GetKey());
+    intAux = sizeof(reg->GetKey());
     arq.write((char*)&intAux, sizeof(intAux)); 
-    intAux = reg.GetKey();
+    intAux = reg->GetKey();
     arq.write((char*)&intAux, sizeof(intAux)); 
     //arq << separador_cam;
 
-    intAux = reg.GetFirstName().length();
+    intAux = reg->GetFirstName().length();
     arq.write((char*)&intAux, sizeof(intAux)); 
-    arq << reg.GetFirstName().c_str();
+    arq << reg->GetFirstName().c_str();
 
-    intAux = reg.GetLastName().length();
+    intAux = reg->GetLastName().length();
     arq.write((char*)&intAux, sizeof(intAux));
-    arq << reg.GetLastName().c_str();
+    arq << reg->GetLastName().c_str();
 
-    intAux = reg.GetLogradouro().length();
+    intAux = reg->GetLogradouro().length();
     arq.write((char*)&intAux, sizeof(intAux)); 
-    arq << reg.GetLogradouro().c_str();  
+    arq << reg->GetLogradouro().c_str();  
 
-    intAux = sizeof(reg.GetANumero());
+    intAux = sizeof(reg->GetANumero());
     arq.write((char*)&intAux, sizeof(intAux)); 
-    intAux = reg.GetANumero();
+    intAux = reg->GetANumero();
     arq.write((char*)&intAux, sizeof(intAux)); 
     //arq << separador_cam;
 
-    intAux = reg.GetComplemento().length();
+    intAux = reg->GetComplemento().length();
     arq.write((char*)&intAux, sizeof(intAux)); 
-    arq << reg.GetComplemento().c_str();
+    arq << reg->GetComplemento().c_str();
 
-    intAux = reg.GetCity().length();
+    intAux = reg->GetCity().length();
     arq.write((char*)&intAux, sizeof(intAux)); 
-    arq << reg.GetCity().c_str();
+    arq << reg->GetCity().c_str();
 
-    intAux = reg.GetState().length();
+    intAux = reg->GetState().length();
     arq.write((char*)&intAux, sizeof(intAux)); 
-    arq << reg.GetState().c_str();
+    arq << reg->GetState().c_str();
 
-    intAux = sizeof(reg.GetZipcode());
+    intAux = sizeof(reg->GetZipcode());
     arq.write((char*)&intAux, sizeof(intAux)); 
-    intAux = reg.GetZipcode();
+    intAux = reg->GetZipcode();
     arq.write((char*)&intAux, sizeof(intAux)); 
     //arq << separador_cam;
 
-    intAux = sizeof(reg.GetDDD());
+    intAux = sizeof(reg->GetDDD());
     arq.write((char*)&intAux, sizeof(intAux)); 
-    intAux = reg.GetDDD();
+    intAux = reg->GetDDD();
     arq.write((char*)&intAux, sizeof(intAux)); 
     //arq << separador_cam;
 
-    intAux = sizeof(reg.GetPNumero());
+    intAux = sizeof(reg->GetPNumero());
     arq.write((char*)&intAux, sizeof(intAux)); 
-    intAux = reg.GetPNumero();
+    intAux = reg->GetPNumero();
     arq.write((char*)&intAux, sizeof(intAux)); 
     //arq << separador_cam;
 
@@ -802,6 +802,7 @@ bool ArquivoVAR::escreverReg(Registro reg){
 }
 
 Registro ArquivoVAR::buscaKey(int key){
+
     std:: ifstream arq;
     Registro auxReg;
     Registro regVazio;
@@ -950,7 +951,17 @@ Registro ArquivoVAR::buscaKey(int key){
     return regVazio;
 }
 
+Registro ArquivoVAR::buscaNome(std::string nome){
+    Registro auxReg;
+    return auxReg;
+}
 
+bool ArquivoVAR::removerReg(int key){
+    return true;
+}
+bool ArquivoVAR::atualizaIndice(int key, std::string nome){
+    return true;
+}
 Registro Arquivo::buscaNome(std::string nome){
     Registro auxReg;
     // to do

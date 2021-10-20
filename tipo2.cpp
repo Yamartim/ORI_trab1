@@ -45,7 +45,7 @@ int inputOperacao(){
 }
 
 // Loop de input dos dados de pessoas
-void inputGravarDados(ArquivoFIX *arq){
+void inputGravarDados(ArquivoVAR *arq){
     Registro inRegistro;
     int intaux;
     string straux = "";
@@ -159,13 +159,13 @@ void inputGravarDados(ArquivoFIX *arq){
 }
 
 // Loop de "browsing" do arquivo
-void visualizarSequencial(ArquivoFIX *arq){
+void visualizarSequencial(ArquivoVAR *arq){
     Registro regAux;
     string aux;
     int i = 1;
-    regAux = arq->buscaNumReg(i);
+    //regAux = arq->buscaNumReg(i);
     while(regAux.GetFirstName() != ""){
-        regAux = arq->buscaNumReg(i);
+        //regAux = arq->buscaNumReg(i);
         if(regAux.GetFirstName()!= "")
             regAux.print();
         i++;
@@ -173,19 +173,19 @@ void visualizarSequencial(ArquivoFIX *arq){
 }
 
 // Recuperaï¿œï¿œo por nï¿œmero
-void visualizarNumero(ArquivoFIX *arq){
+void visualizarNumero(ArquivoVAR *arq){
     Registro regAux;
     int num;
     cout << "Digite o nï¿œmero que deseja visualizar: ";
     cin >> num;
     
-    regAux = arq->buscaNumReg(num);
+   // regAux = arq->buscaNumReg(num);
 
     regAux.print();
 }
 
 // Recuperaï¿œï¿œo por nome
-void visualizarNome(ArquivoFIX *arq){
+void visualizarNome(ArquivoVAR *arq){
     Registro regAux;
     string aux;
     string nome;
@@ -206,7 +206,7 @@ void visualizarNome(ArquivoFIX *arq){
 }
 
 // Recuperaï¿œï¿œo por chave
-void visualizarKey(ArquivoFIX *arq){
+void visualizarKey(ArquivoVAR *arq){
     Registro regAux;
     string aux;
     int key;
@@ -219,7 +219,7 @@ void visualizarKey(ArquivoFIX *arq){
 }
 
 // Remoï¿œï¿œo Lï¿œgica
-void removerLogicamente(ArquivoFIX *arq){
+void removerLogicamente(ArquivoVAR *arq){
     int key;
     string aux;
     do{
@@ -244,7 +244,7 @@ int main(int argc, char const *argv[])
     setlocale(LC_ALL, "Portuguese");
 
     //Criando objeto de Arquivo
-    ArquivoFIX arquivoFix("arquivo.dat", "indices.bin", 't');
+    ArquivoVAR arquivoVar("arquivo2.dat", "indices2.bin", 't');
 
     bool sair = false;
     while(!sair){
@@ -258,27 +258,27 @@ int main(int argc, char const *argv[])
             break;
             case 1:
             // GRAVAR DADOS
-                inputGravarDados(&arquivoFix);
+                inputGravarDados(&arquivoVar);
             break;
             case 2:
             // RECUPERAï¿œï¿œO SEQUENCIAL
-                visualizarSequencial(&arquivoFix);
+                visualizarSequencial(&arquivoVar);
             break;
             case 3:
             // RECUPERAï¿œï¿œO Nï¿œMERO
-                visualizarNumero(&arquivoFix);
+                visualizarNumero(&arquivoVar);
             break;
             case 4:
             // RECUPERAï¿œï¿œO POR CHAVE
-                visualizarKey(&arquivoFix);
+                visualizarKey(&arquivoVar);
             break;
             case 5:
             // RECUPERAï¿œï¿œO POR NOME
-                visualizarNome(&arquivoFix);
+                visualizarNome(&arquivoVar);
             break;
             case 6:
             // REMOï¿œï¿œO Lï¿œGICA
-                removerLogicamente(&arquivoFix);
+                removerLogicamente(&arquivoVar);
             break;
             default:
                 cout << "NÃºmero nÃ£o reconhecido" << endl;

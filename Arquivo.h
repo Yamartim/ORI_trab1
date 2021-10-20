@@ -97,9 +97,9 @@ public:
     Registro buscaKey(int key);
     Registro buscaNome(string nome);
 
-    bool escreverReg(Registro reg);
-   // bool removerReg(Registro reg);
-    //bool atualizaIndice(Registro reg);
+    bool escreverReg(Registro* reg);
+    bool removerReg(int key);
+    bool atualizaIndice(int key, std::string nome);
 
 };
 #endif
