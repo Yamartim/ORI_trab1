@@ -678,6 +678,7 @@ bool ArquivoVAR::escreverReg(Registro* reg){
     std::fstream arqIndice;
     int registerSize;
     int intAux;
+    short int shortIntAux;
     char c;
 
     //convertendo de string para char*
@@ -761,8 +762,8 @@ bool ArquivoVAR::escreverReg(Registro* reg){
 
     intAux = sizeof(reg->GetANumero());
     arq.write((char*)&intAux, sizeof(intAux)); 
-    intAux = reg->GetANumero();
-    arq.write((char*)&intAux, sizeof(intAux)); 
+    shortIntAux = reg->GetANumero();
+    arq.write((char*)&shortIntAux, sizeof(shortIntAux)); 
     //arq << separador_cam;
 
     intAux = reg->GetComplemento().length();
@@ -785,8 +786,8 @@ bool ArquivoVAR::escreverReg(Registro* reg){
 
     intAux = sizeof(reg->GetDDD());
     arq.write((char*)&intAux, sizeof(intAux)); 
-    intAux = reg->GetDDD();
-    arq.write((char*)&intAux, sizeof(intAux)); 
+    shortIntAux = reg->GetDDD();
+    arq.write((char*)&shortIntAux, sizeof(shortIntAux)); 
     //arq << separador_cam;
 
     intAux = sizeof(reg->GetPNumero());
@@ -944,17 +945,17 @@ Registro ArquivoVAR::buscaKey(int key){
         //Zipcode
         arq.read((char*)&fieldSize, sizeof(fieldSize));
         arq.read((char*)&zipCode, sizeof(zipCode));
-        auxReg.SetANumero(zipCode);
+        auxReg.SetZipcode(zipCode);
         
         //DDD
         arq.read((char*)&fieldSize, sizeof(fieldSize));
         arq.read((char*)&ddd, sizeof(ddd));
-        auxReg.SetANumero(ddd);
+        auxReg.SetDDD(ddd);
         
         //pNumero
         arq.read((char*)&fieldSize, sizeof(fieldSize));
         arq.read((char*)&pNumero, sizeof(pNumero));
-        auxReg.SetANumero(pNumero);
+        auxReg.SetPNumero(pNumero);
 
         arq.close();     
         return auxReg;
