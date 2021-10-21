@@ -377,19 +377,3 @@
 //     }
 //     return 0;
 // }
-
-
-// // favor ignorar
-// // cout << " Chave: " << regAux.GetKey() << '\n';
-// // cout << " First Name: " << regAux.GetFirstName() << '\n';
-// // cout << " Last Name: " << regAux.GetLastName() << '\n'; 
-// // cout << "\n";
-// // cout << " Endere�o" << '\n';
-// // cout << " Logradouro: " << regAux.GetLogradouro() << '\n';
-// // cout << " N�mero: " << regAux.GetANumero() << '\n';
-// // cout << " Complemento: " << regAux.GetComplemento() << '\n';
-// // cout << " Cidade: " << regAux.GetCity() << '\n';
-// // cout << " Estado: " << regAux.GetState() << '\n';
-// // cout << " ZIP: " << regAux.GetZipcode() << '\n';
-// // cout << " Telefone: " << regAux.GetPNumero() << '\n';
-// // cout << endl << "Digite enter para continuar, ou 0 para parar" << endl;
