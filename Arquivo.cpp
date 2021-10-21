@@ -1250,9 +1250,8 @@ bool ArquivoVAR::removerReg(int key){
 
     //realizando remoção logica
     arq.seekg(-(sizeof(nameSize) + nameSize), std::ios::cur);
-    arq.seekg(-(sizeof(auxKey) + sizeof(fieldSize) + sizeof(registerSize)), std::ios::cur);
+    arq.seekg(-(sizeof(auxKey)), std::ios::cur);
     arq.write(&removedorLogico, sizeof(char));
-    arq.write((char*)&registerSize, sizeof(registerSize));
     atualizaIndice(key, nome);
 
     delete auxArray;
@@ -1308,9 +1307,9 @@ bool ArquivoVAR::atualizaIndice(int key, std::string nome){
     }
     //else
     //fazendo a remoÃ§ao logica
-    arqIndice.seekg(-(sizeof(nameSize) + nameSize), std::ios::cur);
+    arqIndice.clear();
+    arqIndice.seekg(-nameSize, std::ios::cur);
     arqIndice.write(&removedorLogico, sizeof(char));
-    arqIndice.write((char*)&nameSize, std::ios::cur);
     arqIndice.close();
     delete auxArray;
     delete pathIndice;
